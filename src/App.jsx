@@ -33,13 +33,13 @@ const NAV = [
 ];
 
 function Splash({ onDone }) {
-  useEffect(() => { const t = setTimeout(onDone, 2200); return () => clearTimeout(t); }, [onDone]);
+  useEffect(() => { const t = setTimeout(onDone, 5500); return () => clearTimeout(t); }, [onDone]);
   return (
     <div style={{
       position: 'fixed', inset: 0, background: '#000',
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
-      zIndex: 999, animation: 'splashFade 2.2s ease forwards',
+      zIndex: 999, animation: 'splashFade 5.5s ease forwards',
     }}>
       <div style={{ animation: 'logoScale 2s ease forwards', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
         <div style={{
@@ -54,17 +54,23 @@ function Splash({ onDone }) {
         }}>TAPGUARD</div>
       </div>
       <div style={{
-        animation: 'taglineFade 2s ease forwards',
-        fontSize: 11, letterSpacing: 4, textTransform: 'uppercase',
-        color: '#444', marginTop: 10, fontWeight: 500,
-      }}>Your BJJ Coaching App</div>
+        fontSize: 14, letterSpacing: 4, textTransform: 'uppercase',
+        color: '#444', marginTop: 10, fontWeight: 500, textAlign: 'center',
+      }}>
+        <span style={{ animation: 'taglineFade 1s ease 0.5s forwards', opacity: 0, display: 'block' }}>
+          Train Smarter...
+        </span>
+        <span style={{ animation: 'taglineFade 1s ease 2s forwards', opacity: 0, display: 'block' }}>
+          Tap Less.
+        </span>
+      </div>
       <div style={{
         position: 'absolute', bottom: 56,
         width: 100, height: 2, background: '#222', borderRadius: 2, overflow: 'hidden',
       }}>
         <div style={{
           height: '100%', background: '#4ade80', borderRadius: 2,
-          animation: 'tabEnter 2s ease forwards', width: '100%',
+          animation: 'tabEnter 5s ease forwards', width: '100%',
         }} />
       </div>
     </div>
