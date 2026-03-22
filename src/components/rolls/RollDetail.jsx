@@ -1,3 +1,5 @@
+import { useApp } from '../../context/AppContext';
+
 const G = '#4ade80';
 
 export default function RollDetail({ session, onBack }) {

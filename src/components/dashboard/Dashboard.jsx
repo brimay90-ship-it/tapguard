@@ -115,14 +115,28 @@ function FocusOverlay({ focus, onClose }) {
   );
 }
 
+// Map lowestComp key to FOCUS_SKILLS index
+const COMP_TO_FOCUS_IDX = {
+  esc:      0, // HIP ESCAPE MECHANICS
+  pass:     1, // KNEE SLICE PASS
+  sub:      2, // ARMBAR FROM GUARD
+  guard:    6, // GUARD RETENTION
+  takedown: 4, // SINGLE LEG TAKEDOWN
+  position: 5, // MOUNT ESCAPES
+};
+
 export default function Dashboard() {
-  const { comp, belt, beltColor, setActiveTab, styles, nickname } = useApp();
-  const [focusIndex, setFocusIndex] = useState(0);
+  const { comp, belt, beltColor, setActiveTab, styles, nickname, lowestComp } = useApp();
+
+  // Seed focusIndex from the user's weakest comp area
+  const seedIndex = COMP_TO_FOCUS_IDX[lowestComp] ?? 0;
+  const [focusIndex, setFocusIndex] = useState(seedIndex);
   const [focusOverlay, setFocusOverlay] = useState(false);
 
   const score = calcScore(comp);
   const { title, tagline } = getTitleAndTagline(score, styles);
-  const scoreColor = score < 30 ? '#555' : score < 55 ? '#f59e0b' : score < 75 ? G : G;
+  // Fixed: was score < 75 ? G : G (identical branches)
+  const scoreColor = score < 30 ? '#555' : score < 55 ? '#f59e0b' : score < 75 ? '#f97316' : G;
   const currentFocus = FOCUS_SKILLS[focusIndex % FOCUS_SKILLS.length];
 
   const now = new Date();

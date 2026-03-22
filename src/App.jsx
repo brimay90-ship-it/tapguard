@@ -33,7 +33,7 @@ const NAV = [
 ];
 
 function Splash({ onDone }) {
-  useEffect(() => { const t = setTimeout(onDone, 5500); return () => clearTimeout(t); }, [onDone]);
+  useEffect(() => { const t = setTimeout(onDone, 2200); return () => clearTimeout(t); }, [onDone]);
   return (
     <div style={{
       position: 'fixed', inset: 0, background: '#000',
@@ -69,8 +69,8 @@ function Splash({ onDone }) {
         width: 100, height: 2, background: '#222', borderRadius: 2, overflow: 'hidden',
       }}>
         <div style={{
-          height: '100%', background: '#4ade80', borderRadius: 2,
-          animation: 'tabEnter 5s ease forwards', width: '100%',
+          height: '100%', background: '#000', borderRadius: 2,
+          animation: 'tabEnter 2.2s ease forwards', width: '100%',
         }} />
       </div>
     </div>

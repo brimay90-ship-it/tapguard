@@ -1,25 +1,31 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import RollDetail from './RollDetail';
 import { rollSessions } from '../../data/weekPlan';
 
 const G = '#4ade80';
 
 export default function Rolls() {
-  const [selected, setSelected]   = useState(null);
-  const [recording, setRecording] = useState(false);
-  const [recSeconds, setRecSeconds] = useState(0);
-  const [timer, setTimer]         = useState(null);
+  const [selected,    setSelected]   = useState(null);
+  const [recording,   setRecording]  = useState(false);
+  const [recSeconds,  setRecSeconds] = useState(0);
+  const timerRef = useRef(null);
+
+  // Clear interval on unmount to prevent leak
+  useEffect(() => () => clearInterval(timerRef.current), []);
 
   const toggleRecord = () => {
     if (!recording) {
-      setRecording(true); setRecSeconds(0);
-      const t = setInterval(() => setRecSeconds(s => s + 1), 1000);
-      setTimer(t);
+      setRecording(true);
+      setRecSeconds(0);
+      timerRef.current = setInterval(() => setRecSeconds(s => s + 1), 1000);
     } else {
-      setRecording(false); clearInterval(timer); setTimer(null); setRecSeconds(0);
+      setRecording(false);
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+      setRecSeconds(0);
     }
   };
-  const fmt = (s) => `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+  const fmt = (s) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
 
   return (
     <div style={{ position:'relative', height:'100%' }}>
