@@ -413,8 +413,8 @@ export default function Onboarding() {
     // 0 – Name
     <StepWrapper key="name" animKey={animKey}>
       <p style={lbl}>Step 1 of {TOTAL_STEPS}</p>
-      <h1 style={title()}>WHAT DO WE<br/>CALL YOU?</h1>
-      <p style={sub}>Nickname, first name, mat name – your call. This is how the app talks to you.</p>
+      <h1 style={title()}>WHAT SHOULD WE<br/>CALL YOU?</h1>
+      <p style={sub}>Nickname, first name, mat name – your call.</p>
       <div style={{marginTop:28}}>
         <input type="text" value={nickname} onChange={e=>setNickname(e.target.value)}
           placeholder="e.g. Marcus, Cobra..." maxLength={20} style={inp}
