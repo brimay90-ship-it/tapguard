@@ -4,13 +4,11 @@ const AMBER = '#f59e0b';
 export default function RollDetail({ session, onBack }) {
   if (!session) return null;
 
-  const rollCount = parseInt(session.tags?.[1]) || 1;
-  const rolls     = Array.from({ length: rollCount }, (_, i) => ({
-    label:    `Roll ${i + 1}`,
-    duration: session.tags?.[0] || '',
+  const rollCount  = parseInt(session.tags?.[1]) || 1;
+  const rolls      = Array.from({ length: rollCount }, (_, i) => ({
+    label: `Roll ${i + 1}`, duration: session.tags?.[0] || '',
   }));
-
-  const hasAudio = !!session.audioBlobUrl;
+  const hasVideo = !!session.videoBlobUrl;
 
   return (
     <div className="overlay-enter" style={{
@@ -18,10 +16,9 @@ export default function RollDetail({ session, onBack }) {
       overflowY: 'auto', padding: '20px 20px 80px', zIndex: 10,
     }}>
       <button onClick={onBack} style={{
-        display: 'flex', alignItems: 'center', gap: 6,
-        fontSize: 13, color: '#444', cursor: 'pointer',
-        background: 'none', border: 'none', marginBottom: 20,
-        fontWeight: 700, transition: 'color 0.18s',
+        display: 'flex', alignItems: 'center', gap: 6, fontSize: 13,
+        color: '#444', cursor: 'pointer', background: 'none', border: 'none',
+        marginBottom: 20, fontWeight: 700, transition: 'color 0.18s',
       }}
         onMouseEnter={e => e.currentTarget.style.color = '#aaa'}
         onMouseLeave={e => e.currentTarget.style.color = '#444'}
@@ -75,33 +72,20 @@ export default function RollDetail({ session, onBack }) {
         ))}
       </div>
 
-      {/* SESSION RECORDING — real audio player or placeholder */}
+      {/* Session recording */}
       <div style={{ marginBottom: 24 }}>
         <div style={{ fontSize: 10, letterSpacing: 3, textTransform: 'uppercase', color: '#444', marginBottom: 10, fontWeight: 700 }}>SESSION RECORDING</div>
 
-        {hasAudio ? (
-          <div style={{
-            background: '#111', border: `1px solid rgba(74,222,128,0.2)`,
-            borderRadius: 12, padding: '20px 18px',
-          }}>
-            {/* Waveform decoration */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-              <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(74,222,128,0.1)', border: `1px solid rgba(74,222,128,0.3)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0 }}>🎙</div>
-              <div>
-                <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 16, color: '#fff', letterSpacing: 0.5 }}>{session.title}</div>
-                <div style={{ fontSize: 11, color: '#444', marginTop: 2 }}>{session.tags?.[0]} · {session.partner || 'Training Partner'}</div>
-              </div>
-            </div>
-
-            <audio
+        {hasVideo ? (
+          <div style={{ borderRadius: 12, overflow: 'hidden', border: `1px solid rgba(74,222,128,0.2)`, background: '#000' }}>
+            <video
               controls
-              src={session.audioBlobUrl}
-              style={{ width: '100%', accentColor: G }}
+              src={session.videoBlobUrl}
+              style={{ width: '100%', display: 'block', maxHeight: 240, objectFit: 'cover' }}
             />
-
-            <div style={{ fontSize: 11, color: '#333', marginTop: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ color: AMBER }}>⚠</span>
-              Audio is available this session only — it will clear on refresh.
+            <div style={{ padding: '10px 14px', background: '#0d0d0d', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ color: AMBER, fontSize: 13 }}>⚠</span>
+              <span style={{ fontSize: 11, color: '#333' }}>Video available this session only — clears on refresh.</span>
             </div>
           </div>
         ) : (
@@ -109,12 +93,12 @@ export default function RollDetail({ session, onBack }) {
             background: '#111', border: '1px solid #1f1f1f',
             borderRadius: 12, padding: '24px 18px', textAlign: 'center',
           }}>
-            <div style={{ fontSize: 28, marginBottom: 10 }}>🎙</div>
+            <div style={{ fontSize: 28, marginBottom: 10 }}>📹</div>
             <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 16, color: '#333', marginBottom: 6 }}>No Recording</div>
             <div style={{ fontSize: 12, color: '#2a2a2a', lineHeight: 1.6 }}>
               {session.aiGenerated
-                ? 'This session was analyzed without audio. Start a new session to capture audio.'
-                : 'Record your next session to capture audio for playback here.'}
+                ? 'This session was analyzed without video. Record your next session to capture footage.'
+                : 'Record your next session to capture video for playback here.'}
             </div>
           </div>
         )}

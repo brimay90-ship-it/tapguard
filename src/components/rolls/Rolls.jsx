@@ -11,18 +11,66 @@ const fmt = (s) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 
 function nowLabel() {
   const now    = new Date();
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  return { day: String(now.getDate()), month: months[now.getMonth()], dayName: days[now.getDay()] };
+  return { day: String(now.getDate()), month: months[now.getMonth()] };
+}
+
+// ── Camera Picker Sheet ───────────────────────────────────────────────────────
+function CameraPickerSheet({ onPick, onDismiss }) {
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)',
+      zIndex: 200, display: 'flex', alignItems: 'flex-end',
+      maxWidth: 430, margin: '0 auto',
+    }}>
+      <div style={{
+        width: '100%', background: '#0d0d0d',
+        borderRadius: '20px 20px 0 0', padding: '24px 20px 40px',
+        border: '1px solid #1f1f1f', borderBottom: 'none',
+        animation: 'fadeUp 0.25s ease both',
+      }}>
+        <div style={{ fontSize: 10, letterSpacing: 3, textTransform: 'uppercase', color: G, fontWeight: 700, marginBottom: 6 }}>Start Recording</div>
+        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 26, color: '#fff', letterSpacing: 1, marginBottom: 20 }}>CHOOSE CAMERA</div>
+
+        {[
+          { label: 'Rear Camera', sub: 'Best for filming your rolls', icon: '📷', facing: 'environment' },
+          { label: 'Front Camera', sub: 'Selfie cam — good for solo drilling', icon: '🤳', facing: 'user' },
+        ].map(opt => (
+          <div key={opt.facing} onClick={() => onPick(opt.facing)} style={{
+            background: '#111', border: '1px solid #1f1f1f', borderRadius: 12,
+            padding: '16px 18px', marginBottom: 10, cursor: 'pointer',
+            display: 'flex', alignItems: 'center', gap: 14,
+            transition: 'border-color 0.18s',
+          }}
+            onMouseEnter={e => e.currentTarget.style.borderColor = G}
+            onMouseLeave={e => e.currentTarget.style.borderColor = '#1f1f1f'}
+          >
+            <span style={{ fontSize: 28 }}>{opt.icon}</span>
+            <div>
+              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 18, color: '#fff', letterSpacing: 0.5 }}>{opt.label}</div>
+              <div style={{ fontSize: 12, color: '#444', marginTop: 2 }}>{opt.sub}</div>
+            </div>
+            <span style={{ marginLeft: 'auto', color: '#333', fontSize: 18 }}>›</span>
+          </div>
+        ))}
+
+        <button onClick={onDismiss} style={{
+          width: '100%', background: 'transparent', border: '1px solid #1f1f1f',
+          color: '#444', padding: 12, borderRadius: 10, fontSize: 13,
+          fontWeight: 700, cursor: 'pointer', marginTop: 4,
+        }}>Cancel</button>
+      </div>
+    </div>
+  );
 }
 
 // ── Analysis Modal ────────────────────────────────────────────────────────────
-function AnalysisModal({ duration, rounds, audioBlobUrl, onSave, onDismiss }) {
+function AnalysisModal({ duration, rounds, videoBlobUrl, onSave, onDismiss }) {
   const { belt, comp, styles } = useApp();
-  const [description,   setDescription]   = useState('');
-  const [sessionTitle,  setSessionTitle]  = useState('');
-  const [partner,       setPartner]       = useState('');
-  const [loading,       setLoading]       = useState(false);
-  const [error,         setError]         = useState('');
+  const [description,  setDescription]  = useState('');
+  const [sessionTitle, setSessionTitle] = useState('');
+  const [partner,      setPartner]      = useState('');
+  const [loading,      setLoading]      = useState(false);
+  const [error,        setError]        = useState('');
 
   const compSummary = Object.entries(comp).map(([k, v]) => `${k}: ${v}/10`).join(', ');
   const styleStr    = styles.length ? styles.join(', ') : 'general';
@@ -67,9 +115,9 @@ Generate 3–6 missed moves and 6–10 timeline entries. Be specific to BJJ term
           messages: [{ role: 'user', content: prompt }],
         }),
       });
-      const data  = await response.json();
-      const text  = data.content?.find(b => b.type === 'text')?.text || '';
-      const clean = text.replace(/```json|```/g, '').trim();
+      const data   = await response.json();
+      const text   = data.content?.find(b => b.type === 'text')?.text || '';
+      const clean  = text.replace(/```json|```/g, '').trim();
       const parsed = JSON.parse(clean);
 
       const { day, month } = nowLabel();
@@ -83,7 +131,7 @@ Generate 3–6 missed moves and 6–10 timeline entries. Be specific to BJJ term
         missedMoves:  parsed.missedMoves || [],
         timeline:     parsed.timeline    || [],
         aiGenerated:  true,
-        audioBlobUrl: audioBlobUrl || null,
+        videoBlobUrl: videoBlobUrl || null,
       };
       onSave(newSession);
     } catch (err) {
@@ -128,11 +176,17 @@ Generate 3–6 missed moves and 6–10 timeline entries. Be specific to BJJ term
           </div>
         </div>
 
-        {/* Audio preview — only shown if recording succeeded */}
-        {audioBlobUrl && (
-          <div style={{ marginBottom: 16, background: '#111', border: `1px solid rgba(74,222,128,0.2)`, borderRadius: 10, padding: '12px 14px' }}>
-            <div style={{ fontSize: 10, letterSpacing: 2, textTransform: 'uppercase', color: G, fontWeight: 700, marginBottom: 8 }}>🎙 Audio Captured</div>
-            <audio controls src={audioBlobUrl} style={{ width: '100%', height: 36, accentColor: G }} />
+        {/* Video preview */}
+        {videoBlobUrl && (
+          <div style={{ marginBottom: 16 }}>
+            <div style={{ fontSize: 10, letterSpacing: 2, textTransform: 'uppercase', color: G, fontWeight: 700, marginBottom: 8 }}>📹 Video Captured</div>
+            <div style={{ borderRadius: 12, overflow: 'hidden', background: '#000', border: `1px solid rgba(74,222,128,0.2)`, aspectRatio: '16/9' }}>
+              <video
+                controls
+                src={videoBlobUrl}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              />
+            </div>
             <div style={{ fontSize: 11, color: '#333', marginTop: 6 }}>Playback available this session only.</div>
           </div>
         )}
@@ -161,7 +215,7 @@ Generate 3–6 missed moves and 6–10 timeline entries. Be specific to BJJ term
             onChange={e => setDescription(e.target.value)}
             onFocus={e => e.target.style.borderColor = G}
             onBlur={e => e.target.style.borderColor = '#1f1f1f'} />
-          <div style={{ fontSize: 11, color: '#333', marginTop: 6 }}>More detail = better analysis. Include positions, attempts, taps, and resets.</div>
+          <div style={{ fontSize: 11, color: '#333', marginTop: 6 }}>More detail = better analysis.</div>
         </div>
 
         {error && (
@@ -200,35 +254,50 @@ export default function Rolls() {
   const { sessions, addSession } = useApp();
 
   const [selected,     setSelected]    = useState(null);
-  const [recording,    setRecording]   = useState(false);
+  const [phase,        setPhase]       = useState('idle'); // idle | picking | recording | modal
   const [recSeconds,   setRecSeconds]  = useState(0);
   const [rounds,       setRounds]      = useState(1);
-  const [showModal,    setShowModal]   = useState(false);
   const [savedDur,     setSavedDur]    = useState(0);
-  const [audioBlobUrl, setAudioBlobUrl] = useState(null);
-  const [micError,     setMicError]    = useState('');
+  const [videoBlobUrl, setVideoBlobUrl] = useState(null);
+  const [camError,     setCamError]    = useState('');
 
-  const timerRef   = useRef(null);
-  const mediaRef   = useRef(null);   // MediaRecorder instance
-  const chunksRef  = useRef([]);     // recorded audio chunks
+  const timerRef    = useRef(null);
+  const mediaRef    = useRef(null);   // MediaRecorder
+  const chunksRef   = useRef([]);
+  const streamRef   = useRef(null);   // MediaStream (to stop tracks)
+  const viewfinderRef = useRef(null); // <video> element for live preview
 
-  // Clean up timer and media on unmount
+  // Cleanup on unmount
   useEffect(() => {
     return () => {
       clearInterval(timerRef.current);
-      if (mediaRef.current && mediaRef.current.state !== 'inactive') {
-        mediaRef.current.stop();
-      }
+      stopStream();
     };
   }, []);
 
-  const startRecording = async () => {
-    setMicError('');
+  // Attach live stream to viewfinder whenever it mounts
+  useEffect(() => {
+    if (phase === 'recording' && viewfinderRef.current && streamRef.current) {
+      viewfinderRef.current.srcObject = streamRef.current;
+    }
+  }, [phase]);
+
+  const stopStream = () => {
+    streamRef.current?.getTracks().forEach(t => t.stop());
+    streamRef.current = null;
+  };
+
+  const handlePickCamera = async (facingMode) => {
+    setCamError('');
     chunksRef.current = [];
 
-    // Request mic permission and start MediaRecorder
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode },
+        audio: true,
+      });
+      streamRef.current = stream;
+
       const recorder = new MediaRecorder(stream);
       mediaRef.current = recorder;
 
@@ -237,55 +306,48 @@ export default function Rolls() {
       };
 
       recorder.onstop = () => {
-        // Build blob URL from collected chunks
-        const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
+        const blob = new Blob(chunksRef.current, { type: 'video/webm' });
         const url  = URL.createObjectURL(blob);
-        setAudioBlobUrl(url);
-        // Stop all mic tracks to release the indicator light
-        stream.getTracks().forEach(t => t.stop());
+        setVideoBlobUrl(url);
+        stopStream();
       };
 
-      recorder.start(1000); // collect a chunk every second
+      recorder.start(1000);
+      setPhase('recording');
+      setRecSeconds(0);
+      timerRef.current = setInterval(() => setRecSeconds(s => s + 1), 1000);
     } catch (err) {
-      // Mic denied or unavailable — record timer-only, no audio
-      setMicError('Microphone access denied — recording timer only.');
-      console.warn('MediaRecorder error:', err);
+      setCamError('Camera access denied — check your browser permissions.');
+      setPhase('idle');
+      console.warn('Camera error:', err);
     }
-
-    // Start timer regardless
-    setRecording(true);
-    setRecSeconds(0);
-    timerRef.current = setInterval(() => setRecSeconds(s => s + 1), 1000);
   };
 
   const stopRecording = () => {
-    setRecording(false);
     clearInterval(timerRef.current);
     timerRef.current = null;
     setSavedDur(recSeconds);
+    setRecSeconds(0);
 
-    // Stop MediaRecorder — onstop will fire and build the blob URL
-    if (mediaRef.current && mediaRef.current.state !== 'inactive') {
-      mediaRef.current.stop();
+    if (mediaRef.current?.state !== 'inactive') {
+      mediaRef.current.stop(); // triggers onstop → builds blob
     }
 
-    setShowModal(true);
-    setRecSeconds(0);
+    setPhase('modal');
   };
 
   const handleSave = (session) => {
     addSession(session);
-    setShowModal(false);
+    setPhase('idle');
     setRounds(1);
-    setAudioBlobUrl(null);
+    setVideoBlobUrl(null);
     setSelected(session);
   };
 
   const handleDismiss = () => {
-    // Release the blob URL to free memory
-    if (audioBlobUrl) URL.revokeObjectURL(audioBlobUrl);
-    setAudioBlobUrl(null);
-    setShowModal(false);
+    if (videoBlobUrl) URL.revokeObjectURL(videoBlobUrl);
+    setVideoBlobUrl(null);
+    setPhase('idle');
     setRounds(1);
     setSavedDur(0);
   };
@@ -296,6 +358,7 @@ export default function Rolls() {
         <div style={{ fontSize: 10, letterSpacing: 3, textTransform: 'uppercase', color: '#444', marginBottom: 6, fontWeight: 700 }}>Session History</div>
         <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 30, color: '#fff', marginBottom: 20, letterSpacing: 1 }}>ROLL ANALYSIS</div>
 
+        {/* Session list */}
         {sessions.map(session => (
           <div key={session.id} onClick={() => setSelected(session)} style={{
             background: '#111', border: '1px solid #1f1f1f', borderRadius: 12,
@@ -316,8 +379,8 @@ export default function Rolls() {
                 {session.aiGenerated && (
                   <span style={{ fontSize: 9, letterSpacing: 1, textTransform: 'uppercase', padding: '2px 6px', background: 'rgba(74,222,128,0.1)', border: '1px solid rgba(74,222,128,0.2)', borderRadius: 4, color: G, fontWeight: 700 }}>AI</span>
                 )}
-                {session.audioBlobUrl && (
-                  <span style={{ fontSize: 9, letterSpacing: 1, textTransform: 'uppercase', padding: '2px 6px', background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: 4, color: AMBER, fontWeight: 700 }}>🎙</span>
+                {session.videoBlobUrl && (
+                  <span style={{ fontSize: 9, letterSpacing: 1, textTransform: 'uppercase', padding: '2px 6px', background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: 4, color: AMBER, fontWeight: 700 }}>📹</span>
                 )}
               </div>
               <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 6 }}>
@@ -331,15 +394,15 @@ export default function Rolls() {
           </div>
         ))}
 
-        {/* Record button / live recording UI */}
-        {!recording ? (
+        {/* ── IDLE: Start button ── */}
+        {phase === 'idle' && (
           <div style={{ marginTop: 8 }}>
-            {micError && (
+            {camError && (
               <div style={{ fontSize: 11, color: AMBER, marginBottom: 8, padding: '8px 12px', background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.15)', borderRadius: 8 }}>
-                ⚠ {micError}
+                ⚠ {camError}
               </div>
             )}
-            <div onClick={startRecording} style={{
+            <div onClick={() => setPhase('picking')} style={{
               width: '100%', background: '#111', border: '1px dashed #1f1f1f',
               borderRadius: 12, padding: 20, color: '#444', fontSize: 14,
               fontWeight: 700, cursor: 'pointer', textAlign: 'center',
@@ -350,51 +413,78 @@ export default function Rolls() {
               onMouseLeave={e => { e.currentTarget.style.borderColor = '#1f1f1f'; e.currentTarget.style.color = '#444'; }}
             >⏺ START RECORDING SESSION</div>
           </div>
-        ) : (
-          <div style={{
-            marginTop: 8, background: 'rgba(74,222,128,0.04)',
-            border: `1px solid ${G}`, borderRadius: 12, padding: 20,
-            animation: 'pulse 1.2s ease-in-out infinite',
-          }}>
-            {/* Mic indicator */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 12 }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: RED, display: 'inline-block', animation: 'pulse 1s ease infinite' }} />
-              <span style={{ fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', color: '#555', fontWeight: 700 }}>Recording Audio</span>
-            </div>
+        )}
 
-            {/* Live timer */}
-            <div style={{ textAlign: 'center', marginBottom: 16 }}>
-              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 48, color: G, letterSpacing: 2 }}>{fmt(recSeconds)}</div>
-              <div style={{ fontSize: 10, letterSpacing: 3, textTransform: 'uppercase', color: '#444', fontWeight: 700, marginTop: 4 }}>Live</div>
-            </div>
+        {/* ── RECORDING: viewfinder + timer + controls ── */}
+        {phase === 'recording' && (
+          <div style={{ marginTop: 8, border: `1px solid ${G}`, borderRadius: 12, overflow: 'hidden', background: '#000' }}>
 
-            {/* Round counter */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, marginBottom: 16 }}>
-              <div style={{ fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', color: '#444', fontWeight: 700 }}>Rounds</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <button onClick={() => setRounds(r => Math.max(1, r - 1))} style={{ width: 32, height: 32, borderRadius: '50%', background: '#111', border: '1px solid #2a2a2a', color: '#fff', fontSize: 18, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>−</button>
-                <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 28, color: '#fff', minWidth: 24, textAlign: 'center' }}>{rounds}</span>
-                <button onClick={() => setRounds(r => r + 1)} style={{ width: 32, height: 32, borderRadius: '50%', background: '#111', border: '1px solid #2a2a2a', color: '#fff', fontSize: 18, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</button>
+            {/* Live viewfinder */}
+            <div style={{ position: 'relative', aspectRatio: '16/9', background: '#000' }}>
+              <video
+                ref={viewfinderRef}
+                autoPlay
+                muted
+                playsInline
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              />
+              {/* REC badge */}
+              <div style={{
+                position: 'absolute', top: 10, left: 10,
+                display: 'flex', alignItems: 'center', gap: 6,
+                background: 'rgba(0,0,0,0.7)', borderRadius: 6, padding: '4px 10px',
+              }}>
+                <span style={{ width: 8, height: 8, borderRadius: '50%', background: RED, display: 'inline-block', animation: 'pulse 1s ease infinite' }} />
+                <span style={{ fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', color: '#fff', fontWeight: 700 }}>REC</span>
               </div>
+              {/* Live timer overlay */}
+              <div style={{
+                position: 'absolute', top: 10, right: 10,
+                background: 'rgba(0,0,0,0.7)', borderRadius: 6, padding: '4px 10px',
+                fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 20, color: G, letterSpacing: 2,
+              }}>{fmt(recSeconds)}</div>
             </div>
 
-            <button onClick={stopRecording} style={{
-              width: '100%', background: RED, color: '#fff', border: 'none',
-              borderRadius: 10, padding: 14,
-              fontFamily: "'Barlow Condensed', sans-serif",
-              fontWeight: 900, fontSize: 18, letterSpacing: 2, cursor: 'pointer',
-            }}>⏹ STOP & ANALYZE</button>
+            {/* Controls below viewfinder */}
+            <div style={{ padding: '14px 16px 16px', background: '#0d0d0d' }}>
+              {/* Round counter */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, marginBottom: 14 }}>
+                <div style={{ fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', color: '#444', fontWeight: 700 }}>Rounds</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <button onClick={() => setRounds(r => Math.max(1, r - 1))} style={{ width: 32, height: 32, borderRadius: '50%', background: '#111', border: '1px solid #2a2a2a', color: '#fff', fontSize: 18, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>−</button>
+                  <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 28, color: '#fff', minWidth: 24, textAlign: 'center' }}>{rounds}</span>
+                  <button onClick={() => setRounds(r => r + 1)} style={{ width: 32, height: 32, borderRadius: '50%', background: '#111', border: '1px solid #2a2a2a', color: '#fff', fontSize: 18, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</button>
+                </div>
+              </div>
+
+              <button onClick={stopRecording} style={{
+                width: '100%', background: RED, color: '#fff', border: 'none',
+                borderRadius: 10, padding: 14,
+                fontFamily: "'Barlow Condensed', sans-serif",
+                fontWeight: 900, fontSize: 18, letterSpacing: 2, cursor: 'pointer',
+              }}>⏹ STOP & ANALYZE</button>
+            </div>
           </div>
         )}
       </div>
 
+      {/* Camera picker sheet */}
+      {phase === 'picking' && (
+        <CameraPickerSheet
+          onPick={handlePickCamera}
+          onDismiss={() => setPhase('idle')}
+        />
+      )}
+
+      {/* RollDetail overlay */}
       {selected && <RollDetail session={selected} onBack={() => setSelected(null)} />}
 
-      {showModal && (
+      {/* Analysis modal */}
+      {phase === 'modal' && (
         <AnalysisModal
           duration={savedDur}
           rounds={rounds}
-          audioBlobUrl={audioBlobUrl}
+          videoBlobUrl={videoBlobUrl}
           onSave={handleSave}
           onDismiss={handleDismiss}
         />
