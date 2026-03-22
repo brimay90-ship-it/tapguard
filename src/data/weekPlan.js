@@ -1,42 +1,90 @@
 export const weekPlan = [
   [ // Mon
-    { title: 'Hip Escape Drill', meta: '3 × 10 each side', tags: ['Mobility', 'BJJ-Specific'] },
-    { title: 'Kettlebell Swing', meta: '4 × 15 reps', tags: ['Strength', 'Power'] },
-    { title: 'Hip Flexor Stretch', meta: 'Hold 45 sec × 3', tags: ['Flexibility'] },
-    { title: 'Sprawl to Base', meta: '3 × 20 reps', tags: ['BJJ-Specific', 'Cardio'] },
+    { title: 'Kettlebell Swing', meta: '4 × 15 reps', tags: ['Strength', 'Power'], sets: 4, reps: 15, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/kettlebell-swing.gif' },
+    { title: 'Pull-Ups', meta: '4 × max reps', tags: ['Strength', 'Grip'], sets: 4, reps: 8, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/11/pull-up.gif' },
+    { title: 'Plank Hold', meta: '3 × 45 sec', tags: ['Core'], sets: 3, reps: null, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/plank.gif' },
+    { title: 'Face Pull', meta: '3 × 15 reps', tags: ['Injury Prevention'], sets: 3, reps: 15, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/03/face-pull.gif' },
   ],
   [ // Tue
-    { title: 'Pigeon Pose Sequence', meta: '2 min each side × 3', tags: ['Flexibility'] },
-    { title: 'Thoracic Rotation', meta: '3 × 10 each side', tags: ['Mobility'] },
-    { title: '90/90 Hip Stretch', meta: '2 × 60 sec', tags: ['Flexibility'] },
+    { title: 'Deadlift', meta: '4 × 5 @ 75% 1RM', tags: ['Strength'], sets: 4, reps: 5, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/barbell-deadlift.gif' },
+    { title: 'Single-Leg RDL', meta: '3 × 8 each leg', tags: ['Strength', 'Balance'], sets: 3, reps: 8, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/single-leg-rdl.gif' },
+    { title: 'TRX Row', meta: '3 × 12 reps', tags: ['Strength'], sets: 3, reps: 12, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/04/trx-row.gif' },
+    { title: 'L-Sit Hold', meta: '3 × 20 sec', tags: ['Core'], sets: 3, reps: null, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/06/l-sit.gif' },
   ],
   [ // Wed
-    { title: 'Deadlift', meta: '4 × 5 @ 75% 1RM', tags: ['Strength'] },
-    { title: 'Pull-Ups', meta: '4 × max reps', tags: ['Strength', 'Grip'] },
-    { title: 'Plank w/ Hip Tap', meta: '3 × 45 sec', tags: ['Core'] },
-    { title: 'Face Pull', meta: '3 × 15 reps', tags: ['Injury Prevention'] },
-    { title: 'Neck Bridges', meta: '2 × 30 sec', tags: ['BJJ-Specific'] },
+    { title: 'Front Squat', meta: '4 × 5 reps', tags: ['Strength', 'Power'], sets: 4, reps: 5, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/front-squat.gif' },
+    { title: 'Neck Bridges', meta: '2 × 30 sec', tags: ['BJJ-Specific'], sets: 2, reps: null, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/08/wrestler-bridge.gif' },
+    { title: 'Jump Rope', meta: '5 × 2 min rounds', tags: ['Cardio', 'Footwork'], sets: 5, reps: null, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/03/jump-rope.gif' },
+    { title: 'Sprawl Circuits', meta: '3 × 10 sprawls', tags: ['BJJ-Specific'], sets: 3, reps: 10, gifUrl: 'https://media.giphy.com/media/3o7TKMt1VVNkHV2PaE/giphy.gif' },
   ],
   [ // Thu
-    { title: 'Burgener Warm-up', meta: '10 min', tags: ['Mobility'] },
-    { title: 'Jump Rope', meta: '5 × 2 min rounds', tags: ['Cardio', 'Footwork'] },
-    { title: 'Sprawl Circuits', meta: '3 × 10 sprawls', tags: ['BJJ-Specific'] },
+    { title: 'Kettlebell Clean & Press', meta: '4 × 8 each side', tags: ['Strength', 'Power'], sets: 4, reps: 8, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/kettlebell-clean-and-press.gif' },
+    { title: 'Chin-Ups', meta: '4 × max reps', tags: ['Strength', 'Grip'], sets: 4, reps: 6, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/11/chin-up.gif' },
+    { title: 'Ab Wheel Rollout', meta: '3 × 10 reps', tags: ['Core'], sets: 3, reps: 10, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/09/ab-wheel-rollout.gif' },
+    { title: 'Hip Flexor Stretch', meta: '3 × 45 sec each', tags: ['Flexibility'], sets: 3, reps: null, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/kneeling-hip-flexor-stretch.gif' },
   ],
   [ // Fri
-    { title: 'Front Squat', meta: '4 × 5 reps', tags: ['Strength', 'Power'] },
-    { title: 'Single-Leg RDL', meta: '3 × 8 each leg', tags: ['Strength', 'Balance'] },
-    { title: 'TRX Row', meta: '3 × 12 reps', tags: ['Strength'] },
-    { title: 'L-Sit Hold', meta: '3 × 20 sec', tags: ['Core'] },
+    { title: 'Barbell Row', meta: '4 × 8 reps', tags: ['Strength'], sets: 4, reps: 8, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/barbell-row.gif' },
+    { title: 'Bulgarian Split Squat', meta: '3 × 10 each leg', tags: ['Strength', 'Balance'], sets: 3, reps: 10, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/dumbbell-bulgarian-split-squat.gif' },
+    { title: 'Farmer Carry', meta: '3 × 40m', tags: ['Grip', 'Strength'], sets: 3, reps: null, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/08/farmers-carry.gif' },
+    { title: 'Pallof Press', meta: '3 × 12 each side', tags: ['Core'], sets: 3, reps: 12, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/07/pallof-press.gif' },
   ],
   [ // Sat
-    { title: '5-Min Rounds', meta: '5 × 5 min rolling', tags: ['Cardio', 'Sparring'] },
-    { title: 'Active Recovery Walk', meta: '20 min easy', tags: ['Recovery'] },
-    { title: 'Full Body Stretch', meta: '15 min flow', tags: ['Flexibility'] },
+    { title: 'Deadlift', meta: '3 × 3 @ 80% 1RM', tags: ['Strength'], sets: 3, reps: 3, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/barbell-deadlift.gif' },
+    { title: 'Dips', meta: '4 × max reps', tags: ['Strength'], sets: 4, reps: 10, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/chest-dip.gif' },
+    { title: 'Dragon Flag', meta: '3 × 6 reps', tags: ['Core'], sets: 3, reps: 6, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/06/dragon-flag.gif' },
   ],
   [ // Sun
-    { title: 'Yoga Flow', meta: '30 min', tags: ['Recovery', 'Flexibility'] },
-    { title: 'Ice Bath / Cold Shower', meta: '5 min', tags: ['Recovery'] },
+    { title: 'Goblet Squat', meta: '3 × 12 reps', tags: ['Strength', 'Mobility'], sets: 3, reps: 12, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/goblet-squat.gif' },
+    { title: 'Push-Ups', meta: '3 × 20 reps', tags: ['Strength'], sets: 3, reps: 20, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/push-up.gif' },
+    { title: 'Plank w/ Hip Tap', meta: '3 × 45 sec', tags: ['Core'], sets: 3, reps: null, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/plank-hip-dips.gif' },
   ],
+];
+
+// BJJ day recovery & prep content
+export const bjjDayTips = [
+  { // Mon
+    warmup: ['Hip Escape Drill — 3 × 10 each side', 'Shrimp to base — 2 × 20m', 'Sprawl practice — 3 × 10'],
+    recovery: ['10 min post-class stretch', 'Focus: hip flexors & shoulders'],
+    hydration: 'Drink 500ml 30 min before class. Sip during, 750ml after.',
+    extras: ['🧊 Cold shower post-training (2–3 min) reduces inflammation', '🧖 Epsom salt bath if legs are heavy'],
+  },
+  { // Tue
+    warmup: ['Thoracic rotation — 3 × 10 each side', '90/90 hip stretch — 2 × 60 sec', 'Neck rolls — 2 × 30 sec each'],
+    recovery: ['Pigeon pose — 2 min each side', 'Doorway pec stretch'],
+    hydration: 'Start hydrating 2 hrs before class. Electrolytes if training > 90 min.',
+    extras: ['🌡️ Sauna 15–20 min post-class if available — aids recovery', '😴 Prioritise 8 hrs sleep tonight'],
+  },
+  { // Wed
+    warmup: ['Burgener warm-up — 10 min', 'Jump rope — 3 × 2 min', 'Arm circles & wrist prep'],
+    recovery: ['Full body stretch — 10 min', 'Focus: lower back & glutes'],
+    hydration: 'Weigh in before and after class. Replace each 1lb lost with 500ml water.',
+    extras: ['🥶 Cold plunge 3–5 min if sore from Monday', '🎯 Visualise 2 techniques before class'],
+  },
+  { // Thu
+    warmup: ['Hip mobility flow — 5 min', 'Jumping jacks — 2 min', 'Shadow wrestling — 3 min'],
+    recovery: ['Foam roll IT band & quads', 'Pigeon pose — 90 sec each side'],
+    hydration: 'Pre-train meal 2 hrs before. Avoid heavy food 1 hr before rolling.',
+    extras: ['🧊 Ice pack any niggles for 10 min post-class', '📝 Log your sparring notes in the Notes tab'],
+  },
+  { // Fri
+    warmup: ['Cossack squat — 2 × 10', 'Hip flexor lunge stretch', 'Wrist & finger warm-up'],
+    recovery: ['End of week full body stretch — 15 min', 'Focus: neck, shoulders, hips'],
+    hydration: 'Week\'s end — check your hydration habits. Aim for clear urine.',
+    extras: ['🌡️ Sauna session tonight — flush out the week\'s training', '🛁 Contrast shower (hot/cold) for circulation'],
+  },
+  { // Sat
+    warmup: ['Full joint mobility flow — 10 min', 'Light jog or bike — 5 min', 'Partner drilling warm-up'],
+    recovery: ['Active recovery walk — 20 min easy', 'Full body stretch flow — 15 min'],
+    hydration: 'Competition prep day — stay ahead of thirst. 3L+ target.',
+    extras: ['🥶 Cold plunge post-training if available', '🍌 Banana + protein shake within 30 min of finishing'],
+  },
+  { // Sun
+    warmup: ['Yoga flow — 20 min', 'Breath work — 5 min box breathing'],
+    recovery: ['Full body mobility — 30 min', 'Focus: anywhere that feels tight'],
+    hydration: 'Rest day — still aim for 2–3L. Herbal tea counts.',
+    extras: ['🧖 Sauna or steam room — perfect rest day recovery', '🥶 Cold shower in the morning to reset the nervous system', '😴 Prioritise sleep — this is when you grow'],
+  },
 ];
 
 export const rollSessions = [

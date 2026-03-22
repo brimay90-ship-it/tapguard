@@ -12,10 +12,10 @@ export function AppProvider({ children }) {
   const [giPref, setGiPref]       = useState('');
   const [styles, setStyles]       = useState([]);
   const [goals, setGoals]         = useState([]);
-  const [freq, setFreq]           = useState('');       // BJJ days/week
-  const [scFreq, setScFreq]       = useState('');       // S&C workouts/week outside BJJ
-  const [bjjDays, setBjjDays]     = useState([]);       // e.g. [1, 3, 5] = Mon/Wed/Fri
-  const [workoutDays, setWorkoutDays] = useState([]);   // e.g. [2, 4] = Tue/Thu
+  const [freq, setFreq]           = useState('');
+  const [scFreq, setScFreq]       = useState('');
+  const [bjjDays, setBjjDays]     = useState([]);
+  const [workoutDays, setWorkoutDays] = useState([]);
   const [comp, setComp]           = useState({
     guard: 3, pass: 3, sub: 3, esc: 3, takedown: 3, position: 3,
   });
@@ -33,11 +33,28 @@ export function AppProvider({ children }) {
     { id: 2, date: 'Mar 7 · Friday',    title: 'Back Takes & RNC',          moves: ['Seatbelt', 'Hook Insertion', 'RNC'],      feel: 'lost', note: 'Struggling with seatbelt.' },
   ]);
 
-  // Training
+  // Training — exercise completion
   const [exerciseDone, setExerciseDone] = useState({});
   const toggleExercise = (day, i) => {
     const key = `${day}-${i}`;
     setExerciseDone(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  // Training — set logs: { 'dayIdx-exIdx-setIdx': { reps: '', weight: '' } }
+  const [setLogs, setSetLogs] = useState({});
+  const updateSetLog = (dayIdx, exIdx, setIdx, field, value) => {
+    const key = `${dayIdx}-${exIdx}-${setIdx}`;
+    setSetLogs(prev => ({
+      ...prev,
+      [key]: { ...(prev[key] || {}), [field]: value },
+    }));
+  };
+  const getSetLog = (dayIdx, exIdx, setIdx) => {
+    return setLogs[`${dayIdx}-${exIdx}-${setIdx}`] || {};
+  };
+  const getPrevSetLog = (dayIdx, exIdx, setIdx) => {
+    if (setIdx === 0) return {};
+    return setLogs[`${dayIdx}-${exIdx}-${setIdx - 1}`] || {};
   };
 
   const finishOnboarding = () => setOnboardingDone(true);
@@ -77,6 +94,7 @@ export function AppProvider({ children }) {
       bodyType, setBodyType,
       notes, addNote,
       exerciseDone, toggleExercise,
+      setLogs, updateSetLog, getSetLog, getPrevSetLog,
       focusSkill, beltColor, lowestComp,
     }}>
       {children}
