@@ -2,9 +2,9 @@ import { useState, useRef, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import RollDetail from './RollDetail';
 
-const G     = '#4ade80';
-const AMBER = '#f59e0b';
-const RED   = '#ef4444';
+const G     = '#0BF571';
+const AMBER = '#F0A020';
+const RED   = '#FF3B5C';
 const BLUE  = '#3b82f6';
 
 const fmt = (s) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
@@ -29,7 +29,7 @@ function parseYouTubeId(url) {
 function CameraPickerSheet({ onPick, onDismiss }) {
   return (
     <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.85)', zIndex:200, display:'flex', alignItems:'flex-end', maxWidth:430, margin:'0 auto' }}>
-      <div style={{ width:'100%', background:'#0d0d0d', borderRadius:'20px 20px 0 0', padding:'24px 20px 40px', border:'1px solid #1f1f1f', borderBottom:'none', animation:'fadeUp 0.25s ease both' }}>
+      <div style={{ width:'100%', background:'#080808', borderRadius:'20px 20px 0 0', padding:'24px 20px 40px', border:'1px solid #1f1f1f', borderBottom:'none', animation:'fadeUp 0.25s ease both' }}>
         <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:G, fontWeight:700, marginBottom:6 }}>Start Recording</div>
         <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:26, color:'#fff', letterSpacing:1, marginBottom:20 }}>CHOOSE CAMERA</div>
         {[
@@ -67,7 +67,7 @@ function YouTubeLinkSheet({ onConfirm, onDismiss }) {
 
   return (
     <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.85)', zIndex:200, display:'flex', alignItems:'flex-end', maxWidth:430, margin:'0 auto' }}>
-      <div style={{ width:'100%', background:'#0d0d0d', borderRadius:'20px 20px 0 0', padding:'24px 20px 40px', border:'1px solid #1f1f1f', borderBottom:'none', animation:'fadeUp 0.25s ease both' }}>
+      <div style={{ width:'100%', background:'#080808', borderRadius:'20px 20px 0 0', padding:'24px 20px 40px', border:'1px solid #1f1f1f', borderBottom:'none', animation:'fadeUp 0.25s ease both' }}>
         <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:BLUE, fontWeight:700, marginBottom:6 }}>YouTube</div>
         <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:26, color:'#fff', letterSpacing:1, marginBottom:6 }}>PASTE VIDEO LINK</div>
         <div style={{ fontSize:13, color:'#444', marginBottom:20, lineHeight:1.5 }}>Paste a link to your YouTube roll and we'll embed it in the session for review.</div>
@@ -75,7 +75,7 @@ function YouTubeLinkSheet({ onConfirm, onDismiss }) {
           autoFocus value={url}
           onChange={e => { setUrl(e.target.value); setErr(''); }}
           placeholder="https://youtube.com/watch?v=..."
-          style={{ width:'100%', background:'#111', border:`1px solid ${err ? RED : '#1f1f1f'}`, borderRadius:10, padding:'13px 14px', color:'#fff', fontFamily:"'Barlow',sans-serif", fontSize:14, outline:'none', boxSizing:'border-box', transition:'border-color 0.18s', marginBottom: err ? 8 : 16 }}
+          style={{ width:'100%', background:'#111', border:`1px solid ${err ? RED : '#1f1f1f'}`, borderRadius:10, padding:'13px 14px', color:'#fff', fontFamily:"'Space Grotesk',sans-serif", fontSize:14, outline:'none', boxSizing:'border-box', transition:'border-color 0.18s', marginBottom: err ? 8 : 16 }}
           onFocus={e => e.target.style.borderColor = BLUE}
           onBlur={e  => e.target.style.borderColor = err ? RED : '#1f1f1f'}
         />
@@ -136,11 +136,10 @@ Respond ONLY with valid JSON, no markdown, no preamble:
 Generate 3–5 missed moves and 7–10 timeline entries. Use real BJJ terminology.`;
 
     try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
+      const response = await fetch('/api/analyze', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'anthropic-dangerous-direct-browser-access': 'true',
         },
         body: JSON.stringify({
           model: 'claude-sonnet-4-20250514',
@@ -180,12 +179,12 @@ Generate 3–5 missed moves and 7–10 timeline entries. Use real BJJ terminolog
     }
   };
 
-  const inp = { width:'100%', background:'#111', border:'1px solid #1f1f1f', borderRadius:10, padding:'12px 14px', color:'#fff', fontFamily:"'Barlow',sans-serif", fontSize:14, fontWeight:500, outline:'none', transition:'border-color 0.18s', boxSizing:'border-box' };
+  const inp = { width:'100%', background:'#111', border:'1px solid #1f1f1f', borderRadius:10, padding:'12px 14px', color:'#fff', fontFamily:"'Space Grotesk',sans-serif", fontSize:14, fontWeight:500, outline:'none', transition:'border-color 0.18s', boxSizing:'border-box' };
   const lbl = { fontSize:10, letterSpacing:2, textTransform:'uppercase', color:'#444', marginBottom:8, fontWeight:700 };
 
   return (
     <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.92)', zIndex:100, display:'flex', alignItems:'flex-end', maxWidth:430, margin:'0 auto' }}>
-      <div style={{ width:'100%', background:'#0d0d0d', borderRadius:'20px 20px 0 0', padding:'24px 20px 40px', border:'1px solid #1f1f1f', borderBottom:'none', animation:'fadeUp 0.3s ease both', maxHeight:'92vh', overflowY:'auto' }}>
+      <div style={{ width:'100%', background:'#080808', borderRadius:'20px 20px 0 0', padding:'24px 20px 40px', border:'1px solid #1f1f1f', borderBottom:'none', animation:'fadeUp 0.3s ease both', maxHeight:'92vh', overflowY:'auto' }}>
 
         {/* Header */}
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:20 }}>
@@ -215,7 +214,7 @@ Generate 3–5 missed moves and 7–10 timeline entries. Use real BJJ terminolog
         {mediaSource?.type === 'blob' && (
           <div style={{ marginBottom:16 }}>
             <div style={{ fontSize:10, letterSpacing:2, textTransform:'uppercase', color:G, fontWeight:700, marginBottom:8 }}>📹 Video Ready</div>
-            <div style={{ borderRadius:12, overflow:'hidden', background:'#000', border:'1px solid rgba(74,222,128,0.2)', aspectRatio:'16/9' }}>
+            <div style={{ borderRadius:12, overflow:'hidden', background:'#080808', border:'1px solid rgba(74,222,128,0.2)', aspectRatio:'16/9' }}>
               <video controls src={mediaSource.url} style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
             </div>
             <div style={{ fontSize:11, color:'#333', marginTop:6 }}>Playback available this session only.</div>
@@ -225,7 +224,7 @@ Generate 3–5 missed moves and 7–10 timeline entries. Use real BJJ terminolog
         {mediaSource?.type === 'youtube' && (
           <div style={{ marginBottom:16 }}>
             <div style={{ fontSize:10, letterSpacing:2, textTransform:'uppercase', color:BLUE, fontWeight:700, marginBottom:8 }}>▶ YouTube Linked</div>
-            <div style={{ borderRadius:12, overflow:'hidden', background:'#000', border:'1px solid rgba(59,130,246,0.2)', aspectRatio:'16/9' }}>
+            <div style={{ borderRadius:12, overflow:'hidden', background:'#080808', border:'1px solid rgba(59,130,246,0.2)', aspectRatio:'16/9' }}>
               <iframe width="100%" height="100%" src={`https://www.youtube.com/embed/${mediaSource.id}`} title="Session Video" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen style={{ display:'block' }} />
             </div>
           </div>
@@ -252,7 +251,7 @@ Generate 3–5 missed moves and 7–10 timeline entries. Use real BJJ terminolog
           <div style={{ background:'rgba(239,68,68,0.08)', border:'1px solid rgba(239,68,68,0.2)', borderRadius:8, padding:'10px 14px', marginBottom:14, fontSize:13, color:RED }}>{error}</div>
         )}
 
-        <button onClick={analyze} disabled={loading} style={{ width:'100%', background:loading ? '#1a1a1a' : G, color:loading ? '#444' : '#000', border:'none', padding:14, borderRadius:10, fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:20, letterSpacing:2, cursor:loading ? 'not-allowed' : 'pointer', transition:'all 0.18s', marginBottom:10, display:'flex', alignItems:'center', justifyContent:'center', gap:10 }}>
+        <button onClick={analyze} disabled={loading} style={{ width:'100%', background:loading ? '#1A1C20' : G, color:loading ? '#444' : '#000', border:'none', padding:14, borderRadius:10, fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:20, letterSpacing:2, cursor:loading ? 'not-allowed' : 'pointer', transition:'all 0.18s', marginBottom:10, display:'flex', alignItems:'center', justifyContent:'center', gap:10 }}>
           {loading ? (
             <><span style={{ width:16, height:16, border:'2px solid #333', borderTopColor:G, borderRadius:'50%', animation:'spin 0.7s linear infinite', display:'inline-block' }} />ANALYZING WITH AI...</>
           ) : '⚡ ANALYZE SESSION'}
@@ -382,7 +381,7 @@ export default function Rolls() {
                 {session.mediaSource?.type === 'youtube' && <span style={{ fontSize:9, padding:'2px 6px', background:'rgba(59,130,246,0.1)', border:'1px solid rgba(59,130,246,0.2)', borderRadius:4, color:BLUE, fontWeight:700 }}>▶ YT</span>}
               </div>
               <div style={{ display:'flex', gap:5, flexWrap:'wrap', marginBottom:6 }}>
-                {session.tags.map(t => <span key={t} style={{ fontSize:10, letterSpacing:1, textTransform:'uppercase', padding:'2px 8px', background:'#1a1a1a', borderRadius:4, color:'#555', fontWeight:600 }}>{t}</span>)}
+                {session.tags.map(t => <span key={t} style={{ fontSize:10, letterSpacing:1, textTransform:'uppercase', padding:'2px 8px', background:'#1A1C20', borderRadius:4, color:'#555', fontWeight:600 }}>{t}</span>)}
               </div>
               <div style={{ fontSize:12, color:AMBER, display:'flex', alignItems:'center', gap:4, fontWeight:600 }}>⚡ {session.missed} missed opportunities</div>
             </div>
@@ -431,8 +430,8 @@ export default function Rolls() {
 
         {/* ── RECORDING: live viewfinder ── */}
         {phase === 'recording' && (
-          <div style={{ marginTop:8, border:`1px solid ${G}`, borderRadius:12, overflow:'hidden', background:'#000' }}>
-            <div style={{ position:'relative', aspectRatio:'16/9', background:'#000' }}>
+          <div style={{ marginTop:8, border:`1px solid ${G}`, borderRadius:12, overflow:'hidden', background:'#080808' }}>
+            <div style={{ position:'relative', aspectRatio:'16/9', background:'#080808' }}>
               <video ref={viewfinderRef} autoPlay muted playsInline style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
               <div style={{ position:'absolute', top:10, left:10, display:'flex', alignItems:'center', gap:6, background:'rgba(0,0,0,0.7)', borderRadius:6, padding:'4px 10px' }}>
                 <span style={{ width:8, height:8, borderRadius:'50%', background:RED, display:'inline-block', animation:'pulse 1s ease infinite' }} />
@@ -440,13 +439,13 @@ export default function Rolls() {
               </div>
               <div style={{ position:'absolute', top:10, right:10, background:'rgba(0,0,0,0.7)', borderRadius:6, padding:'4px 10px', fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:20, color:G, letterSpacing:2 }}>{fmt(recSeconds)}</div>
             </div>
-            <div style={{ padding:'14px 16px 16px', background:'#0d0d0d' }}>
+            <div style={{ padding:'14px 16px 16px', background:'#080808' }}>
               <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:16, marginBottom:14 }}>
                 <div style={{ fontSize:11, letterSpacing:2, textTransform:'uppercase', color:'#444', fontWeight:700 }}>Rounds</div>
                 <div style={{ display:'flex', alignItems:'center', gap:12 }}>
-                  <button onClick={() => setRounds(r => Math.max(1, r - 1))} style={{ width:32, height:32, borderRadius:'50%', background:'#111', border:'1px solid #2a2a2a', color:'#fff', fontSize:18, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>−</button>
+                  <button onClick={() => setRounds(r => Math.max(1, r - 1))} style={{ width:32, height:32, borderRadius:'50%', background:'#111', border:'1px solid #2A2D32', color:'#fff', fontSize:18, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>−</button>
                   <span style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:28, color:'#fff', minWidth:24, textAlign:'center' }}>{rounds}</span>
-                  <button onClick={() => setRounds(r => r + 1)} style={{ width:32, height:32, borderRadius:'50%', background:'#111', border:'1px solid #2a2a2a', color:'#fff', fontSize:18, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>+</button>
+                  <button onClick={() => setRounds(r => r + 1)} style={{ width:32, height:32, borderRadius:'50%', background:'#111', border:'1px solid #2A2D32', color:'#fff', fontSize:18, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>+</button>
                 </div>
               </div>
               <button onClick={stopRecording} style={{ width:'100%', background:RED, color:'#fff', border:'none', borderRadius:10, padding:14, fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:18, letterSpacing:2, cursor:'pointer' }}>⏹ STOP & ANALYZE</button>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 
-const G = '#4ade80';
+const G = '#0BF571';
 const FEELS = [
   { val: 'lost',   emoji: '😵', label: 'Lost'      },
   { val: 'okay',   emoji: '😐', label: 'Okay'      },
@@ -45,14 +45,14 @@ export default function NoteEditor({ note: existingNote, onClose }) {
 
   const inp = {
     width: '100%', background: '#111', border: '1px solid #1f1f1f', borderRadius: 10,
-    padding: '12px 14px', color: '#fff', fontFamily: "'Barlow', sans-serif",
+    padding: '12px 14px', color: '#fff', fontFamily: "'Space Grotesk', sans-serif",
     fontSize: 15, fontWeight: 500, outline: 'none', resize: 'none',
     transition: 'border-color 0.18s',
   };
   const lbl = { fontSize: 10, letterSpacing: 2, textTransform: 'uppercase', color: '#444', marginBottom: 8, fontWeight: 700 };
 
   return (
-    <div className="overlay-enter" style={{ position: 'absolute', inset: 0, background: '#000', overflowY: 'auto', padding: '20px 20px 80px', zIndex: 10 }}>
+    <div className="overlay-enter" style={{ position: 'absolute', inset: 0, background: '#080808', overflowY: 'auto', padding: '20px 20px 80px', zIndex: 10 }}>
       <button onClick={onClose} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#444', cursor: 'pointer', background: 'none', border: 'none', marginBottom: 20, fontWeight: 700, transition: 'color 0.18s' }}
         onMouseEnter={e => e.currentTarget.style.color = '#aaa'}
         onMouseLeave={e => e.currentTarget.style.color = '#444'}

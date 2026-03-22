@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 
-const G = '#4ade80';
+const G = '#0BF571';
 const FOCUS_SKILLS = [
   { skill: 'HIP ESCAPE MECHANICS',    desc: 'Drill shrimp + bridge combos 10 min before class.', detail: `The hip escape (shrimp) is the single most important movement in BJJ. Without it, you cannot recover guard, escape side control, or create frames.\n\nKey checkpoints:\n• Drive off your bottom foot, not your top\n• Keep your inside elbow glued to your inside knee\n• Shrimp THEN replace guard — not simultaneously\n• Chin tucked, don't give up your neck\n\nDrill: 3 sets of 10 full-length shrimps before every session.`, youtube: 'https://www.youtube.com/embed/5pFhMyCRO5Y' },
   { skill: 'KNEE SLICE PASS',          desc: 'Weight forward, pin the hip before you slice.', detail: `The knee slice is one of the highest percentage guard passes at every level.\n\nKey checkpoints:\n• Establish a strong cross-collar or underhook grip first\n• Drop your hip onto their far hip — this IS the pass\n• Slice your knee across their thigh at a diagonal\n• Land in side control with your head on the mat side\n\nDrill: Slow-motion knee slice from standing — 5 on each side.`, youtube: 'https://www.youtube.com/embed/7fFqfHBolco' },
@@ -61,7 +61,7 @@ function SpiderChart({ comp }) {
       {[2,4,6,8,10].map(v=>{
         const pts=keys.map((_,i)=>pt(i,v));
         const d=pts.map((p,i)=>`${i===0?'M':'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')+' Z';
-        return <path key={v} d={d} fill="none" stroke={v===10?'#2a2a2a':'#1a1a1a'} strokeWidth={v===10?1:0.5}/>;
+        return <path key={v} d={d} fill="none" stroke={v===10?'#2A2D32':'#1A1C20'} strokeWidth={v===10?1:0.5}/>;
       })}
       {keys.map((_,i)=>{const tip=pt(i,10); return <line key={i} x1={cx} y1={cy} x2={tip.x.toFixed(1)} y2={tip.y.toFixed(1)} stroke="#1f1f1f" strokeWidth={0.75}/>;  })}
       <path d={path} fill="rgba(74,222,128,0.12)" stroke={G} strokeWidth={1.5} strokeLinejoin="round"/>
@@ -71,7 +71,7 @@ function SpiderChart({ comp }) {
         const anchor=Math.abs(Math.cos(a))<0.2?'middle':Math.cos(a)>0?'start':'end';
         return (
           <g key={i}>
-            <text x={p.x.toFixed(1)} y={(p.y-7).toFixed(1)} textAnchor={anchor} dominantBaseline="central" fontSize={8} fill="#555" fontFamily="'Barlow', sans-serif" fontWeight="600" letterSpacing="1">{label}</text>
+            <text x={p.x.toFixed(1)} y={(p.y-7).toFixed(1)} textAnchor={anchor} dominantBaseline="central" fontSize={8} fill="#555" fontFamily="'Space Grotesk', sans-serif" fontWeight="600" letterSpacing="1">{label}</text>
             <text x={p.x.toFixed(1)} y={(p.y+7).toFixed(1)} textAnchor={anchor} dominantBaseline="central" fontSize={14} fill={G} fontFamily="'Barlow Condensed', sans-serif" fontWeight="800">{comp[k]||0}</text>
           </g>
         );
@@ -90,16 +90,16 @@ function FocusOverlay({ focus, onClose }) {
   return (
     <div className="overlay-enter" style={{
       position:'fixed', inset:0, zIndex:50,
-      background:'#000', overflowY:'auto',
+      background:'#080808', overflowY:'auto',
       padding:'0 0 60px', maxWidth:430, margin:'0 auto',
     }}>
-      <div style={{ padding:'52px 20px 20px', borderBottom:'1px solid #1a1a1a', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-        <button onClick={onClose} style={{ background:'none', border:'none', color:'#555', fontSize:13, cursor:'pointer', fontWeight:600, fontFamily:"'Barlow',sans-serif", display:'flex', alignItems:'center', gap:6 }}>← Back</button>
+      <div style={{ padding:'52px 20px 20px', borderBottom:'1px solid #1A1C20', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+        <button onClick={onClose} style={{ background:'none', border:'none', color:'#555', fontSize:13, cursor:'pointer', fontWeight:600, fontFamily:"'Space Grotesk',sans-serif", display:'flex', alignItems:'center', gap:6 }}>← Back</button>
         <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:G, fontWeight:700 }}>This Week's Focus</div>
       </div>
       <div style={{ padding:'24px 20px 0' }}>
         <h1 style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:40, color:'#fff', lineHeight:0.95, marginBottom:20, letterSpacing:1 }}>{focus.skill}</h1>
-        <div style={{ width:'100%', aspectRatio:'16/9', borderRadius:12, overflow:'hidden', background:'#111', marginBottom:20, border:'1px solid #1a1a1a' }}>
+        <div style={{ width:'100%', aspectRatio:'16/9', borderRadius:12, overflow:'hidden', background:'#111', marginBottom:20, border:'1px solid #1A1C20' }}>
           <iframe width="100%" height="100%" src={focus.youtube} title={focus.skill} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen style={{display:'block'}}/>
         </div>
         <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:'#555', marginBottom:14, fontWeight:600 }}>TECHNIQUE BREAKDOWN</div>
@@ -136,7 +136,7 @@ export default function Dashboard() {
   const score = calcScore(comp);
   const { title, tagline } = getTitleAndTagline(score, styles);
   // Fixed: was score < 75 ? G : G (identical branches)
-  const scoreColor = score < 30 ? '#555' : score < 55 ? '#f59e0b' : score < 75 ? '#f97316' : G;
+  const scoreColor = score < 30 ? '#5A5D65' : score < 60 ? '#F0A020' : score < 80 ? '#F0A020' : G;
   const currentFocus = FOCUS_SKILLS[focusIndex % FOCUS_SKILLS.length];
 
   const now = new Date();
@@ -164,7 +164,7 @@ export default function Dashboard() {
         {/* Focus Card */}
         <div key={focusIndex} onClick={()=>setFocusOverlay(true)} style={{
           background:'#111', border:'1px solid #1f1f1f',
-          borderLeft:`3px solid ${G}`, borderRadius:12,
+          borderLeft:'3px solid transparent', backgroundImage:'linear-gradient(#1A1C20, #1A1C20), linear-gradient(to bottom, #0BF571, rgba(11,245,113,0.15))', backgroundOrigin:'border-box', backgroundClip:'padding-box, border-box', borderRadius:12,
           padding:'16px 16px', marginBottom:10,
           animation:'fadeUp 0.3s ease both', cursor:'pointer',
         }}>
@@ -174,11 +174,11 @@ export default function Dashboard() {
           <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
             <div style={{ fontSize:12, color:'#444', fontStyle:'italic' }}>Tap for full breakdown →</div>
             <button onClick={e=>{ e.stopPropagation(); setFocusIndex(i=>(i+1)%FOCUS_SKILLS.length); }} style={{
-              background:'transparent', border:'1px solid #2a2a2a',
+              background:'transparent', border:'1px solid #2A2D32',
               borderRadius:50, padding:'5px 12px', color:'#555',
               fontSize:11, fontWeight:600, letterSpacing:1,
               cursor:'pointer', transition:'all 0.18s',
-              fontFamily:"'Barlow',sans-serif",
+              fontFamily:"'Space Grotesk',sans-serif",
             }}>Not this week →</button>
           </div>
         </div>
@@ -223,7 +223,7 @@ export default function Dashboard() {
               borderRadius:12, padding:'14px', cursor:'pointer',
               transition:'border-color 0.18s',
             }}
-              onMouseEnter={e=>e.currentTarget.style.borderColor='#4ade80'}
+              onMouseEnter={e=>e.currentTarget.style.borderColor='#0BF571'}
               onMouseLeave={e=>e.currentTarget.style.borderColor='#1f1f1f'}
             >
               <div style={{fontSize:18,marginBottom:8}}>{card.icon}</div>

@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import NoteEditor from './NoteEditor';
 
-const G = '#4ade80';
-const feelColors = { lost: '#ef4444', okay: '#f59e0b', good: G, locked: '#3b82f6' };
+const G = '#0BF571';
+const feelColors = { lost: '#FF3B5C', okay: '#F0A020', good: G, locked: '#3b82f6' };
 const feelLabels = { lost: 'Struggling', okay: 'Felt okay', good: 'Clicking', locked: 'Locked in' };
 
 // Notes each get a 'category' field ('Techniques' | 'Drills' | 'Sparring')
@@ -86,14 +86,14 @@ export default function Notes() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
               <div style={{ fontSize: 10, letterSpacing: 2, textTransform: 'uppercase', color: '#333', fontWeight: 700 }}>{note.date}</div>
               {note.category && (
-                <div style={{ fontSize: 9, letterSpacing: 1, textTransform: 'uppercase', padding: '2px 7px', background: '#1a1a1a', borderRadius: 4, color: '#555', fontWeight: 700 }}>
+                <div style={{ fontSize: 9, letterSpacing: 1, textTransform: 'uppercase', padding: '2px 7px', background: '#1A1C20', borderRadius: 4, color: '#555', fontWeight: 700 }}>
                   {note.category}
                 </div>
               )}
             </div>
             <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 20, color: '#fff', marginBottom: 8, letterSpacing: 0.5 }}>{note.title}</div>
             <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 8 }}>
-              {note.moves.map(m => <span key={m} style={{ fontSize: 11, padding: '3px 8px', background: '#1a1a1a', borderRadius: 4, color: '#666', fontWeight: 600 }}>{m}</span>)}
+              {note.moves.map(m => <span key={m} style={{ fontSize: 11, padding: '3px 8px', background: '#1A1C20', borderRadius: 4, color: '#666', fontWeight: 600 }}>{m}</span>)}
             </div>
             {note.feel && (
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>

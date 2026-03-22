@@ -1,18 +1,21 @@
-const G     = '#4ade80';
-const AMBER = '#f59e0b';
+const G     = '#0BF571';
+const AMBER = '#F0A020';
+const RED   = '#FF3B5C';
 
 export default function RollDetail({ session, onBack }) {
   if (!session) return null;
 
-  const rollCount  = parseInt(session.tags?.[1]) || 1;
-  const rolls      = Array.from({ length: rollCount }, (_, i) => ({
+  const rollCount = parseInt(session.tags?.[1]) || 1;
+  const rolls     = Array.from({ length: rollCount }, (_, i) => ({
     label: `Roll ${i + 1}`, duration: session.tags?.[0] || '',
   }));
-  const hasVideo = !!session.videoBlobUrl;
+
+  const hasVideo   = !!session.videoBlobUrl;
+  const hasYouTube = !!session.youtubeEmbed;
 
   return (
     <div className="overlay-enter" style={{
-      position: 'absolute', inset: 0, background: '#000',
+      position: 'absolute', inset: 0, background: '#080808',
       overflowY: 'auto', padding: '20px 20px 80px', zIndex: 10,
     }}>
       <button onClick={onBack} style={{
@@ -76,29 +79,48 @@ export default function RollDetail({ session, onBack }) {
       <div style={{ marginBottom: 24 }}>
         <div style={{ fontSize: 10, letterSpacing: 3, textTransform: 'uppercase', color: '#444', marginBottom: 10, fontWeight: 700 }}>SESSION RECORDING</div>
 
-        {hasVideo ? (
-          <div style={{ borderRadius: 12, overflow: 'hidden', border: `1px solid rgba(74,222,128,0.2)`, background: '#000' }}>
-            <video
-              controls
-              src={session.videoBlobUrl}
-              style={{ width: '100%', display: 'block', maxHeight: 240, objectFit: 'cover' }}
-            />
-            <div style={{ padding: '10px 14px', background: '#0d0d0d', display: 'flex', alignItems: 'center', gap: 6 }}>
+        {/* Recorded or imported video blob */}
+        {hasVideo && (
+          <div style={{ borderRadius: 12, overflow: 'hidden', border: `1px solid rgba(74,222,128,0.2)`, background: '#080808' }}>
+            <video controls src={session.videoBlobUrl} style={{ width: '100%', display: 'block', maxHeight: 240, objectFit: 'cover' }} />
+            <div style={{ padding: '10px 14px', background: '#080808', display: 'flex', alignItems: 'center', gap: 6 }}>
               <span style={{ color: AMBER, fontSize: 13 }}>⚠</span>
               <span style={{ fontSize: 11, color: '#333' }}>Video available this session only — clears on refresh.</span>
             </div>
           </div>
-        ) : (
+        )}
+
+        {/* YouTube embed */}
+        {hasYouTube && !hasVideo && (
+          <div style={{ borderRadius: 12, overflow: 'hidden', border: `1px solid rgba(239,68,68,0.2)`, background: '#080808' }}>
+            <div style={{ aspectRatio: '16/9' }}>
+              <iframe
+                width="100%" height="100%"
+                src={session.youtubeEmbed}
+                title="Roll footage"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                style={{ display: 'block' }}
+              />
+            </div>
+            <div style={{ padding: '10px 14px', background: '#080808', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ color: RED, fontSize: 13 }}>▶</span>
+              <span style={{ fontSize: 11, color: '#555' }}>YouTube · linked footage</span>
+            </div>
+          </div>
+        )}
+
+        {/* No recording */}
+        {!hasVideo && !hasYouTube && (
           <div style={{
             background: '#111', border: '1px solid #1f1f1f',
             borderRadius: 12, padding: '24px 18px', textAlign: 'center',
           }}>
             <div style={{ fontSize: 28, marginBottom: 10 }}>📹</div>
             <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 16, color: '#333', marginBottom: 6 }}>No Recording</div>
-            <div style={{ fontSize: 12, color: '#2a2a2a', lineHeight: 1.6 }}>
-              {session.aiGenerated
-                ? 'This session was analyzed without video. Record your next session to capture footage.'
-                : 'Record your next session to capture video for playback here.'}
+            <div style={{ fontSize: 12, color: '#2A2D32', lineHeight: 1.6 }}>
+              Record, import, or link a YouTube video when starting your next session.
             </div>
           </div>
         )}

@@ -6,79 +6,147 @@ import Rolls from './components/rolls/Rolls';
 import Notes from './components/notes/Notes';
 import Training from './components/training/Training';
 
-// Design tokens
+// ── Brand tokens (from Figma ColorSystem.tsx) ─────────────────────────────────
 export const t = {
-  bg:       '#000000',
-  bg2:      '#111111',
-  bg3:      '#1a1a1a',
-  bg4:      '#222222',
-  green:    '#4ade80',
-  greenDim: '#166534',
-  greenMid: '#22c55e',
-  white:    '#ffffff',
-  gray1:    '#aaaaaa',
-  gray2:    '#666666',
-  gray3:    '#333333',
-  gray4:    '#222222',
-  border:   '#2a2a2a',
-  red:      '#ef4444',
-  amber:    '#f59e0b',
+  bg:     '#080808', // Deep Void
+  bg2:    '#111214', // Carbon
+  bg3:    '#1A1C20', // Graphite
+  border: '#2A2D32', // Steel
+  smoke:  '#5A5D65', // Placeholder / muted
+  mist:   '#8A8D96', // Secondary text
+  cloud:  '#C8CAD0', // Body text
+  white:  '#FFFFFF',
+  green:  '#0BF571', // Guard Green
+  gold:   '#F0A020', // Submission Gold
+  ice:    '#00D4FF', // Ice Blue
+  red:    '#FF3B5C', // Submit Red
 };
 
+// ── Nav with SVG icons (from AppMockup.tsx) ───────────────────────────────────
 const NAV = [
-  { id: 'dash',     icon: '⬡', label: 'HOME' },
-  { id: 'roll',     icon: '▶', label: 'ROLLS' },
-  { id: 'notes',    icon: '✎', label: 'NOTES' },
-  { id: 'training', icon: '◈', label: 'WORKOUT' },
+  {
+    id: 'dash', label: 'HOME',
+    icon: (active) => (
+      <svg width="18" height="18" viewBox="0 0 20 20" fill={active ? '#0BF571' : '#5A5D65'}>
+        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+      </svg>
+    ),
+  },
+  {
+    id: 'roll', label: 'ROLLS',
+    icon: (active) => (
+      <svg width="18" height="18" viewBox="0 0 20 20" fill={active ? '#0BF571' : '#5A5D65'}>
+        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+      </svg>
+    ),
+  },
+  {
+    id: 'notes', label: 'NOTES',
+    icon: (active) => (
+      <svg width="18" height="18" viewBox="0 0 20 20" fill={active ? '#0BF571' : '#5A5D65'}>
+        <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+        <path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" />
+      </svg>
+    ),
+  },
+  {
+    id: 'training', label: 'WORKOUT',
+    icon: (active) => (
+      <svg width="18" height="18" viewBox="0 0 20 20" fill={active ? '#0BF571' : '#5A5D65'}>
+        <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.298.057-.594.125-.882a.75.75 0 01.065-.139 6 6 0 10-4.38 0 .75.75 0 01.065.139c.068.288.11.584.125.882h4z" />
+      </svg>
+    ),
+  },
 ];
 
+// ── Hex logo mark (from TapGuardLogo.tsx) ─────────────────────────────────────
+function HexMark({ size = 32, glow = false }) {
+  return (
+    <div style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
+      {glow && (
+        <div style={{
+          position: 'absolute', inset: 0, borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(11,245,113,0.3) 0%, transparent 70%)',
+          transform: 'scale(1.4)',
+        }} />
+      )}
+      <svg width={size} height={size} viewBox="0 0 64 64" fill="none">
+        <path d="M60 32L46 56.4H18L4 32L18 7.6H46L60 32Z" fill="#0BF571" />
+        <line x1="4"  y1="32"  x2="60" y2="32"  stroke="rgba(0,0,0,0.22)" strokeWidth="2.2" />
+        <line x1="18" y1="7.6" x2="46" y2="56.4" stroke="rgba(0,0,0,0.22)" strokeWidth="2.2" />
+        <line x1="46" y1="7.6" x2="18" y2="56.4" stroke="rgba(0,0,0,0.22)" strokeWidth="2.2" />
+        <circle cx="32" cy="32" r="3.5" fill="rgba(0,0,0,0.22)" />
+        {glow && (
+          <path d="M60 32L46 56.4H18L4 32L18 7.6H46L60 32Z" fill="none" stroke="#0BF571" strokeWidth="0.5" opacity="0.4" />
+        )}
+      </svg>
+    </div>
+  );
+}
+
+// ── Wordmark (from TapGuardLogo.tsx) ──────────────────────────────────────────
+function Wordmark({ size = 20 }) {
+  return (
+    <div style={{ fontFamily: "'Space Grotesk', sans-serif", lineHeight: 1 }}>
+      <div style={{ display: 'flex', alignItems: 'baseline' }}>
+        <span style={{ color: '#0BF571', fontWeight: 700, fontSize: size, letterSpacing: '0.04em' }}>TAP</span>
+        <span style={{ color: '#FFFFFF', fontWeight: 700, fontSize: size, letterSpacing: '0.04em' }}>GUARD</span>
+      </div>
+      <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: size * 0.28, letterSpacing: '0.22em', fontWeight: 500, marginTop: 1 }}>
+        FROM THE GROUND UP
+      </div>
+    </div>
+  );
+}
+
+// ── Splash screen ─────────────────────────────────────────────────────────────
 function Splash({ onDone }) {
-  useEffect(() => { const t = setTimeout(onDone, 2200); return () => clearTimeout(t); }, [onDone]);
+  useEffect(() => { const id = setTimeout(onDone, 2400); return () => clearTimeout(id); }, [onDone]);
+
   return (
     <div style={{
-      position: 'fixed', inset: 0, background: '#000',
+      position: 'fixed', inset: 0, background: '#080808',
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
-      zIndex: 999, animation: 'splashFade 5.5s ease forwards',
+      zIndex: 999,
     }}>
-      <div style={{ animation: 'logoScale 2s ease forwards', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
-        <div style={{
-          width: 72, height: 72, background: '#4ade80', borderRadius: 20,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontFamily: "'Barlow Condensed', sans-serif",
-          fontWeight: 900, fontSize: 34, color: '#000', letterSpacing: 1,
-        }}>TG</div>
-        <div style={{
-          fontFamily: "'Barlow Condensed', sans-serif",
-          fontWeight: 800, fontSize: 36, letterSpacing: 6, color: '#fff',
-        }}>TAPGUARD</div>
-      </div>
+      {/* Glow backdrop */}
       <div style={{
-        fontSize: 14, letterSpacing: 4, textTransform: 'uppercase',
-        color: '#444', marginTop: 10, fontWeight: 500, textAlign: 'center',
-      }}>
-        <span style={{ animation: 'taglineFade 1s ease 0.5s forwards', opacity: 0, display: 'block' }}>
-          Train Smarter...
-        </span>
-        <span style={{ animation: 'taglineFade 1s ease 2s forwards', opacity: 0, display: 'block' }}>
-          Tap Less.
-        </span>
+        position: 'absolute', width: 200, height: 200, borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(11,245,113,0.12) 0%, transparent 70%)',
+      }} />
+
+      {/* Logo */}
+      <div style={{ animation: 'logoScale 0.6s ease forwards', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
+        <HexMark size={72} glow />
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+          <div style={{ fontFamily: "'Space Grotesk', sans-serif", display: 'flex', alignItems: 'baseline' }}>
+            <span style={{ color: '#0BF571', fontWeight: 700, fontSize: 38, letterSpacing: '0.04em' }}>TAP</span>
+            <span style={{ color: '#FFFFFF', fontWeight: 700, fontSize: 38, letterSpacing: '0.04em' }}>GUARD</span>
+          </div>
+          <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10, letterSpacing: '0.22em', fontWeight: 500, fontFamily: "'Space Grotesk', sans-serif" }}>
+            FROM THE GROUND UP
+          </div>
+        </div>
       </div>
+
+      {/* Loading bar */}
       <div style={{
         position: 'absolute', bottom: 56,
-        width: 100, height: 2, background: '#222', borderRadius: 2, overflow: 'hidden',
+        width: 100, height: 2, background: '#1A1C20', borderRadius: 2, overflow: 'hidden',
       }}>
         <div style={{
-          height: '100%', background: '#000', borderRadius: 2,
-          animation: 'tabEnter 2.2s ease forwards', width: '100%',
+          height: '100%', background: '#0BF571', borderRadius: 2,
+          animation: 'splashBar 2.4s ease forwards',
         }} />
       </div>
     </div>
   );
 }
 
+// ── Main app shell ────────────────────────────────────────────────────────────
 function MainApp() {
-  const { activeTab, setActiveTab, belt, beltColor, onboardingDone, nickname } = useApp();
+  const { activeTab, setActiveTab, belt, beltColor, onboardingDone } = useApp();
   const [tabKey, setTabKey] = useState(0);
 
   const handleTabSwitch = (tab) => {
@@ -96,32 +164,28 @@ function MainApp() {
   return (
     <div style={{
       height: '100vh', display: 'flex', flexDirection: 'column',
-      background: '#000', maxWidth: 430, margin: '0 auto', overflow: 'hidden',
+      background: '#080808', maxWidth: 430, margin: '0 auto', overflow: 'hidden',
     }}>
       {/* Header */}
       <div style={{ padding: '52px 20px 0', flexShrink: 0 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{
-              width: 32, height: 32, background: '#4ade80', borderRadius: 8,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontFamily: "'Barlow Condensed', sans-serif",
-              fontWeight: 900, fontSize: 16, color: '#000',
-            }}>TG</div>
-            <span style={{
-              fontFamily: "'Barlow Condensed', sans-serif",
-              fontWeight: 800, fontSize: 20, letterSpacing: 3, color: '#fff',
-            }}>TAPGUARD</span>
+            <HexMark size={30} />
+            <Wordmark size={18} />
           </div>
+          {/* Belt badge */}
           <div style={{
-            fontSize: 11, letterSpacing: 1, fontWeight: 600,
-            padding: '4px 12px', borderRadius: 50,
-            background: '#111', border: '1px solid #2a2a2a',
-            color: '#4ade80', textTransform: 'uppercase',
             display: 'flex', alignItems: 'center', gap: 6,
+            padding: '5px 12px', borderRadius: 50,
+            background: 'rgba(11,245,113,0.08)',
+            border: '1px solid rgba(11,245,113,0.2)',
           }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: beltColor, display: 'inline-block' }} />
-            {beltLabel}
+            <span style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: 11, fontWeight: 700, letterSpacing: '0.1em',
+              color: '#0BF571', textTransform: 'uppercase',
+            }}>{beltLabel}</span>
           </div>
         </div>
       </div>
@@ -144,8 +208,9 @@ function MainApp() {
 
       {/* Bottom Nav */}
       <div style={{
-        flexShrink: 0, background: '#111',
-        borderTop: '1px solid #1f1f1f',
+        flexShrink: 0,
+        background: '#111214',
+        borderTop: '1px solid #2A2D32',
         display: 'flex',
         paddingBottom: 'env(safe-area-inset-bottom, 10px)',
       }}>
@@ -157,22 +222,18 @@ function MainApp() {
               display: 'flex', flexDirection: 'column',
               alignItems: 'center', gap: 4, cursor: 'pointer',
             }}>
+              {tab.icon(isActive)}
               <span style={{
-                fontSize: 18, transition: 'transform 0.2s',
-                transform: isActive ? 'scale(1.2)' : 'scale(1)',
-                display: 'inline-block',
-                color: isActive ? '#4ade80' : '#444',
-              }}>{tab.icon}</span>
-              <span style={{
-                fontSize: 9, letterSpacing: 1.5, textTransform: 'uppercase',
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase',
                 fontWeight: 700,
-                color: isActive ? '#4ade80' : '#444',
+                color: isActive ? '#0BF571' : '#5A5D65',
                 transition: 'color 0.2s',
               }}>{tab.label}</span>
               {isActive && (
                 <div style={{
                   width: 20, height: 2, borderRadius: 1,
-                  background: '#4ade80', marginTop: 1,
+                  background: '#0BF571', marginTop: 1,
                 }} />
               )}
             </div>

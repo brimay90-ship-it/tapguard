@@ -3,8 +3,8 @@ import { useApp } from '../../context/AppContext';
 import { weekPlan, bjjDayTips } from '../../data/weekPlan';
 import Calendar from './Calendar';
 
-const G     = '#4ade80';
-const AMBER = '#f59e0b';
+const G     = '#0BF571';
+const AMBER = '#F0A020';
 const DAYS  = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 
 // Convert Date object to our Mon=0 weekday index
@@ -24,16 +24,16 @@ function GifOverlay({ exercise, onClose }) {
       <div
         onClick={e=>e.stopPropagation()}
         style={{
-          background:'#111', border:'1px solid #2a2a2a',
+          background:'#111', border:'1px solid #2A2D32',
           borderRadius:16, overflow:'hidden', width:'100%', maxWidth:380,
           animation:'fadeUp 0.25s ease both',
         }}
       >
-        <div style={{padding:'14px 16px', borderBottom:'1px solid #1a1a1a', display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+        <div style={{padding:'14px 16px', borderBottom:'1px solid #1A1C20', display:'flex', justifyContent:'space-between', alignItems:'center'}}>
           <div style={{fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:18, color:'#fff', letterSpacing:0.5}}>{exercise.title}</div>
           <button onClick={onClose} style={{background:'none',border:'none',color:'#555',fontSize:20,cursor:'pointer',lineHeight:1}}>✕</button>
         </div>
-        <div style={{background:'#000', display:'flex', alignItems:'center', justifyContent:'center', minHeight:200}}>
+        <div style={{background:'#080808', display:'flex', alignItems:'center', justifyContent:'center', minHeight:200}}>
           <img
             src={exercise.gifUrl}
             alt={exercise.title}
@@ -49,7 +49,7 @@ function GifOverlay({ exercise, onClose }) {
           <div style={{fontSize:12, color:'#555', marginBottom:4}}>{exercise.meta}</div>
           <div style={{display:'flex', gap:5, flexWrap:'wrap'}}>
             {exercise.tags.map(tag=>(
-              <span key={tag} style={{fontSize:9,letterSpacing:1,textTransform:'uppercase',padding:'2px 6px',background:'#1a1a1a',borderRadius:3,color:'#444',fontWeight:700}}>{tag}</span>
+              <span key={tag} style={{fontSize:9,letterSpacing:1,textTransform:'uppercase',padding:'2px 6px',background:'#1A1C20',borderRadius:3,color:'#444',fontWeight:700}}>{tag}</span>
             ))}
           </div>
         </div>
@@ -113,7 +113,7 @@ function SetTracker({ exercise, dayIdx, exIdx, exerciseDone, toggleExercise, get
                 {/* Set number */}
                 <div style={{
                   width:28,height:28,borderRadius:6,
-                  background:'#1a1a1a',border:'1px solid #2a2a2a',
+                  background:'#1A1C20',border:'1px solid #2A2D32',
                   display:'flex',alignItems:'center',justifyContent:'center',
                   fontSize:12,fontWeight:800,color:'#444',
                   fontFamily:"'Barlow Condensed',sans-serif",
@@ -126,13 +126,13 @@ function SetTracker({ exercise, dayIdx, exIdx, exerciseDone, toggleExercise, get
                   placeholder={repsPlaceholder}
                   onChange={e=>updateSetLog(dayIdx,exIdx,setIdx,'reps',e.target.value)}
                   style={{
-                    background:'#1a1a1a',border:'1px solid #2a2a2a',borderRadius:8,
+                    background:'#1A1C20',border:'1px solid #2A2D32',borderRadius:8,
                     padding:'7px 10px',color:'#fff',textAlign:'center',
                     fontSize:14,fontWeight:700,outline:'none',width:'100%',
                     transition:'border-color 0.15s',
                   }}
                   onFocus={e=>e.target.style.borderColor=G}
-                  onBlur={e=>e.target.style.borderColor='#2a2a2a'}
+                  onBlur={e=>e.target.style.borderColor='#2A2D32'}
                 />
 
                 {/* Weight input */}
@@ -142,13 +142,13 @@ function SetTracker({ exercise, dayIdx, exIdx, exerciseDone, toggleExercise, get
                   placeholder={weightPlaceholder}
                   onChange={e=>updateSetLog(dayIdx,exIdx,setIdx,'weight',e.target.value)}
                   style={{
-                    background:'#1a1a1a',border:'1px solid #2a2a2a',borderRadius:8,
+                    background:'#1A1C20',border:'1px solid #2A2D32',borderRadius:8,
                     padding:'7px 10px',color:'#fff',textAlign:'center',
                     fontSize:14,fontWeight:700,outline:'none',width:'100%',
                     transition:'border-color 0.15s',
                   }}
                   onFocus={e=>e.target.style.borderColor=AMBER}
-                  onBlur={e=>e.target.style.borderColor='#2a2a2a'}
+                  onBlur={e=>e.target.style.borderColor='#2A2D32'}
                 />
               </div>
             );
@@ -190,7 +190,7 @@ function BJJDayContent({ dayIdx }) {
             </div>
           ))}
         </div>
-        <div style={{borderTop:'1px solid #1a1a1a',paddingTop:10}}>
+        <div style={{borderTop:'1px solid #1A1C20',paddingTop:10}}>
           {tips.extras.map((item,i)=>(
             <div key={i} style={{fontSize:13,color:'#aaa',marginBottom:6,lineHeight:1.4}}>{item}</div>
           ))}
@@ -307,7 +307,7 @@ export default function Training() {
       {/* ── BJJ DAY — recovery & tips ── */}
       {isBjjDay && (
         <div style={{marginTop: isWorkoutDay ? 16 : 0}}>
-          {isWorkoutDay && <div style={{height:1,background:'#1a1a1a',marginBottom:16}}/>}
+          {isWorkoutDay && <div style={{height:1,background:'#1A1C20',marginBottom:16}}/>}
           <BJJDayContent dayIdx={dayIdx} />
         </div>
       )}
@@ -318,7 +318,7 @@ export default function Training() {
           <div style={{fontSize:28,marginBottom:8}}>😴</div>
           <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:18,color:'#fff',marginBottom:6}}>REST DAY</div>
           <div style={{fontSize:13,color:'#444',lineHeight:1.6}}>Recovery is training too. Sleep, hydrate, and let your body adapt.</div>
-          <div style={{marginTop:14,padding:'10px 14px',background:'#1a1a1a',borderRadius:8,fontSize:12,color:'#555',textAlign:'left'}}>
+          <div style={{marginTop:14,padding:'10px 14px',background:'#1A1C20',borderRadius:8,fontSize:12,color:'#555',textAlign:'left'}}>
             💡 Light walk or mobility work only. Avoid anything that spikes heart rate.
           </div>
         </div>
