@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { AppProvider, useApp } from './context/AppContext';
 import Onboarding from './components/onboarding/Onboarding';
 import Dashboard from './components/dashboard/Dashboard';
+import BJJFlowBuilder from './components/matrix/BJJFlowBuilder';
 import Rolls from './components/rolls/Rolls';
 import Notes from './components/notes/Notes';
 import Training from './components/training/Training';
@@ -29,6 +30,14 @@ const NAV = [
     icon: (active) => (
       <svg width="18" height="18" viewBox="0 0 20 20" fill={active ? '#0BF571' : '#5A5D65'}>
         <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+      </svg>
+    ),
+  },
+  {
+    id: 'matrix', label: 'MATRIX',
+    icon: (active) => (
+      <svg width="18" height="18" viewBox="0 0 20 20" fill={active ? '#0BF571' : '#5A5D65'}>
+        <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
       </svg>
     ),
   },
@@ -199,6 +208,7 @@ function MainApp() {
             animation: activeTab === tab.id ? 'tabEnter 0.28s ease both' : 'none',
           }}>
             {tab.id === 'dash'     && <Dashboard key={tabKey} />}
+            {tab.id === 'matrix'   && <BJJFlowBuilder />}
             {tab.id === 'roll'     && <Rolls />}
             {tab.id === 'notes'    && <Notes />}
             {tab.id === 'training' && <Training />}
