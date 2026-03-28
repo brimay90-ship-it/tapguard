@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useApp } from '../../context/AppContext';
+import { weekPlan, bjjDayTips } from '../../data/weekPlan';
 
 const G = '#0BF571';
 const FOCUS_SKILLS = [
@@ -125,8 +126,49 @@ const COMP_TO_FOCUS_IDX = {
   position: 5, // MOUNT ESCAPES
 };
 
+// ─── WOD card helpers ────────────────────────────────────────────────────────
+const REST_QUOTES = [
+  { quote: "Rest is not idleness. The body adapts while you sleep.", author: "Rickson Gracie" },
+  { quote: "Champions aren't made in gyms. They're made from something they have deep inside them.", author: "Muhammad Ali" },
+  { quote: "The fight is won or lost far away from witnesses, in the gym, long before I dance under those lights.", author: "Muhammad Ali" },
+  { quote: "There is no greater wealth in this world than peace of mind.", author: "Helio Gracie" },
+  { quote: "I fear not the man who has practiced 10,000 kicks once, but I fear the man who has practiced one kick 10,000 times.", author: "Bruce Lee" },
+  { quote: "An injury is only a setback if you let it be.", author: "Georges St-Pierre" },
+];
+
+const BJJ_CLASS_FOCUS = [
+  { icon: '🥋', focus: 'Guard Work', tip: 'Today zero in on your guard retention and sweeps. Pick one sweep and drill it 20 times before sparring.' },
+  { icon: '🔒', focus: 'Back Control', tip: 'Focus on seatbelt control and hook placement. Aim to take the back at least once in every round today.' },
+  { icon: '🤼', focus: 'Top Game', tip: 'Practice maintaining heavy side control pressure. Work your transitions from side control to mount.' },
+  { icon: '⚡', focus: 'Takedowns', tip: 'Start every roll from standing. Drill your level change on a partner before class begins.' },
+  { icon: '🧠', focus: 'Submissions', tip: 'Hunt one submission family today — either arm attacks or chokes. Notice the setups that open them up.' },
+  { icon: '🛡️', focus: 'Escapes & Defense', tip: 'Let your partner establish dominant positions and practice escaping. Controlled adversity builds real skill.' },
+  { icon: '🔀', focus: 'Transitions', tip: 'Focus on the moments between positions today. Smooth transitions beat explosive movements every time.' },
+];
+
+const WORKOUT_LABELS = {
+  'Strength': { type: 'Strength Day', emoji: '💪', quote: 'Strength doesn\'t come from what you can do. It comes from overcoming what you once thought you couldn\'t.' },
+  'Power':    { type: 'Power Day',    emoji: '⚡', quote: 'Train harder than you think you need to. The mat doesn\'t care about excuses.' },
+  'Cardio':   { type: 'Cardio Day',   emoji: '🫀', quote: 'Your gas tank is your most dangerous weapon. Fill it up.' },
+  'Core':     { type: 'Core Day',     emoji: '🧱', quote: 'A strong core holds the whole game together. On the mat. Off the mat.' },
+  'BJJ-Specific': { type: 'BJJ Conditioning', emoji: '🥋', quote: 'Every rep today is a technique tomorrow. Put in the work.' },
+  'Balance':  { type: 'Stability Day', emoji: '⚖️', quote: 'Balance and stability are the foundations of explosive movement.' },
+  'Grip':     { type: 'Grip & Pulling Day', emoji: '🖐️', quote: 'Grip strength is grappling strength. Earn it.' },
+  'Flexibility': { type: 'Mobility Day', emoji: '🧘', quote: 'Flexibility fuels the positions your opponents can\'t reach.' },
+};
+
+function getWorkoutMeta(exercises) {
+  if (!exercises || exercises.length === 0) return { type: 'Workout Day', emoji: '🏋️', quote: 'Show up. Do the work. Improve.' };
+  const allTags = exercises.flatMap(e => e.tags || []);
+  const priority = ['BJJ-Specific','Power','Cardio','Grip','Flexibility','Balance','Core','Strength'];
+  for (const tag of priority) {
+    if (allTags.includes(tag) && WORKOUT_LABELS[tag]) return WORKOUT_LABELS[tag];
+  }
+  return { type: 'Strength Day', emoji: '💪', quote: 'Show up. Do the work. Improve.' };
+}
+
 export default function Dashboard() {
-  const { comp, belt, beltColor, setActiveTab, styles, nickname, lowestComp } = useApp();
+  const { comp, belt, beltColor, setActiveTab, styles, nickname, lowestComp, bjjDays, workoutDays } = useApp();
 
   // Seed focusIndex from the user's weakest comp area
   const seedIndex = COMP_TO_FOCUS_IDX[lowestComp] ?? 0;
@@ -145,6 +187,18 @@ export default function Dashboard() {
   const displayName = nickname ? nickname.toUpperCase() : 'FIGHTER';
   const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  // ─── Today's WOD ─────────────────────────────────────────────────────────────
+  const todayIdx     = (now.getDay() + 6) % 7;  // Mon=0 … Sun=6, same as Training.jsx
+  const isBjjToday     = bjjDays.includes(todayIdx);
+  const isWorkoutToday = workoutDays.includes(todayIdx);
+  const todayExercises = weekPlan[todayIdx] || [];
+  const todayBjjTips  = bjjDayTips[todayIdx] || bjjDayTips[0];
+  const workoutMeta   = getWorkoutMeta(todayExercises);
+  // pick BJJ class focus deterministically from day-of-week
+  const bjjClassFocus = BJJ_CLASS_FOCUS[todayIdx % BJJ_CLASS_FOCUS.length];
+  // rest day quote, cycle by date
+  const restQuote     = REST_QUOTES[now.getDate() % REST_QUOTES.length];
 
   return (
     <>
@@ -180,6 +234,151 @@ export default function Dashboard() {
               cursor:'pointer', transition:'all 0.18s',
               fontFamily:"'Space Grotesk',sans-serif",
             }}>Not this week →</button>
+          </div>
+        </div>
+
+        {/* ── Workout of the Day Card ── */}
+        <div style={{
+          marginBottom:10,
+          borderRadius:12,
+          overflow:'hidden',
+          border: isBjjToday && isWorkoutToday ? '1px solid rgba(11,245,113,0.25)'
+                : isBjjToday     ? '1px solid rgba(11,245,113,0.25)'
+                : isWorkoutToday ? '1px solid rgba(240,160,32,0.25)'
+                : '1px solid #1f1f1f',
+          background: isBjjToday && isWorkoutToday ? 'linear-gradient(135deg,#0a1a10,#111)'
+                    : isBjjToday     ? 'linear-gradient(135deg,#0a1a10,#111)'
+                    : isWorkoutToday ? 'linear-gradient(135deg,#1a110a,#111)'
+                    : '#111',
+        }}>
+
+          {/* Accent bar */}
+          <div style={{
+            height:3,
+            background: isBjjToday && isWorkoutToday ? 'linear-gradient(to right,#0BF571,#F0A020)'
+                      : isBjjToday     ? '#0BF571'
+                      : isWorkoutToday ? '#F0A020'
+                      : '#2A2D32',
+          }}/>
+
+          <div style={{padding:'14px 16px'}}>
+            <div style={{fontSize:10,letterSpacing:3,textTransform:'uppercase',fontWeight:700,marginBottom:8,
+              color: isBjjToday && !isWorkoutToday ? G : isWorkoutToday && !isBjjToday ? '#F0A020' : isBjjToday && isWorkoutToday ? G : '#444'
+            }}>Workout of the Day</div>
+
+            {/* ── SCENARIO 1: REST DAY ── */}
+            {!isBjjToday && !isWorkoutToday && (
+              <div>
+                <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:12}}>
+                  <span style={{fontSize:28}}>😴</span>
+                  <div>
+                    <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:22,color:'#fff',letterSpacing:0.5}}>Rest Day</div>
+                    <div style={{fontSize:11,color:'#444',fontWeight:500}}>Recovery is training too</div>
+                  </div>
+                </div>
+                <div style={{background:'rgba(255,255,255,0.03)',borderRadius:8,padding:'12px 14px',borderLeft:'2px solid #2a2a2a'}}>
+                  <div style={{fontSize:13,color:'#777',lineHeight:1.65,fontStyle:'italic',marginBottom:6}}>"{restQuote.quote}"</div>
+                  <div style={{fontSize:10,color:'#444',letterSpacing:1,textTransform:'uppercase',fontWeight:700}}>— {restQuote.author}</div>
+                </div>
+              </div>
+            )}
+
+            {/* ── SCENARIO 2: BJJ ONLY ── */}
+            {isBjjToday && !isWorkoutToday && (
+              <div>
+                <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:10}}>
+                  <span style={{fontSize:28}}>{bjjClassFocus.icon}</span>
+                  <div>
+                    <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:20,color:'#fff',letterSpacing:0.5}}>BJJ Class Day</div>
+                    <div style={{fontSize:11,color:G,fontWeight:700,textTransform:'uppercase',letterSpacing:1}}>Focus: {bjjClassFocus.focus}</div>
+                  </div>
+                </div>
+                <div style={{fontSize:13,color:'#888',lineHeight:1.6,marginBottom:10}}>{bjjClassFocus.tip}</div>
+                <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
+                  {todayBjjTips.warmup.slice(0,2).map((w,i) => (
+                    <div key={i} style={{fontSize:10,padding:'4px 8px',borderRadius:6,background:'rgba(11,245,113,0.08)',border:'1px solid rgba(11,245,113,0.15)',color:G,fontWeight:600}}>{w}</div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ── SCENARIO 3: LIFTING ONLY ── */}
+            {!isBjjToday && isWorkoutToday && (
+              <div>
+                <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:10}}>
+                  <span style={{fontSize:28}}>{workoutMeta.emoji}</span>
+                  <div>
+                    <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:20,color:'#fff',letterSpacing:0.5}}>{workoutMeta.type}</div>
+                    <div style={{fontSize:11,color:'#F0A020',fontWeight:600}}>{todayExercises.length} exercises planned</div>
+                  </div>
+                </div>
+                <div style={{display:'flex',gap:6,marginBottom:10,flexWrap:'wrap'}}>
+                  {todayExercises.slice(0,3).map((ex,i) => (
+                    <div key={i} style={{fontSize:10,padding:'4px 8px',borderRadius:6,background:'rgba(240,160,32,0.08)',border:'1px solid rgba(240,160,32,0.2)',color:'#F0A020',fontWeight:600}}>{ex.title}</div>
+                  ))}
+                  {todayExercises.length > 3 && <div style={{fontSize:10,padding:'4px 8px',borderRadius:6,background:'#1A1C20',color:'#555',fontWeight:600}}>+{todayExercises.length - 3} more</div>}
+                </div>
+                <div style={{fontSize:12,color:'#555',fontStyle:'italic',lineHeight:1.5}}>" {workoutMeta.quote} "</div>
+              </div>
+            )}
+
+            {/* ── SCENARIO 4: BJJ + LIFTING COMBO ── */}
+            {isBjjToday && isWorkoutToday && (
+              <div>
+                {/* Split pill header */}
+                <div style={{display:'flex',gap:8,marginBottom:14}}>
+                  <div style={{display:'flex',alignItems:'center',gap:6,padding:'5px 12px',borderRadius:50,background:'rgba(11,245,113,0.1)',border:'1px solid rgba(11,245,113,0.25)'}}>
+                    <span style={{fontSize:13}}>🥋</span>
+                    <span style={{fontSize:11,fontWeight:700,color:G,letterSpacing:0.5}}>BJJ Class</span>
+                  </div>
+                  <div style={{display:'flex',alignItems:'center',gap:6,padding:'5px 12px',borderRadius:50,background:'rgba(240,160,32,0.1)',border:'1px solid rgba(240,160,32,0.25)'}}>
+                    <span style={{fontSize:13}}>🏋️</span>
+                    <span style={{fontSize:11,fontWeight:700,color:'#F0A020',letterSpacing:0.5}}>Lifting</span>
+                  </div>
+                </div>
+
+                {/* BJJ class details */}
+                <div style={{marginBottom:14}}>
+                  <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:7}}>
+                    <span style={{fontSize:20}}>{bjjClassFocus.icon}</span>
+                    <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:17,color:'#fff'}}>
+                      Focus: {bjjClassFocus.focus}
+                    </div>
+                  </div>
+                  <div style={{fontSize:13,color:'#888',lineHeight:1.55,marginBottom:8}}>{bjjClassFocus.tip}</div>
+                  <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
+                    {todayBjjTips.warmup.slice(0,2).map((w,i) => (
+                      <div key={i} style={{fontSize:10,padding:'4px 8px',borderRadius:6,background:'rgba(11,245,113,0.08)',border:'1px solid rgba(11,245,113,0.15)',color:G,fontWeight:600}}>{w}</div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Divider */}
+                <div style={{height:1,background:'#222',marginBottom:12}}/>
+
+                {/* Compact lifting synopsis */}
+                <div style={{display:'flex',alignItems:'center',gap:10}}>
+                  <span style={{fontSize:20}}>{workoutMeta.emoji}</span>
+                  <div style={{flex:1}}>
+                    <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:700,fontSize:15,color:'#ccc',marginBottom:5}}>
+                      {workoutMeta.type} &middot; {todayExercises.length} exercises
+                    </div>
+                    <div style={{display:'flex',gap:5,flexWrap:'wrap'}}>
+                      {todayExercises.slice(0,3).map((ex,i) => (
+                        <div key={i} style={{fontSize:10,padding:'3px 7px',borderRadius:5,background:'rgba(240,160,32,0.07)',border:'1px solid rgba(240,160,32,0.18)',color:'#C07818',fontWeight:600}}>{ex.title}</div>
+                      ))}
+                      {todayExercises.length > 3 && <div style={{fontSize:10,padding:'3px 7px',borderRadius:5,background:'#1A1C20',color:'#555',fontWeight:600}}>+{todayExercises.length - 3}</div>}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* View full plan link */}
+            <div onClick={() => setActiveTab('training')} style={{
+              marginTop:12, fontSize:11, color:'#333', cursor:'pointer',
+              display:'flex', alignItems:'center', gap:4,
+            }}>View full plan →</div>
           </div>
         </div>
 
