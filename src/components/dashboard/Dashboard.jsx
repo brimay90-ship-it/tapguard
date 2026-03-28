@@ -1,53 +1,51 @@
 import { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { weekPlan, bjjDayTips } from '../../data/weekPlan';
+import { RANK_ROSTER, SPECIAL_RANKS } from '../../data/rankRoster';
 
 const G = '#0BF571';
 const FOCUS_SKILLS = [
-  { skill: 'HIP ESCAPE MECHANICS',    desc: 'Drill shrimp + bridge combos 10 min before class.', detail: `The hip escape (shrimp) is the single most important movement in BJJ. Without it, you cannot recover guard, escape side control, or create frames.\n\nKey checkpoints:\n• Drive off your bottom foot, not your top\n• Keep your inside elbow glued to your inside knee\n• Shrimp THEN replace guard — not simultaneously\n• Chin tucked, don't give up your neck\n\nDrill: 3 sets of 10 full-length shrimps before every session.`, youtube: 'https://www.youtube.com/embed/5pFhMyCRO5Y' },
-  { skill: 'KNEE SLICE PASS',          desc: 'Weight forward, pin the hip before you slice.', detail: `The knee slice is one of the highest percentage guard passes at every level.\n\nKey checkpoints:\n• Establish a strong cross-collar or underhook grip first\n• Drop your hip onto their far hip — this IS the pass\n• Slice your knee across their thigh at a diagonal\n• Land in side control with your head on the mat side\n\nDrill: Slow-motion knee slice from standing — 5 on each side.`, youtube: 'https://www.youtube.com/embed/7fFqfHBolco' },
-  { skill: 'ARMBAR FROM GUARD',        desc: 'Break posture completely before attacking the arm.', detail: `The most common mistake: attacking the arm before breaking posture.\n\nKey checkpoints:\n• Two hands on head/collar — break them DOWN first\n• Rotate 90° with hips UNDER their arm\n• Squeeze knees together throughout\n• Hips up, heels down to finish\n\nDrill: Posture break isolation — partner resists, you break 10 times.`, youtube: 'https://www.youtube.com/embed/oMkU9bBrLgc' },
-  { skill: 'REAR NAKED CHOKE',         desc: 'Hooks first, seatbelt locked, then choke.', detail: `The number one error: going for the choke before back control is established.\n\nKey checkpoints:\n• Top hook in first, bottom hook second\n• Seatbelt: top arm over shoulder, bottom under armpit\n• Bicep across throat, hand behind their head\n• Squeeze with your whole body — not just arms\n\nDrill: Back control retention 30 sec holds — no finish.`, youtube: 'https://www.youtube.com/embed/4lLDMqKpN38' },
-  { skill: 'SINGLE LEG TAKEDOWN',      desc: 'Level change first — stop reaching from standing.', detail: `The fatal flaw: reaching for the leg without a level change.\n\nKey checkpoints:\n• Level change first — bend knees, not your back\n• Penetration step between their feet\n• Head on outside of their hip\n• Lift and drive through — don't pull\n\nDrill: Level change shadow shots — 3 sets of 10.`, youtube: 'https://www.youtube.com/embed/h0L3oJKGqiU' },
-  { skill: 'MOUNT ESCAPES',            desc: 'Bridge to disturb, shrimp to escape — in that order.', detail: `Most beginners bridge randomly and hope. The bridge is a setup, not the escape.\n\nKey checkpoints:\n• Elbows IN — flared elbows gift armbars\n• Bridge explosively to disturb their base\n• Immediately shrimp as they post\n• Get to half guard — don't try to roll them\n\nDrill: Bridge and shrimp to half guard — 3 sets of 5 each side.`, youtube: 'https://www.youtube.com/embed/XCh0JqpEeis' },
-  { skill: 'GUARD RETENTION',          desc: 'Frame on their hip before they clear your leg.', detail: `Guard retention is about being proactive. By the time you react, you're already late.\n\nKey checkpoints:\n• Inside hand frames on their hip — straight arm\n• Outside hand controls their sleeve or wrist\n• Knee shield connected to elbow at all times\n• Move hips AWAY first, then re-engage\n\nDrill: Guard retention solo shrimping — 3 sets of 10.`, youtube: 'https://www.youtube.com/embed/RJSF_SWm8xc' },
+  { skill: 'HIP ESCAPE MECHANICS',    image: '/hip_escape_mechanics_bg.png',    desc: 'Drill shrimp + bridge combos 10 min before class.', detail: `The hip escape (shrimp) is the single most important movement in BJJ. Without it, you cannot recover guard, escape side control, or create frames.\n\nKey checkpoints:\n• Drive off your bottom foot, not your top\n• Keep your inside elbow glued to your inside knee\n• Shrimp THEN replace guard — not simultaneously\n• Chin tucked, don't give up your neck\n\nDrill: 3 sets of 10 full-length shrimps before every session.`, youtube: 'https://www.youtube.com/embed/5pFhMyCRO5Y' },
+  { skill: 'KNEE SLICE PASS',          image: '/knee_slice_pass_bg.png',          desc: 'Weight forward, pin the hip before you slice.', detail: `The knee slice is one of the highest percentage guard passes at every level.\n\nKey checkpoints:\n• Establish a strong cross-collar or underhook grip first\n• Drop your hip onto their far hip — this IS the pass\n• Slice your knee across their thigh at a diagonal\n• Land in side control with your head on the mat side\n\nDrill: Slow-motion knee slice from standing — 5 on each side.`, youtube: 'https://www.youtube.com/embed/7fFqfHBolco' },
+  { skill: 'ARMBAR FROM GUARD',        image: '/armbar_from_guard_bg.png',        desc: 'Break posture completely before attacking the arm.', detail: `The most common mistake: attacking the arm before breaking posture.\n\nKey checkpoints:\n• Two hands on head/collar — break them DOWN first\n• Rotate 90° with hips UNDER their arm\n• Squeeze knees together throughout\n• Hips up, heels down to finish\n\nDrill: Posture break isolation — partner resists, you break 10 times.`, youtube: 'https://www.youtube.com/embed/oMkU9bBrLgc' },
+  { skill: 'REAR NAKED CHOKE',         image: '/rear_naked_choke_bg.png',         desc: 'Hooks first, seatbelt locked, then choke.', detail: `The number one error: going for the choke before back control is established.\n\nKey checkpoints:\n• Top hook in first, bottom hook second\n• Seatbelt: top arm over shoulder, bottom under armpit\n• Bicep across throat, hand behind their head\n• Squeeze with your whole body — not just arms\n\nDrill: Back control retention 30 sec holds — no finish.`, youtube: 'https://www.youtube.com/embed/4lLDMqKpN38' },
+  { skill: 'SINGLE LEG TAKEDOWN',      image: '/single_leg_takedown_bg.png',      desc: 'Level change first — stop reaching from standing.', detail: `The fatal flaw: reaching for the leg without a level change.\n\nKey checkpoints:\n• Level change first — bend knees, not your back\n• Penetration step between their feet\n• Head on outside of their hip\n• Lift and drive through — don't pull\n\nDrill: Level change shadow shots — 3 sets of 10.`, youtube: 'https://www.youtube.com/embed/h0L3oJKGqiU' },
+  { skill: 'MOUNT ESCAPES',            image: '/mount_escapes_bg.png',            desc: 'Bridge to disturb, shrimp to escape — in that order.', detail: `Most beginners bridge randomly and hope. The bridge is a setup, not the escape.\n\nKey checkpoints:\n• Elbows IN — flared elbows gift armbars\n• Bridge explosively to disturb their base\n• Immediately shrimp as they post\n• Get to half guard — don't try to roll them\n\nDrill: Bridge and shrimp to half guard — 3 sets of 5 each side.`, youtube: 'https://www.youtube.com/embed/XCh0JqpEeis' },
+  { skill: 'GUARD RETENTION',          image: '/grounded_hip_escape.png',          desc: 'Frame on their hip before they clear your leg.', detail: `Guard retention is about being proactive. By the time you react, you're already late.\n\nKey checkpoints:\n• Inside hand frames on their hip — straight arm\n• Outside hand controls their sleeve or wrist\n• Knee shield connected to elbow at all times\n• Move hips AWAY first, then re-engage\n\nDrill: Guard retention solo shrimping — 3 sets of 10.`, youtube: 'https://www.youtube.com/embed/RJSF_SWm8xc' },
 ];
 
-function getTitleAndTagline(score, styles) {
+function getTitleAndTagline(score, styles, comp) {
   const styleKey = styles && styles[0];
-  const tiers = [
-    { range:[0,25],   items:[
-      { title:'Professional Tap Machine',      tagline:'You\'re basically a free submission dispenser.' },
-      { title:'Donation Artist',               tagline:'Giving away taps like they\'re business cards.' },
-      { title:'Certified Mat Inspector',       tagline:'Nobody studies the ceiling more diligently.' },
-    ]},
-    { range:[26,50],  items:[
-      { title:'Occasionally Dangerous',        tagline:'Like a speed bump. Annoying but survivable.' },
-      { title:'Emerging Menace',               tagline:'The gym is mildly aware of your existence.' },
-      { title:'Work In Progress',              tagline:'Heavy emphasis on the "in progress" part.' },
-    ]},
-    { range:[51,75],  items:[
-      { title:'Certified Problem',             tagline:'People start to remember what you train.' },
-      { title:'Gym Hazard',                    tagline:'New students get a quiet warning about you.' },
-      { title:'Involuntary Instructor',        tagline:'Teaching humility, one tap at a time.' },
-    ]},
-    { range:[76,100], items:[
-      { title:'Do Not Engage',                 tagline:'The warm-up round is someone else\'s nightmare.' },
-      { title:'Insurance Liability',           tagline:'The gym owner checks your membership monthly.' },
-      { title:'Helio Is Watching',             tagline:'From wherever he is, he\'s nodding.' },
-    ]},
-  ];
-  const styleTitles = {
-    'leg-lock':  { title:'Orthopaedic Surgeon\'s BFF', tagline:'Keeping knee specialists in business since day one.' },
-    'rubber':    { title:'Mission Control Operator',   tagline:'Eddie Bravo is your spirit animal. God help us.' },
-    'pressure':  { title:'Human Weighted Blanket',     tagline:'Oppressive, suffocating, and oddly effective.' },
-    'bottom':    { title:'Guard Goblin',               tagline:'Happiest when horizontal and causing problems.' },
-    'wrestling': { title:'Takedown Tyrant',            tagline:'If it\'s not on the ground, it\'s not your problem.' },
-    'judo':      { title:'Airtime Architect',           tagline:'Your partners are getting frequent flyer miles.' },
-  };
-  if (styleKey && styleTitles[styleKey] && score > 20 && (score * 7) % 10 < 4) return styleTitles[styleKey];
-  const tier = tiers.find(t => score >= t.range[0] && score <= t.range[1]) || tiers[0];
-  return tier.items[Math.floor((score/26) % tier.items.length) % tier.items.length];
+  const { guard=0, pass=0, sub=0, esc=0, takedown=0 } = comp || {};
+  
+  // Imbalance Detection
+  if (takedown >= 8 && guard <= 3) return SPECIAL_RANKS['takedown-no-guard'];
+  if (guard >= 8 && pass <= 3) return SPECIAL_RANKS['guard-no-pass'];
+  if (sub >= 8 && esc <= 3) return SPECIAL_RANKS['sub-no-esc'];
+  if (esc >= 8 && guard <= 4 && sub <= 4 && takedown <= 4) return SPECIAL_RANKS['esc-only'];
+  if (pass >= 8 && sub <= 3) return SPECIAL_RANKS['pass-no-sub'];
+  
+  // High-score specialization overrides (if high enough score)
+  if (styleKey && SPECIAL_RANKS[styleKey] && score > 40 && (score * 7) % 10 < 4) {
+    return SPECIAL_RANKS[styleKey];
+  }
+
+  // Check for specific skill map dominance
+  const sorted = Object.entries(comp).sort((a,b) => b[1] - a[1]);
+  const highestSkill = sorted[0];
+  const lowestSkill = sorted[sorted.length - 1];
+  
+  // All-rounder check
+  if (highestSkill[1] - lowestSkill[1] <= 2 && score > 30) return SPECIAL_RANKS['all-rounder'];
+
+  if (highestSkill[1] >= 8) {
+    if (highestSkill[0] === 'esc' && SPECIAL_RANKS['shrimper']) return SPECIAL_RANKS['shrimper'];
+    if (highestSkill[0] === 'sub' && SPECIAL_RANKS['sub-hunter']) return SPECIAL_RANKS['sub-hunter'];
+  }
+
+  // Find the base rank by score range
+  const rank = RANK_ROSTER.find(r => score >= r.range[0] && score <= r.range[1]) || RANK_ROSTER[0];
+  return { title: rank.title, tagline: rank.subtext, icon: rank.icon };
 }
 
 function SpiderChart({ comp }) {
@@ -116,6 +114,89 @@ function FocusOverlay({ focus, onClose }) {
   );
 }
 
+function RankOverlay({ currentScore, onClose }) {
+  const reversedRoster = [...RANK_ROSTER].reverse();
+  const indicatorPos = 100 - currentScore; // 0 is top, 100 is bottom
+
+  return (
+    <div className="overlay-enter" style={{
+      position:'fixed', inset:0, zIndex:50,
+      background:'#080808', overflowY:'auto',
+      padding:'0 0 60px', maxWidth:430, margin:'0 auto',
+    }}>
+      <div style={{ padding:'52px 20px 20px', borderBottom:'1px solid #1A1C20', display:'flex', alignItems:'center', justifyContent:'space-between', background:'#080808', position:'sticky', top:0, zIndex:10 }}>
+        <button onClick={onClose} style={{ background:'none', border:'none', color:'#555', fontSize:13, cursor:'pointer', fontWeight:600, fontFamily:"'Space Grotesk',sans-serif", display:'flex', alignItems:'center', gap:6 }}>← Back</button>
+        <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:G, fontWeight:700 }}>Rank Library</div>
+      </div>
+
+      <div style={{ padding:'24px 20px', position:'relative' }}>
+        <h1 style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:44, color:'#fff', lineHeight:0.95, marginBottom:10, letterSpacing:1 }}>MAT HIERARCHY</h1>
+        <p style={{ fontSize:14, color:'#555', marginBottom:32, fontWeight:400, lineHeight:1.5 }}>Unlock unique titles by shifting your skill map and evolving your game.</p>
+
+        <div style={{ display:'flex', gap:20, position:'relative' }}>
+          <div style={{ display:'flex', flexDirection:'column', gap:10, flex:1 }}>
+            {reversedRoster.map(rank => {
+              const isActive = currentScore >= rank.range[0] && currentScore <= rank.range[1];
+              return (
+                <div key={rank.title} className={isActive ? "liquid-glass" : ""} style={{
+                  background: isActive ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.02)',
+                  border: isActive ? `1px solid rgba(11,245,113,0.3)` : '1px solid rgba(255,255,255,0.05)',
+                  borderRadius:20, padding:'20px',
+                  position:'relative', transition:'all 0.4s ease',
+                  opacity: isActive ? 1 : 0.85,
+                  backdropFilter:'blur(24px)',
+                  boxShadow: isActive ? '0 8px 32px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.1)' : 'none'
+                }}>
+                  <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:10 }}>
+                    <span style={{ fontSize:28, filter: isActive ? 'none' : 'grayscale(100%) brightness(80%)' }}>{rank.icon}</span>
+                    <h2 style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:22, color: isActive ? G : '#fff', letterSpacing:0.5 }}>{rank.title}</h2>
+                  </div>
+                  <p style={{ fontSize:14, color: isActive ? '#eee' : '#666', lineHeight:1.5, fontWeight:400, fontStyle:'italic' }}>{rank.subtext}</p>
+                  {isActive && <div style={{ position:'absolute', top:20, right:20, fontSize:9, color:G, fontWeight:800, letterSpacing:1.5, textTransform:'uppercase' }}>Active</div>}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Vertical Temperature Gauge on Right */}
+          <div style={{ 
+            width:10, position:'relative',
+            background:'linear-gradient(to bottom, #A855F7, #4ADE80, #F0A020, #333)',
+            borderRadius:10, flexShrink:0, border:'2px solid #000', alignSelf:'stretch'
+          }}>
+            {/* Current Rank Pointer */}
+            <div style={{
+              position:'absolute', top:`${indicatorPos}%`, left:-6,
+              width:22, height:22, background:'#fff', borderRadius:'2px',
+              border:'3px solid #000', transform:'translateY(-50%)',
+              boxShadow:`0 0 10px ${G}`, zIndex:5,
+              transition:'top 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28)'
+            }}/>
+
+            {/* Labels for Top and Bottom */}
+            <div style={{ position:'absolute', top:-20, right:0, fontSize:8, color:G, fontWeight:900, textTransform:'uppercase', textAlign:'right' }}>Zenith</div>
+            <div style={{ position:'absolute', bottom:-20, right:0, fontSize:8, color:'#555', fontWeight:900, textTransform:'uppercase', textAlign:'right' }}>Base</div>
+          </div>
+        </div>
+
+        <div style={{ marginTop:50, marginBottom:16, fontSize:10, letterSpacing:3, textTransform:'uppercase', color:'#444', fontWeight:700 }}>STYLE SPECIALIZATIONS</div>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
+          {Object.entries(SPECIAL_RANKS).map(([key, rank]) => (
+            <div key={key} style={{
+              background:'#111', border:'1px solid #1f1f1f',
+              borderRadius:12, padding:'14px',
+            }}>
+              <div style={{ fontSize:20, marginBottom:8 }}>{rank.icon}</div>
+              <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:15, color:'#fff', marginBottom:4 }}>{rank.title}</div>
+              <div style={{ fontSize:11, color:'#666', lineHeight:1.4 }}>{rank.subtext}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Map lowestComp key to FOCUS_SKILLS index
 const COMP_TO_FOCUS_IDX = {
   esc:      0, // HIP ESCAPE MECHANICS
@@ -174,11 +255,12 @@ export default function Dashboard() {
   const seedIndex = COMP_TO_FOCUS_IDX[lowestComp] ?? 0;
   const [focusIndex, setFocusIndex] = useState(seedIndex);
   const [focusOverlay, setFocusOverlay] = useState(false);
+  const [rankOverlay, setRankOverlay] = useState(false);
 
   const score = calcScore(comp);
-  const { title, tagline } = getTitleAndTagline(score, styles);
-  // Fixed: was score < 75 ? G : G (identical branches)
-  const scoreColor = score < 30 ? '#5A5D65' : score < 60 ? '#F0A020' : score < 80 ? '#F0A020' : G;
+  const { title, tagline, icon } = getTitleAndTagline(score, styles, comp);
+  // Color mapping to match the rank temperature gauge
+  const scoreColor = score < 26 ? '#5A5D65' : score < 51 ? '#F0A020' : score < 76 ? '#4ADE80' : '#A855F7';
   const currentFocus = FOCUS_SKILLS[focusIndex % FOCUS_SKILLS.length];
 
   const now = new Date();
@@ -202,7 +284,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <div style={{ padding:'16px 20px 100px', overflowY:'auto', height:'100%' }}>
+      <div style={{ padding:'16px 20px 180px', overflowY:'auto', height:'100%' }}>
 
         {/* Greeting */}
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:16 }}>
@@ -215,31 +297,91 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Focus Card */}
+        {/* ── Expanded Weekly Focus Image Card (Vitality Inspired) ── */}
         <div key={focusIndex} onClick={()=>setFocusOverlay(true)} style={{
-          background:'#111', border:'1px solid #1f1f1f',
-          borderLeft:'3px solid transparent', backgroundImage:'linear-gradient(#1A1C20, #1A1C20), linear-gradient(to bottom, #0BF571, rgba(11,245,113,0.15))', backgroundOrigin:'border-box', backgroundClip:'padding-box, border-box', borderRadius:12,
-          padding:'16px 16px', marginBottom:10,
-          animation:'fadeUp 0.3s ease both', cursor:'pointer',
+          position:'relative',
+          minHeight:420,
+          borderRadius:28,
+          marginBottom:26,
+          overflow:'hidden',
+          display:'flex',
+          flexDirection:'column',
+          justifyContent:'flex-end',
+          cursor:'pointer',
+          boxShadow: '0 24px 48px rgba(0,0,0,0.7)',
+          animation:'fadeUp 0.4s ease both'
         }}>
-          <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:G, marginBottom:6, fontWeight:700 }}>This Week's Focus</div>
-          <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:20, color:'#fff', marginBottom:4, letterSpacing:0.5 }}>{currentFocus.skill}</div>
-          <div style={{ fontSize:13, color:'#666', fontWeight:400, lineHeight:1.5, marginBottom:12 }}>{currentFocus.desc}</div>
-          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-            <div style={{ fontSize:12, color:'#444', fontStyle:'italic' }}>Tap for full breakdown →</div>
-            <button onClick={e=>{ e.stopPropagation(); setFocusIndex(i=>(i+1)%FOCUS_SKILLS.length); }} style={{
-              background:'transparent', border:'1px solid #2A2D32',
-              borderRadius:50, padding:'5px 12px', color:'#555',
-              fontSize:11, fontWeight:600, letterSpacing:1,
-              cursor:'pointer', transition:'all 0.18s',
+          {/* Background Image */}
+          <div style={{
+            position:'absolute', inset:0,
+            backgroundImage:`url(${currentFocus.image})`,
+            backgroundSize:'cover', backgroundPosition:'center',
+            zIndex:1
+          }} />
+          
+          {/* Liquid Glass Overlays */}
+          <div style={{
+            position:'absolute', inset:0,
+            background:'linear-gradient(to top, rgba(8,8,8,0.98) 0%, rgba(8,8,8,0.4) 45%, transparent 100%)',
+            zIndex:2
+          }} />
+
+          {/* Top Label Badge */}
+          <div style={{
+            position:'absolute', top:24, left:24, zIndex:3,
+            padding:'8px 16px', borderRadius:24,
+            background:'rgba(11,245,113,0.15)',
+            backdropFilter:'blur(20px)',
+            border:'1px solid rgba(11,245,113,0.3)',
+            display:'flex', alignItems:'center', gap:8
+          }}>
+            <div style={{ width:6, height:6, borderRadius:'50%', background:G, boxShadow:`0 0 10px ${G}` }} />
+            <span style={{ fontSize:10, fontWeight:900, color:G, letterSpacing:2, textTransform:'uppercase' }}>WEEKLY FOCUS</span>
+          </div>
+
+          {/* Not This Week Button (Floating Glass) */}
+          <button 
+            onClick={e=>{ e.stopPropagation(); setFocusIndex(i=>(i+1)%FOCUS_SKILLS.length); }}
+            style={{
+              position:'absolute', top:24, right:24, zIndex:3,
+              background:'rgba(255,255,255,0.05)',
+              backdropFilter:'blur(12px)',
+              border:'1px solid rgba(255,255,255,0.1)',
+              borderRadius:24, padding:'8px 16px',
+              color:'#fff', fontSize:10, fontWeight:700, letterSpacing:1,
+              cursor:'pointer', transition:'all 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28)',
               fontFamily:"'Space Grotesk',sans-serif",
-            }}>Not this week →</button>
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.15)'}
+            onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
+          >
+            NOT THIS WEEK →
+          </button>
+
+          {/* Bottom Content */}
+          <div style={{ position:'relative', zIndex:3, padding:28 }}>
+            <h1 style={{ 
+              fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, 
+              fontSize:48, color:'#fff', lineHeight:0.95, textTransform:'uppercase',
+              marginBottom:10, letterSpacing:0.5
+            }}>{currentFocus.skill}</h1>
+            <p style={{ fontSize:16, color:'rgba(255,255,255,0.8)', lineHeight:1.5, maxWidth:'95%', fontWeight:400, marginBottom:20 }}>
+              {currentFocus.desc}
+            </p>
+            <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+              <div style={{
+                padding:'10px 20px', borderRadius:50, background:G, color:'#000',
+                fontSize:12, fontWeight:900, letterSpacing:1.5, textTransform:'uppercase'
+              }}>
+                LEARN LESSON
+              </div>
+            </div>
           </div>
         </div>
 
         {/* ── Workout of the Day Card ── */}
         <div style={{
-          marginBottom:10,
+          marginBottom:20,
           borderRadius:12,
           overflow:'hidden',
           border: isBjjToday && isWorkoutToday ? '1px solid rgba(11,245,113,0.25)'
@@ -383,25 +525,28 @@ export default function Dashboard() {
         </div>
 
         {/* KPI Score */}
-        <div style={{
-          background:'#111', border:'1px solid #1f1f1f',
-          borderRadius:12, padding:'18px 18px', marginBottom:10,
-          display:'flex', alignItems:'center', gap:18,
+        <div onClick={() => setRankOverlay(true)} className="liquid-glass" style={{
+          borderRadius:20, padding:'24px 20px', marginBottom:20,
+          display:'flex', alignItems:'center', gap:22,
+          cursor:'pointer', position:'relative',
+          background:'rgba(255,255,255,0.04)',
+          border:'1px solid rgba(255,255,255,0.1)',
         }}>
+          {rankOverlay === false && <div style={{ position:'absolute', top:14, right:16, fontSize:10, color:'#555', letterSpacing:1, textTransform:'uppercase', fontWeight:700 }}>Library →</div>}
           <div style={{ textAlign:'center', flexShrink:0 }}>
-            <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:64, lineHeight:1, color:scoreColor, letterSpacing:-2 }}>{score}</div>
-            <div style={{ fontSize:10, letterSpacing:2, textTransform:'uppercase', color:'#444', marginTop:2, fontWeight:700 }}>Overall</div>
+            <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:72, lineHeight:1, color:scoreColor, letterSpacing:-3 }}>{score}</div>
+            <div style={{ fontSize:10, letterSpacing:2, textTransform:'uppercase', color:'#555', marginTop:4, fontWeight:800 }}>Overall</div>
           </div>
-          <div style={{ width:1, height:56, background:'#222', flexShrink:0 }}/>
+          <div style={{ width:1, height:60, background:'rgba(255,255,255,0.08)', flexShrink:0 }}/>
           <div style={{ flex:1 }}>
-            <div style={{ fontSize:10, letterSpacing:2, textTransform:'uppercase', color:'#444', marginBottom:6, fontWeight:700 }}>YOUR RANK</div>
-            <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:20, color:'#fff', lineHeight:1.1, marginBottom:6, letterSpacing:0.5 }}>{title}</div>
-            <div style={{ fontSize:12, color:'#555', fontWeight:400, lineHeight:1.4, fontStyle:'italic' }}>{tagline}</div>
+            <div style={{ fontSize:10, letterSpacing:2, textTransform:'uppercase', color:'#555', marginBottom:8, fontWeight:800 }}>YOUR RANK</div>
+            <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:24, color:'#fff', lineHeight:1.1, marginBottom:8, letterSpacing:0.5 }}>{title || 'Trainee'} {icon}</div>
+            <div style={{ fontSize:13, color:'#aaa', fontWeight:400, lineHeight:1.5, fontStyle:'italic' }}>{tagline}</div>
           </div>
         </div>
 
         {/* Skill Map */}
-        <div style={{ background:'#111', border:'1px solid #1f1f1f', borderRadius:12, padding:'16px 18px', marginBottom:10 }}>
+        <div style={{ background:'#111', border:'1px solid #1f1f1f', borderRadius:12, padding:'16px 18px', marginBottom:20 }}>
           <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:'#444', marginBottom:8, fontWeight:700 }}>Skill Map</div>
           <div style={{ display:'flex', justifyContent:'center' }}>
             <SpiderChart comp={comp}/>
@@ -434,6 +579,7 @@ export default function Dashboard() {
       </div>
 
       {focusOverlay && <FocusOverlay focus={currentFocus} onClose={()=>setFocusOverlay(false)}/>}
+      {rankOverlay && <RankOverlay currentScore={score} onClose={()=>setRankOverlay(false)}/>}
     </>
   );
 }

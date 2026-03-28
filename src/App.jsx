@@ -175,8 +175,15 @@ function MainApp() {
       height: '100vh', display: 'flex', flexDirection: 'column',
       background: '#080808', maxWidth: 430, margin: '0 auto', overflow: 'hidden',
     }}>
-      {/* Header */}
-      <div style={{ padding: '52px 20px 0', flexShrink: 0 }}>
+      {/* Header Blur Band - Liquid Glass Gradient Blur */}
+      <div style={{ 
+        position: 'absolute', top: 0, left: 0, right: 0, 
+        height: 100, zIndex: 110, padding: '48px 20px 0',
+        background: 'linear-gradient(to bottom, rgba(8,8,8,0.95) 0%, rgba(8,8,8,0.6) 60%, transparent 100%)',
+        backdropFilter: 'blur(32px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(32px) saturate(180%)',
+        WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)',
+      }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <HexMark size={30} />
@@ -199,8 +206,8 @@ function MainApp() {
         </div>
       </div>
 
-      {/* Content */}
-      <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
+      {/* Content Area - shifted down to clear the thinner fixed header */}
+      <div style={{ flex: 1, position: 'relative', overflow: 'hidden', paddingTop: 90 }}>
         {NAV.map(tab => (
           <div key={tab.id} style={{
             display: activeTab === tab.id ? 'block' : 'none',
@@ -216,36 +223,49 @@ function MainApp() {
         ))}
       </div>
 
-      {/* Bottom Nav */}
+      {/* Bottom Nav - Liquid Glass Pill (Vitality Inspired) */}
       <div style={{
-        flexShrink: 0,
-        background: '#111214',
-        borderTop: '1px solid #2A2D32',
+        position: 'absolute',
+        bottom: 24,
+        left: '50%',
+        transform: 'translateX(-50%)',
+        height: 68,
+        zIndex: 100,
         display: 'flex',
-        paddingBottom: 'env(safe-area-inset-bottom, 10px)',
-      }}>
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 34,
+        padding: '0 6px',
+        width: 'auto',
+        minWidth: 320,
+      }} className="liquid-glass">
         {NAV.map(tab => {
           const isActive = activeTab === tab.id;
           return (
             <div key={tab.id} onClick={() => handleTabSwitch(tab.id)} style={{
-              flex: 1, padding: '12px 4px 8px',
+              flex: 1, height: 56,
               display: 'flex', flexDirection: 'column',
-              alignItems: 'center', gap: 4, cursor: 'pointer',
+              alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+              transition: 'all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28)',
+              background: isActive ? 'rgba(255,255,255,0.08)' : 'transparent',
+              borderRadius: 28,
+              margin: '0 2px',
+              padding: '0 12px',
+              minWidth: 64,
             }}>
-              {tab.icon(isActive)}
-              <span style={{
-                fontFamily: "'Space Grotesk', sans-serif",
-                fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase',
-                fontWeight: 700,
-                color: isActive ? '#0BF571' : '#5A5D65',
-                transition: 'color 0.2s',
-              }}>{tab.label}</span>
-              {isActive && (
-                <div style={{
-                  width: 20, height: 2, borderRadius: 1,
-                  background: '#0BF571', marginTop: 1,
-                }} />
-              )}
+              <div style={{
+                position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2
+              }}>
+                {tab.icon(isActive)}
+                <span style={{
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontSize: 9, letterSpacing: '0.04em', textTransform: 'uppercase',
+                  fontWeight: 800,
+                  color: isActive ? '#fff' : 'rgba(255,255,255,0.3)',
+                  transition: 'color 0.2s',
+                  marginTop: 2
+                }}>{tab.label}</span>
+              </div>
             </div>
           );
         })}
