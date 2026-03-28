@@ -365,27 +365,32 @@ export default function Rolls() {
         <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:30, color:'#fff', marginBottom:20, letterSpacing:1 }}>ROLL ANALYSIS</div>
 
         {sessions.map(session => (
-          <div key={session.id} onClick={() => setSelected(session)} style={{ background:'#111', border:'1px solid #1f1f1f', borderRadius:12, padding:'16px', marginBottom:8, cursor:'pointer', display:'flex', gap:14, alignItems:'flex-start', transition:'border-color 0.18s' }}
+          <div key={session.id} onClick={() => setSelected(session)} className="liquid-glass" style={{
+            borderRadius:20, padding:'20px', marginBottom:12,
+            cursor:'pointer', display:'flex', gap:14, alignItems:'flex-start',
+            transition:'all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28)',
+            border:'1px solid rgba(255,255,255,0.14)'
+          }}
             onMouseEnter={e => e.currentTarget.style.borderColor = G}
-            onMouseLeave={e => e.currentTarget.style.borderColor = '#1f1f1f'}
+            onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.14)'}
           >
-            <div style={{ textAlign:'center', minWidth:38 }}>
-              <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:28, lineHeight:1, color:G }}>{session.day}</div>
-              <div style={{ fontSize:9, letterSpacing:2, textTransform:'uppercase', color:'#444', fontWeight:700 }}>{session.month}</div>
+            <div style={{ textAlign:'center', minWidth:42 }}>
+              <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:32, lineHeight:1, color:G }}>{session.day}</div>
+              <div style={{ fontSize:10, letterSpacing:2, textTransform:'uppercase', color:'#555', fontWeight:800 }}>{session.month}</div>
             </div>
             <div style={{ flex:1 }}>
-              <div style={{ display:'flex', alignItems:'center', gap:6, flexWrap:'wrap', marginBottom:6 }}>
-                <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:18, color:'#fff', letterSpacing:0.5 }}>{session.title}</div>
-                {session.aiGenerated && <span style={{ fontSize:9, letterSpacing:1, textTransform:'uppercase', padding:'2px 6px', background:'rgba(74,222,128,0.1)', border:'1px solid rgba(74,222,128,0.2)', borderRadius:4, color:G, fontWeight:700 }}>AI</span>}
-                {session.mediaSource?.type === 'blob'    && <span style={{ fontSize:9, padding:'2px 6px', background:'rgba(245,158,11,0.1)', border:'1px solid rgba(245,158,11,0.2)', borderRadius:4, color:AMBER, fontWeight:700 }}>📹</span>}
-                {session.mediaSource?.type === 'youtube' && <span style={{ fontSize:9, padding:'2px 6px', background:'rgba(59,130,246,0.1)', border:'1px solid rgba(59,130,246,0.2)', borderRadius:4, color:BLUE, fontWeight:700 }}>▶ YT</span>}
+              <div style={{ display:'flex', alignItems:'center', gap:8, flexWrap:'wrap', marginBottom:8 }}>
+                <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:20, color:'#fff', letterSpacing:0.5 }}>{session.title.toUpperCase()}</div>
+                {session.aiGenerated && <span style={{ fontSize:9, letterSpacing:1.5, textTransform:'uppercase', padding:'3px 8px', background:'rgba(11,245,113,0.1)', border:'1px solid rgba(11,245,113,0.3)', borderRadius:20, color:G, fontWeight:800 }}>AI ANALYZED</span>}
               </div>
-              <div style={{ display:'flex', gap:5, flexWrap:'wrap', marginBottom:6 }}>
-                {session.tags.map(t => <span key={t} style={{ fontSize:10, letterSpacing:1, textTransform:'uppercase', padding:'2px 8px', background:'#1A1C20', borderRadius:4, color:'#555', fontWeight:600 }}>{t}</span>)}
+              <div style={{ display:'flex', gap:6, flexWrap:'wrap', marginBottom:8 }}>
+                {session.tags.map(t => <span key={t} style={{ fontSize:10, letterSpacing:1, textTransform:'uppercase', padding:'3px 10px', background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:20, color:'#888', fontWeight:700 }}>{t}</span>)}
               </div>
-              <div style={{ fontSize:12, color:AMBER, display:'flex', alignItems:'center', gap:4, fontWeight:600 }}>⚡ {session.missed} missed opportunities</div>
+              <div style={{ fontSize:13, color:AMBER, display:'flex', alignItems:'center', gap:6, fontWeight:700, letterSpacing:0.3 }}>
+                <span style={{fontSize:16}}>⚡</span> {session.missed} MISSED OPPORTUNITIES
+              </div>
             </div>
-            <span style={{ color:'#333', fontSize:18, alignSelf:'center' }}>›</span>
+            <span style={{ color:'#444', fontSize:22, alignSelf:'center' }}>›</span>
           </div>
         ))}
 
@@ -394,16 +399,22 @@ export default function Rolls() {
           <div style={{ marginTop:8 }}>
             {camError && <div style={{ fontSize:11, color:AMBER, marginBottom:10, padding:'8px 12px', background:'rgba(245,158,11,0.06)', border:'1px solid rgba(245,158,11,0.15)', borderRadius:8 }}>⚠ {camError}</div>}
 
-            <div onClick={() => setPhase('picking')} style={{ width:'100%', background:'#111', border:`1px solid ${G}`, borderRadius:12, padding:'18px 20px', cursor:'pointer', display:'flex', alignItems:'center', gap:14, transition:'background 0.18s', marginBottom:8 }}
-              onMouseEnter={e => e.currentTarget.style.background = 'rgba(74,222,128,0.06)'}
-              onMouseLeave={e => e.currentTarget.style.background = '#111'}
+            <div onClick={() => setPhase('picking')} className="liquid-glass-pill" style={{ 
+              width:'100%', borderRadius:24, padding:'20px', cursor:'pointer', 
+              display:'flex', alignItems:'center', gap:16, 
+              transition:'all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28)', marginBottom:12,
+              border:'1px solid rgba(11,245,113,0.4)',
+              background: 'rgba(11,245,113,0.05)'
+            }}
+              onMouseEnter={e => e.currentTarget.style.background = 'rgba(11,245,113,0.1)'}
+              onMouseLeave={e => e.currentTarget.style.background = 'rgba(11,245,113,0.05)'}
             >
-              <div style={{ width:40, height:40, borderRadius:'50%', background:'rgba(74,222,128,0.12)', border:'1px solid rgba(74,222,128,0.3)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:18, flexShrink:0 }}>⏺</div>
+              <div style={{ width:48, height:48, borderRadius:'50%', background:'rgba(11,245,113,0.2)', border:'1px solid rgba(11,245,113,0.4)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:20, flexShrink:0 }}>⏺</div>
               <div>
-                <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:17, color:G, letterSpacing:0.5 }}>RECORD SESSION</div>
-                <div style={{ fontSize:12, color:'#444', marginTop:2 }}>Use your camera to record a roll</div>
+                <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:19, color:G, letterSpacing:1 }}>RECORD SESSION</div>
+                <div style={{ fontSize:12, color:'#888', marginTop:2, fontWeight:500 }}>High-fidelity video analysis enabled.</div>
               </div>
-              <span style={{ marginLeft:'auto', color:G, fontSize:18 }}>›</span>
+              <span style={{ marginLeft:'auto', color:G, fontSize:22 }}>›</span>
             </div>
 
             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>

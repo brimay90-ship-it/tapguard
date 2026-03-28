@@ -44,19 +44,25 @@ export default function NoteEditor({ note: existingNote, onClose }) {
   };
 
   const inp = {
-    width: '100%', background: '#111', border: '1px solid #1f1f1f', borderRadius: 10,
-    padding: '12px 14px', color: '#fff', fontFamily: "'Space Grotesk', sans-serif",
-    fontSize: 15, fontWeight: 500, outline: 'none', resize: 'none',
-    transition: 'border-color 0.18s',
+    width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 16,
+    padding: '14px 18px', color: '#fff', fontFamily: "'Space Grotesk', sans-serif",
+    fontSize: 15, fontWeight: 600, outline: 'none', resize: 'none',
+    transition: 'all 0.3s ease',
   };
-  const lbl = { fontSize: 10, letterSpacing: 2, textTransform: 'uppercase', color: '#444', marginBottom: 8, fontWeight: 700 };
+  const lbl = { fontSize: 10, letterSpacing: 3, textTransform: 'uppercase', color: G, marginBottom: 12, fontWeight: 800 };
 
   return (
-    <div className="overlay-enter" style={{ position: 'absolute', inset: 0, background: '#080808', overflowY: 'auto', padding: '20px 20px 80px', zIndex: 10 }}>
-      <button onClick={onClose} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#444', cursor: 'pointer', background: 'none', border: 'none', marginBottom: 20, fontWeight: 700, transition: 'color 0.18s' }}
-        onMouseEnter={e => e.currentTarget.style.color = '#aaa'}
-        onMouseLeave={e => e.currentTarget.style.color = '#444'}
-      >← Back</button>
+    <div className="overlay-enter" style={{ 
+      position: 'fixed', inset: 0, 
+      background: 'rgba(8,8,8,0.4)', 
+      backdropFilter: 'blur(60px) saturate(250%)',
+      overflowY: 'auto', padding: '20px 20px 100px', zIndex: 10,
+      maxWidth: 430, margin: '0 auto'
+    }}>
+      <button onClick={onClose} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#666', cursor: 'pointer', background: 'none', border: 'none', marginBottom: 20, fontWeight: 800, transition: 'color 0.18s' }}
+        onMouseEnter={e => e.currentTarget.style.color = '#fff'}
+        onMouseLeave={e => e.currentTarget.style.color = '#666'}
+      >← BACK</button>
 
       <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 32, color: '#fff', marginBottom: 24, letterSpacing: 1, animation: 'fadeUp 0.35s ease both' }}>
         {isEditing ? 'EDIT NOTES' : 'NEW CLASS NOTES'}

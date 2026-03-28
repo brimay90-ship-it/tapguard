@@ -38,7 +38,7 @@ export default function Notes() {
 
   return (
     <div style={{ position: 'relative', height: '100%' }}>
-      <div style={{ padding: '20px 20px 100px', overflowY: 'auto', height: '100%' }}>
+      <div style={{ padding: '20px 20px 140px', overflowY: 'auto', height: '100%' }}>
         <div style={{ fontSize: 10, letterSpacing: 3, textTransform: 'uppercase', color: '#444', marginBottom: 6, fontWeight: 700 }}>Training Journal</div>
         <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 30, color: '#fff', marginBottom: 16, letterSpacing: 1 }}>CLASS NOTES</div>
 
@@ -56,16 +56,17 @@ export default function Notes() {
         </div>
 
         {/* Add new note button */}
-        <div onClick={openNew} style={{
-          width: '100%', background: '#111', border: '1px dashed #1f1f1f',
-          borderRadius: 12, padding: 20, color: '#444', fontSize: 14,
-          fontWeight: 700, cursor: 'pointer', textAlign: 'center',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-          marginBottom: 16, transition: 'all 0.18s',
+        <div onClick={openNew} className="liquid-glass" style={{
+          width: '100%', border: '1px dashed rgba(255,255,255,0.2)',
+          borderRadius: 20, padding: 24, color: '#666', fontSize: 13,
+          fontWeight: 800, cursor: 'pointer', textAlign: 'center',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+          marginBottom: 20, transition: 'all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28)',
+          letterSpacing: 2
         }}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = G; e.currentTarget.style.color = '#aaa'; }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = '#1f1f1f'; e.currentTarget.style.color = '#444'; }}
-        >+ ADD TODAY'S CLASS NOTES</div>
+          onMouseEnter={e => { e.currentTarget.style.borderColor = G; e.currentTarget.style.color = '#fff'; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.color = '#666'; }}
+        >⚡ ADD TODAY'S CLASS NOTES</div>
 
         {/* Note cards — each opens in editor for viewing/editing */}
         {filtered.length === 0 && (
@@ -75,30 +76,30 @@ export default function Notes() {
         )}
 
         {filtered.map(note => (
-          <div key={note.id} onClick={() => openNote(note)} style={{
-            background: '#111', border: '1px solid #1f1f1f',
-            borderRadius: 12, padding: '16px', marginBottom: 8,
-            cursor: 'pointer', transition: 'border-color 0.18s',
+          <div key={note.id} onClick={() => openNote(note)} className="liquid-glass" style={{
+            borderRadius:20, padding:'20px', marginBottom:12,
+            cursor:'pointer', transition:'all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28)',
+            border:'1px solid rgba(255,255,255,0.14)'
           }}
             onMouseEnter={e => e.currentTarget.style.borderColor = G}
-            onMouseLeave={e => e.currentTarget.style.borderColor = '#1f1f1f'}
+            onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.14)'}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
-              <div style={{ fontSize: 10, letterSpacing: 2, textTransform: 'uppercase', color: '#333', fontWeight: 700 }}>{note.date}</div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom:10 }}>
+              <div style={{ fontSize: 10, letterSpacing: 2.5, textTransform: 'uppercase', color:G, fontWeight:800 }}>{note.date}</div>
               {note.category && (
-                <div style={{ fontSize: 9, letterSpacing: 1, textTransform: 'uppercase', padding: '2px 7px', background: '#1A1C20', borderRadius: 4, color: '#555', fontWeight: 700 }}>
+                <div style={{ fontSize: 9, letterSpacing: 1.5, textTransform: 'uppercase', padding: '3px 10px', background: 'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.1)', borderRadius: 20, color: '#888', fontWeight:800 }}>
                   {note.category}
                 </div>
               )}
             </div>
-            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 20, color: '#fff', marginBottom: 8, letterSpacing: 0.5 }}>{note.title}</div>
-            <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 8 }}>
-              {note.moves.map(m => <span key={m} style={{ fontSize: 11, padding: '3px 8px', background: '#1A1C20', borderRadius: 4, color: '#666', fontWeight: 600 }}>{m}</span>)}
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 22, color: '#fff', marginBottom:12, letterSpacing: 0.5 }}>{note.title.toUpperCase()}</div>
+            <div style={{ display: 'flex', gap:6, flexWrap: 'wrap', marginBottom:12 }}>
+              {note.moves.map(m => <span key={m} style={{ fontSize: 10, padding: '4px 10px', background: 'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.1)', borderRadius: 20, color: '#aaa', fontWeight: 700, letterSpacing:0.3 }}>{m}</span>)}
             </div>
             {note.feel && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: feelColors[note.feel] || '#444', display: 'inline-block' }} />
-                <span style={{ fontSize: 12, color: '#444', fontWeight: 600 }}>{feelLabels[note.feel] || note.feel}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap:8 }}>
+                <span style={{ width: 8, height: 8, borderRadius: '50%', background: feelColors[note.feel] || '#444', display: 'inline-block', boxShadow:`0 0 10px ${feelColors[note.feel] || 'transparent'}` }} />
+                <span style={{ fontSize: 12, color: '#666', fontWeight: 700, textTransform:'uppercase', letterSpacing:1 }}>{feelLabels[note.feel] || note.feel}</span>
               </div>
             )}
           </div>

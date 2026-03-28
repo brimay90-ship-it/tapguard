@@ -37,7 +37,7 @@ export default function Calendar({ selectedDate, onSelectDate }) {
   };
 
   return (
-    <div style={{background:'#111',border:'1px solid #1f1f1f',borderRadius:12,overflow:'hidden',marginBottom:16}}>
+    <div className="liquid-glass" style={{borderRadius:20,overflow:'hidden',marginBottom:20}}>
 
       {/* Header */}
       <div style={{padding:'14px 16px 10px',borderBottom:'1px solid #1a1a1a'}}>

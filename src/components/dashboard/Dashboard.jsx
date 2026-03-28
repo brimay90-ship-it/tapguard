@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { weekPlan, bjjDayTips } from '../../data/weekPlan';
 import { RANK_ROSTER, SPECIAL_RANKS } from '../../data/rankRoster';
@@ -14,38 +14,37 @@ const FOCUS_SKILLS = [
   { skill: 'GUARD RETENTION',          image: '/grounded_hip_escape.png',          desc: 'Frame on their hip before they clear your leg.', detail: `Guard retention is about being proactive. By the time you react, you're already late.\n\nKey checkpoints:\n• Inside hand frames on their hip — straight arm\n• Outside hand controls their sleeve or wrist\n• Knee shield connected to elbow at all times\n• Move hips AWAY first, then re-engage\n\nDrill: Guard retention solo shrimping — 3 sets of 10.`, youtube: 'https://www.youtube.com/embed/RJSF_SWm8xc' },
 ];
 
-function getTitleAndTagline(score, styles, comp) {
+function getPlayerMeta(score, styles, comp) {
   const styleKey = styles && styles[0];
   const { guard=0, pass=0, sub=0, esc=0, takedown=0 } = comp || {};
   
+  // 1. Calculate Base Rank
+  const baseRankData = RANK_ROSTER.find(r => score >= r.range[0] && score <= r.range[1]) || RANK_ROSTER[0];
+  const rank = { title: baseRankData.title, tagline: baseRankData.subtext, icon: baseRankData.icon };
+
+  // 2. Identify Specialization (if any)
+  let spec = null;
   // Imbalance Detection
-  if (takedown >= 8 && guard <= 3) return SPECIAL_RANKS['takedown-no-guard'];
-  if (guard >= 8 && pass <= 3) return SPECIAL_RANKS['guard-no-pass'];
-  if (sub >= 8 && esc <= 3) return SPECIAL_RANKS['sub-no-esc'];
-  if (esc >= 8 && guard <= 4 && sub <= 4 && takedown <= 4) return SPECIAL_RANKS['esc-only'];
-  if (pass >= 8 && sub <= 3) return SPECIAL_RANKS['pass-no-sub'];
-  
-  // High-score specialization overrides (if high enough score)
-  if (styleKey && SPECIAL_RANKS[styleKey] && score > 40 && (score * 7) % 10 < 4) {
-    return SPECIAL_RANKS[styleKey];
+  if (takedown >= 8 && guard <= 3) spec = SPECIAL_RANKS['takedown-no-guard'];
+  else if (guard >= 8 && pass <= 3) spec = SPECIAL_RANKS['guard-no-pass'];
+  else if (sub >= 8 && esc <= 3) spec = SPECIAL_RANKS['sub-no-esc'];
+  else if (esc >= 8 && guard <= 4 && sub <= 4 && takedown <= 4) spec = SPECIAL_RANKS['esc-only'];
+  else if (pass >= 8 && sub <= 3) spec = SPECIAL_RANKS['pass-no-sub'];
+  // High-score specialization overrides
+  else if (styleKey && SPECIAL_RANKS[styleKey] && score > 40 && (score * 7) % 10 < 4) spec = SPECIAL_RANKS[styleKey];
+  else {
+    // Skill map dominance
+    const sorted = Object.entries(comp).sort((a,b) => b[1] - a[1]);
+    const highestSkill = sorted[0];
+    const lowestSkill = sorted[sorted.length - 1];
+    if (highestSkill[1] - lowestSkill[1] <= 2 && score > 30) spec = SPECIAL_RANKS['all-rounder'];
+    else if (highestSkill[1] >= 8) {
+      if (highestSkill[0] === 'esc' && SPECIAL_RANKS['shrimper']) spec = SPECIAL_RANKS['shrimper'];
+      if (highestSkill[0] === 'sub' && SPECIAL_RANKS['sub-hunter']) spec = SPECIAL_RANKS['sub-hunter'];
+    }
   }
 
-  // Check for specific skill map dominance
-  const sorted = Object.entries(comp).sort((a,b) => b[1] - a[1]);
-  const highestSkill = sorted[0];
-  const lowestSkill = sorted[sorted.length - 1];
-  
-  // All-rounder check
-  if (highestSkill[1] - lowestSkill[1] <= 2 && score > 30) return SPECIAL_RANKS['all-rounder'];
-
-  if (highestSkill[1] >= 8) {
-    if (highestSkill[0] === 'esc' && SPECIAL_RANKS['shrimper']) return SPECIAL_RANKS['shrimper'];
-    if (highestSkill[0] === 'sub' && SPECIAL_RANKS['sub-hunter']) return SPECIAL_RANKS['sub-hunter'];
-  }
-
-  // Find the base rank by score range
-  const rank = RANK_ROSTER.find(r => score >= r.range[0] && score <= r.range[1]) || RANK_ROSTER[0];
-  return { title: rank.title, tagline: rank.subtext, icon: rank.icon };
+  return { rank, spec };
 }
 
 function SpiderChart({ comp }) {
@@ -114,12 +113,33 @@ function FocusOverlay({ focus, onClose }) {
   );
 }
 
-function RankOverlay({ currentScore, onClose }) {
+function RankOverlay({ currentScore, target, onClose }) {
+  const containerRef = useRef(null);
+  const rankRefs = useRef({});
+  const specRefs = useRef({});
+  
   const reversedRoster = [...RANK_ROSTER].reverse();
-  const indicatorPos = 100 - currentScore; // 0 is top, 100 is bottom
+  const indicatorPos = 100 - currentScore;
+
+  useEffect(() => {
+    if (!target) return;
+    const timer = setTimeout(() => {
+      let element = null;
+      if (target === 'rank') {
+        const activeRank = RANK_ROSTER.find(r => currentScore >= r.range[0] && currentScore <= r.range[1]);
+        if (activeRank) element = rankRefs.current[activeRank.title];
+      } else {
+        element = specRefs.current[target];
+      }
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 300); // Wait for overlay enter animation
+    return () => clearTimeout(timer);
+  }, [target, currentScore]);
 
   return (
-    <div className="overlay-enter" style={{
+    <div ref={containerRef} className="overlay-enter" style={{
       position:'fixed', inset:0, zIndex:50,
       background:'#080808', overflowY:'auto',
       padding:'0 0 60px', maxWidth:430, margin:'0 auto',
@@ -138,7 +158,7 @@ function RankOverlay({ currentScore, onClose }) {
             {reversedRoster.map(rank => {
               const isActive = currentScore >= rank.range[0] && currentScore <= rank.range[1];
               return (
-                <div key={rank.title} className={isActive ? "liquid-glass" : ""} style={{
+                <div key={rank.title} ref={el => rankRefs.current[rank.title] = el} className={isActive ? "liquid-glass" : ""} style={{
                   background: isActive ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.02)',
                   border: isActive ? `1px solid rgba(11,245,113,0.3)` : '1px solid rgba(255,255,255,0.05)',
                   borderRadius:20, padding:'20px',
@@ -181,16 +201,23 @@ function RankOverlay({ currentScore, onClose }) {
 
         <div style={{ marginTop:50, marginBottom:16, fontSize:10, letterSpacing:3, textTransform:'uppercase', color:'#444', fontWeight:700 }}>STYLE SPECIALIZATIONS</div>
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
-          {Object.entries(SPECIAL_RANKS).map(([key, rank]) => (
-            <div key={key} style={{
-              background:'#111', border:'1px solid #1f1f1f',
-              borderRadius:12, padding:'14px',
-            }}>
-              <div style={{ fontSize:20, marginBottom:8 }}>{rank.icon}</div>
-              <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:15, color:'#fff', marginBottom:4 }}>{rank.title}</div>
-              <div style={{ fontSize:11, color:'#666', lineHeight:1.4 }}>{rank.subtext}</div>
-            </div>
-          ))}
+          {Object.entries(SPECIAL_RANKS).map(([key, rank]) => {
+            // Check if this is the user's active spec to highlight it
+            const isActive = target === key;
+            return (
+              <div key={key} ref={el => specRefs.current[key] = el} style={{
+                background: isActive ? 'rgba(11,245,113,0.05)' : '#111', 
+                border: isActive ? `1px solid ${G}` : '1px solid #1f1f1f',
+                borderRadius:12, padding:'14px',
+                transition:'all 0.3s ease',
+                transform: isActive ? 'scale(1.02)' : 'scale(1)'
+              }}>
+                <div style={{ fontSize:20, marginBottom:8 }}>{rank.icon}</div>
+                <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:15, color: isActive ? G : '#fff', marginBottom:4 }}>{rank.title}</div>
+                <div style={{ fontSize:11, color: isActive ? '#ccc' : '#666', lineHeight:1.4 }}>{rank.subtext}</div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
@@ -255,10 +282,11 @@ export default function Dashboard() {
   const seedIndex = COMP_TO_FOCUS_IDX[lowestComp] ?? 0;
   const [focusIndex, setFocusIndex] = useState(seedIndex);
   const [focusOverlay, setFocusOverlay] = useState(false);
-  const [rankOverlay, setRankOverlay] = useState(false);
+  const [rankOverlay, setRankOverlay] = useState(null);
 
   const score = calcScore(comp);
-  const { title, tagline, icon } = getTitleAndTagline(score, styles, comp);
+  const { rank, spec } = getPlayerMeta(score, styles, comp);
+  const { title, tagline, icon } = rank;
   // Color mapping to match the rank temperature gauge
   const scoreColor = score < 26 ? '#5A5D65' : score < 51 ? '#F0A020' : score < 76 ? '#4ADE80' : '#A855F7';
   const currentFocus = FOCUS_SKILLS[focusIndex % FOCUS_SKILLS.length];
@@ -380,18 +408,15 @@ export default function Dashboard() {
         </div>
 
         {/* ── Workout of the Day Card ── */}
-        <div style={{
+        <div className="liquid-glass" style={{
           marginBottom:20,
-          borderRadius:12,
+          borderRadius:24,
           overflow:'hidden',
-          border: isBjjToday && isWorkoutToday ? '1px solid rgba(11,245,113,0.25)'
-                : isBjjToday     ? '1px solid rgba(11,245,113,0.25)'
-                : isWorkoutToday ? '1px solid rgba(240,160,32,0.25)'
-                : '1px solid #1f1f1f',
-          background: isBjjToday && isWorkoutToday ? 'linear-gradient(135deg,#0a1a10,#111)'
-                    : isBjjToday     ? 'linear-gradient(135deg,#0a1a10,#111)'
-                    : isWorkoutToday ? 'linear-gradient(135deg,#1a110a,#111)'
-                    : '#111',
+          padding: '2px', // Thin accent highlight
+          border: isBjjToday && isWorkoutToday ? '1px solid rgba(11,245,113,0.3)'
+                : isBjjToday     ? '1px solid rgba(11,245,113,0.3)'
+                : isWorkoutToday ? '1px solid rgba(240,160,32,0.3)'
+                : '1px solid rgba(255,255,255,0.14)',
         }}>
 
           {/* Accent bar */}
@@ -525,14 +550,14 @@ export default function Dashboard() {
         </div>
 
         {/* KPI Score */}
-        <div onClick={() => setRankOverlay(true)} className="liquid-glass" style={{
+        <div onClick={() => setRankOverlay('rank')} className="liquid-glass" style={{
           borderRadius:20, padding:'24px 20px', marginBottom:20,
           display:'flex', alignItems:'center', gap:22,
           cursor:'pointer', position:'relative',
           background:'rgba(255,255,255,0.04)',
           border:'1px solid rgba(255,255,255,0.1)',
         }}>
-          {rankOverlay === false && <div style={{ position:'absolute', top:14, right:16, fontSize:10, color:'#555', letterSpacing:1, textTransform:'uppercase', fontWeight:700 }}>Library →</div>}
+          {rankOverlay === null && <div style={{ position:'absolute', top:14, right:16, fontSize:10, color:'#555', letterSpacing:1, textTransform:'uppercase', fontWeight:700 }}>Library →</div>}
           <div style={{ textAlign:'center', flexShrink:0 }}>
             <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:72, lineHeight:1, color:scoreColor, letterSpacing:-3 }}>{score}</div>
             <div style={{ fontSize:10, letterSpacing:2, textTransform:'uppercase', color:'#555', marginTop:4, fontWeight:800 }}>Overall</div>
@@ -541,13 +566,37 @@ export default function Dashboard() {
           <div style={{ flex:1 }}>
             <div style={{ fontSize:10, letterSpacing:2, textTransform:'uppercase', color:'#555', marginBottom:8, fontWeight:800 }}>YOUR RANK</div>
             <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:24, color:'#fff', lineHeight:1.1, marginBottom:8, letterSpacing:0.5 }}>{title || 'Trainee'} {icon}</div>
-            <div style={{ fontSize:13, color:'#aaa', fontWeight:400, lineHeight:1.5, fontStyle:'italic' }}>{tagline}</div>
+            <div style={{ fontSize:13, color:'#aaa', fontWeight:400, lineHeight:1.5, fontStyle:'italic', marginBottom: spec ? 12 : 0 }}>{tagline}</div>
+            
+            {/* Style Specialization Badge */}
+            {spec && (
+              <div 
+                onClick={(e) => { 
+                  e.stopPropagation(); 
+                  const specKey = Object.keys(SPECIAL_RANKS).find(k => SPECIAL_RANKS[k].title === spec.title);
+                  setRankOverlay(specKey); 
+                }}
+                style={{ 
+                  display:'inline-flex', alignItems:'center', gap:8,
+                  padding:'6px 14px', borderRadius:20,
+                  background: 'rgba(11,245,113,0.08)',
+                  border: '1px solid rgba(11,245,113,0.2)',
+                  backdropFilter:'blur(20px)',
+                  boxShadow:'0 4px 15px rgba(0,0,0,0.2)'
+                }} className="liquid-glass">
+                <span style={{ fontSize:16 }}>{spec.icon}</span>
+                <div>
+                  <div style={{ fontSize:8, fontWeight:900, color:G, letterSpacing:1.5, textTransform:'uppercase', lineHeight:1 }}>Style Specialist</div>
+                  <div style={{ fontSize:12, fontWeight:700, color:'#fff' }}>{spec.title}</div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Skill Map */}
-        <div style={{ background:'#111', border:'1px solid #1f1f1f', borderRadius:12, padding:'16px 18px', marginBottom:20 }}>
-          <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:'#444', marginBottom:8, fontWeight:700 }}>Skill Map</div>
+        <div className="liquid-glass" style={{ borderRadius:24, padding:'24px 20px', marginBottom:20 }}>
+          <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:G, marginBottom:16, fontWeight:800 }}>Skill Map</div>
           <div style={{ display:'flex', justifyContent:'center' }}>
             <SpiderChart comp={comp}/>
           </div>
@@ -562,24 +611,23 @@ export default function Dashboard() {
             { icon:'🏋️', label:"Today's Workout", sub:'Workout plan',       tab:'training' },
             { icon:'♟',  label:'Missed Moves',     sub:'From last roll', tab:'roll' },
           ].map(card=>(
-            <div key={card.label} onClick={()=>setActiveTab(card.tab)} style={{
-              background:'#111', border:'1px solid #1f1f1f',
-              borderRadius:12, padding:'14px', cursor:'pointer',
-              transition:'border-color 0.18s',
+            <div key={card.label} onClick={()=>setActiveTab(card.tab)} className="liquid-glass" style={{
+              borderRadius:20, padding:'20px', cursor:'pointer',
+              transition:'all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28)',
             }}
-              onMouseEnter={e=>e.currentTarget.style.borderColor='#0BF571'}
-              onMouseLeave={e=>e.currentTarget.style.borderColor='#1f1f1f'}
+              onMouseEnter={e=>e.currentTarget.style.borderColor=G}
+              onMouseLeave={e=>e.currentTarget.style.borderColor='rgba(255,255,255,0.14)'}
             >
-              <div style={{fontSize:18,marginBottom:8}}>{card.icon}</div>
-              <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:15,letterSpacing:0.5,color:'#fff',marginBottom:3}}>{card.label}</div>
-              <div style={{fontSize:11,color:'#555',fontWeight:400}}>{card.sub}</div>
+              <div style={{fontSize:22,marginBottom:12}}>{card.icon}</div>
+              <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:18,letterSpacing:0.5,color:'#fff',marginBottom:4}}>{card.label}</div>
+              <div style={{fontSize:12,color:G,fontWeight:600,letterSpacing:0.5}}>{card.sub}</div>
             </div>
           ))}
         </div>
       </div>
 
       {focusOverlay && <FocusOverlay focus={currentFocus} onClose={()=>setFocusOverlay(false)}/>}
-      {rankOverlay && <RankOverlay currentScore={score} onClose={()=>setRankOverlay(false)}/>}
+      {rankOverlay && <RankOverlay currentScore={score} target={rankOverlay} onClose={()=>setRankOverlay(null)}/>}
     </>
   );
 }

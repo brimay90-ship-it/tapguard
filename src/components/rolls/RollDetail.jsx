@@ -15,7 +15,8 @@ export default function RollDetail({ session, onBack }) {
 
   return (
     <div className="overlay-enter" style={{
-      position: 'absolute', inset: 0, background: '#080808',
+      position: 'absolute', inset: 0, background: 'rgba(8,8,8,0.4)',
+      backdropFilter: 'blur(60px) saturate(250%)',
       overflowY: 'auto', padding: '20px 20px 80px', zIndex: 10,
     }}>
       <button onClick={onBack} style={{
@@ -46,15 +47,15 @@ export default function RollDetail({ session, onBack }) {
       {/* Roll headers */}
       <div style={{ marginBottom: 24 }}>
         <div style={{ fontSize: 10, letterSpacing: 3, textTransform: 'uppercase', color: '#444', marginBottom: 10, fontWeight: 700 }}>RECORDED ROLLS</div>
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div style={{ display: 'flex', gap: 10 }}>
           {rolls.map((roll, i) => (
-            <div key={i} style={{
-              background: i === 0 ? 'rgba(74,222,128,0.08)' : '#111',
-              border: `1px solid ${i === 0 ? G : '#1f1f1f'}`,
-              borderRadius: 8, padding: '10px 14px',
+            <div key={i} className="liquid-glass" style={{
+              background: i === 0 ? 'rgba(11,245,113,0.1)' : 'rgba(255,255,255,0.03)',
+              border: `1px solid ${i === 0 ? G : 'rgba(255,255,255,0.14)'}`,
+              borderRadius: 12, padding: '12px 18px', flex:1, textAlign:'center'
             }}>
-              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 16, color: i === 0 ? G : '#fff' }}>{roll.label}</div>
-              <div style={{ fontSize: 10, color: '#444', marginTop: 2, fontWeight: 600 }}>{roll.duration}</div>
+              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 18, color: i === 0 ? G : '#fff', letterSpacing:0.5 }}>{roll.label.toUpperCase()}</div>
+              <div style={{ fontSize:11, color: '#444', marginTop:4, fontWeight:800, letterSpacing:1 }}>{roll.duration}</div>
             </div>
           ))}
         </div>

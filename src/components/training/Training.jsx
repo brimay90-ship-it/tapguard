@@ -63,10 +63,10 @@ function SetTracker({ exercise, dayIdx, exIdx, exerciseDone, toggleExercise, get
   const numSets = exercise.sets || 3;
 
   return (
-    <div style={{
-      background:'#111', border:`1px solid ${done ? 'rgba(74,222,128,0.2)' : '#1f1f1f'}`,
-      borderRadius:12, marginBottom:10, overflow:'hidden',
-      opacity: done ? 0.6 : 1, transition:'all 0.2s',
+    <div className="liquid-glass" style={{
+      border:`1px solid ${done ? 'rgba(74,222,128,0.3)' : 'rgba(255,255,255,0.14)'}`,
+      borderRadius:20, marginBottom:12, overflow:'hidden',
+      opacity: done ? 0.6 : 1, transition:'all 0.3s ease',
     }}>
       {/* Exercise header */}
       <div style={{padding:'14px 16px 10px', display:'flex', gap:12, alignItems:'flex-start'}}>
@@ -164,12 +164,12 @@ function BJJDayContent({ dayIdx }) {
   return (
     <div>
       {/* Pre-class warmup */}
-      <div style={{background:'#111',border:'1px solid #1f1f1f',borderTop:`3px solid ${G}`,borderRadius:12,padding:'14px 16px',marginBottom:10}}>
-        <div style={{fontSize:10,letterSpacing:2,textTransform:'uppercase',color:G,marginBottom:10,fontWeight:700}}>🥋 Pre-Class Warmup</div>
+      <div className="liquid-glass" style={{borderTop:`3px solid ${G}`, borderRadius:16, padding:'20px', marginBottom:12}}>
+        <div style={{fontSize:10,letterSpacing:2,textTransform:'uppercase',color:G,marginBottom:12,fontWeight:800}}>🥋 PRE-CLASS WARMUP</div>
         {tips.warmup.map((item,i)=>(
-          <div key={i} style={{display:'flex',alignItems:'flex-start',gap:8,marginBottom:7}}>
-            <div style={{width:18,height:18,borderRadius:'50%',background:'rgba(74,222,128,0.1)',border:'1px solid rgba(74,222,128,0.2)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:9,color:G,fontWeight:800,flexShrink:0,marginTop:1}}>{i+1}</div>
-            <div style={{fontSize:13,color:'#aaa',fontWeight:500,lineHeight:1.4}}>{item}</div>
+          <div key={i} style={{display:'flex',alignItems:'flex-start',gap:12,marginBottom:10}}>
+            <div style={{width:22,height:22,borderRadius:'50%',background:'rgba(11,245,113,0.15)',border:'1px solid rgba(11,245,113,0.3)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,color:G,fontWeight:900,flexShrink:0,marginTop:2}}>{i+1}</div>
+            <div style={{fontSize:14,color:'#fff',fontWeight:500,lineHeight:1.4}}>{item}</div>
           </div>
         ))}
       </div>
@@ -224,22 +224,22 @@ export default function Training() {
   const formattedDate = selectedDate.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
 
   return (
-    <div style={{ padding:'20px 20px 100px', overflowY:'auto', height:'100%' }}>
+    <div style={{ padding:'20px 20px 140px', overflowY:'auto', height:'100%' }}>
 
       {/* Header */}
       <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:'#444', marginBottom:4, fontWeight:700 }}>Workout Plan</div>
       <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:28, color:'#fff', marginBottom:14, letterSpacing:1 }}>YOUR WORKOUT PLAN</div>
 
       {/* Weekly summary chips */}
-      <div style={{display:'flex',gap:8,marginBottom:14,flexWrap:'wrap'}}>
-        <div style={{padding:'6px 12px',borderRadius:50,background:'rgba(74,222,128,0.08)',border:'1px solid rgba(74,222,128,0.2)',fontSize:11,fontWeight:700,color:G}}>
-          🥋 {remainingBjj}× BJJ / week
+      <div style={{display:'flex',gap:8,marginBottom:20,flexWrap:'wrap'}}>
+        <div className="liquid-glass" style={{padding:'10px 18px',borderRadius:20,border:'1px solid rgba(11,245,113,0.3)',fontSize:11,fontWeight:800,color:G, letterSpacing:1}}>
+          🥋 {remainingBjj}× BJJ / WEEK
         </div>
-        <div style={{padding:'6px 12px',borderRadius:50,background:'rgba(245,158,11,0.08)',border:'1px solid rgba(245,158,11,0.2)',fontSize:11,fontWeight:700,color:AMBER}}>
-          🏋️ {remainingWorkout}× Workouts / week
+        <div className="liquid-glass" style={{padding:'10px 18px',borderRadius:20,border:'1px solid rgba(240,160,32,0.3)',fontSize:11,fontWeight:800,color:AMBER, letterSpacing:1}}>
+          🏋️ {remainingWorkout}× LIFT / WEEK
         </div>
-        <div style={{padding:'6px 12px',borderRadius:50,background:'#111',border:'1px solid #1f1f1f',fontSize:11,fontWeight:700,color:'#444'}}>
-          😴 {restDays} Rest days
+        <div className="liquid-glass" style={{padding:'10px 18px',borderRadius:20,border:'1px solid rgba(255,255,255,0.14)',fontSize:11,fontWeight:800,color:'#555', letterSpacing:1}}>
+          😴 {restDays} REST DAYS
         </div>
       </div>
 
@@ -314,12 +314,13 @@ export default function Training() {
 
       {/* ── REST DAY ── */}
       {!isBjjDay && !isWorkoutDay && (
-        <div style={{background:'#111',border:'1px solid #1f1f1f',borderRadius:12,padding:'24px',textAlign:'center'}}>
-          <div style={{fontSize:28,marginBottom:8}}>😴</div>
-          <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:18,color:'#fff',marginBottom:6}}>REST DAY</div>
-          <div style={{fontSize:13,color:'#444',lineHeight:1.6}}>Recovery is training too. Sleep, hydrate, and let your body adapt.</div>
-          <div style={{marginTop:14,padding:'10px 14px',background:'#1A1C20',borderRadius:8,fontSize:12,color:'#555',textAlign:'left'}}>
-            💡 Light walk or mobility work only. Avoid anything that spikes heart rate.
+        <div className="liquid-glass" style={{borderRadius:20, padding:'32px 24px', textAlign:'center', border:'1px solid rgba(255,255,255,0.14)'}}>
+          <div style={{fontSize:48,marginBottom:16}}>😴</div>
+          <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:24,color:'#fff',marginBottom:8, letterSpacing:1}}>REST DAY</div>
+          <div style={{fontSize:15,color:'#888',lineHeight:1.6, marginBottom:20}}>Recovery is training too. Sleep, hydrate, and let your body adapt.</div>
+          <div style={{padding:'16px',background:'rgba(255,255,255,0.03)',borderRadius:12,fontSize:13,color:G,textAlign:'left', borderLeft:`4px solid ${G}`}}>
+            <span style={{fontWeight:800, letterSpacing:1, fontSize:10, display:'block', marginBottom:4}}>COACH'S TIP:</span>
+            Light walk or mobility work only. Avoid anything that spikes heart rate.
           </div>
         </div>
       )}

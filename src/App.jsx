@@ -207,11 +207,11 @@ function MainApp() {
       </div>
 
       {/* Content Area - shifted down to clear the thinner fixed header */}
-      <div style={{ flex: 1, position: 'relative', overflow: 'hidden', paddingTop: 90 }}>
+      <div style={{ flex: 1, position: 'relative', paddingTop: 90, paddingBottom: 110 }}>
         {NAV.map(tab => (
           <div key={tab.id} style={{
             display: activeTab === tab.id ? 'block' : 'none',
-            height: '100%', position: 'relative',
+            height: '100%', position: 'relative', overflow: 'hidden',
             animation: activeTab === tab.id ? 'tabEnter 0.28s ease both' : 'none',
           }}>
             {tab.id === 'dash'     && <Dashboard key={tabKey} />}
@@ -223,52 +223,65 @@ function MainApp() {
         ))}
       </div>
 
-      {/* Bottom Nav - Liquid Glass Pill (Vitality Inspired) */}
+      {/* Bottom Nav - iOS 26 Liquid Glass Pill */}
       <div style={{
         position: 'absolute',
-        bottom: 24,
+        bottom: 28,
         left: '50%',
         transform: 'translateX(-50%)',
         height: 68,
         zIndex: 100,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
         borderRadius: 34,
-        padding: '0 6px',
         width: 'auto',
         minWidth: 320,
-      }} className="liquid-glass">
-        {NAV.map(tab => {
-          const isActive = activeTab === tab.id;
-          return (
-            <div key={tab.id} onClick={() => handleTabSwitch(tab.id)} style={{
-              flex: 1, height: 56,
-              display: 'flex', flexDirection: 'column',
-              alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
-              transition: 'all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28)',
-              background: isActive ? 'rgba(255,255,255,0.08)' : 'transparent',
-              borderRadius: 28,
-              margin: '0 2px',
-              padding: '0 12px',
-              minWidth: 64,
-            }}>
-              <div style={{
-                position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2
+      }} className="liquid-glass-pill">
+        
+        <div style={{ position:'relative', display:'flex', width:'100%', height:'100%', padding:'0 8px', alignItems:'center' }}>
+          {/* Animated Background Pill */}
+          {(() => {
+            const idx = NAV.findIndex(t => t.id === activeTab);
+            const offsets = { dash: 4, matrix: 2, roll: 0, notes: -2, training: -4 };
+            const currentOffset = offsets[activeTab] || 0;
+            return (
+              <div className="tab-active-pill" style={{
+                width: `calc(100% / ${NAV.length} - 4px)`,
+                left: `calc(${(idx * (100 / NAV.length))}% + 2px + ${currentOffset}px)`,
+                height: 52,
+              }} />
+            );
+          })()}
+
+          {NAV.map(tab => {
+            const isActive = activeTab === tab.id;
+            return (
+              <div key={tab.id} onClick={() => handleTabSwitch(tab.id)} style={{
+                flex: 1, height: 56,
+                display: 'flex', flexDirection: 'column',
+                alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+                transition: 'all 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.28)',
+                borderRadius: 28,
+                margin: '0 2px',
+                padding: '0 8px',
+                minWidth: 58,
+                zIndex: 1
               }}>
-                {tab.icon(isActive)}
-                <span style={{
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  fontSize: 9, letterSpacing: '0.04em', textTransform: 'uppercase',
-                  fontWeight: 800,
-                  color: isActive ? '#fff' : 'rgba(255,255,255,0.3)',
-                  transition: 'color 0.2s',
-                  marginTop: 2
-                }}>{tab.label}</span>
+                <div style={{
+                  position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2
+                }}>
+                  {tab.icon(isActive)}
+                  <span style={{
+                    fontFamily: "'Space Grotesk', sans-serif",
+                    fontSize: 9, letterSpacing: '0.04em', textTransform: 'uppercase',
+                    fontWeight: 800,
+                    color: isActive ? '#fff' : 'rgba(255,255,255,0.3)',
+                    transition: 'color 0.2s',
+                    marginTop: 2
+                  }}>{tab.label}</span>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );

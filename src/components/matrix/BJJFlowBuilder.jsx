@@ -1366,16 +1366,15 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
   const allNbrs = (adj[tech.id]||[]).map(id=>byId[id]).filter(Boolean);
 
   return (
-    <div style={{
+    <div className="liquid-glass" style={{
       position:"absolute", bottom:0, left:0, right:0,
-      background:"#0f0f0f",
-      borderRadius:"22px 22px 0 0",
-      border:"1px solid #1e1e1e",
+      borderRadius:"32px 32px 0 0",
+      border:"1px solid rgba(255,255,255,0.25)",
       maxHeight:"calc(100% - 24px)",
       display:"flex", flexDirection:"column",
-      boxShadow:"0 -16px 64px #000f",
+      boxShadow:"0 -16px 64px rgba(0,0,0,0.8)",
       zIndex:200,
-      animation:"sheetUp 0.28s cubic-bezier(0.32,0.72,0,1) both",
+      animation:"sheetUp 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28) both",
     }}>
       {/* Handle — tap to close */}
       <div onClick={onClose} style={{ padding:"12px 0 0", display:"flex", justifyContent:"center", cursor:"pointer" }}>
@@ -1407,7 +1406,7 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
       </div>
 
       {/* Tabs */}
-      <div style={{ display:"flex", flexShrink:0, borderBottom:"1px solid #191919" }}>
+      <div style={{ display:"flex", flexShrink:0, borderBottom:"1px solid rgba(255,255,255,0.08)" }}>
         {[["info","Details"],["train","Training"],["links","Connections"]].map(([t,l]) => (
           <button key={t} onClick={()=>setTab(t)} style={{
             flex:1, minHeight:44, fontSize:12, border:"none", background:"transparent",
@@ -1605,7 +1604,7 @@ function Library({ onSelect, onBack }) {
           })}
         </div>
       </div>
-      <div style={{ flex:1, overflowY:"auto", padding:"8px 12px 34px", WebkitOverflowScrolling:"touch" }}>
+      <div style={{ flex:1, overflowY:"auto", padding:"8px 12px 120px", WebkitOverflowScrolling:"touch" }}>
         {filtered.map(t => {
           const col = catColor(t);
           return (
@@ -1677,7 +1676,7 @@ function Arsenal({ byId, onBack, onLoadFlow, onNavigate }) {
         </div>
       </div>
 
-      <div style={{ flex:1, overflowY:"auto", padding:"12px 16px 34px", WebkitOverflowScrolling:"touch" }}>
+      <div style={{ flex:1, overflowY:"auto", padding:"12px 16px 120px", WebkitOverflowScrolling:"touch" }}>
         {view==="saved" && (
           saved.length===0 ? (
             <div style={{ textAlign:"center", padding:"48px 24px", color:"#2a2a2a",
@@ -2041,6 +2040,7 @@ function App() {
       display:"flex", flexDirection:"column", overflow:"hidden",
       fontFamily:"'DM Sans',sans-serif",
       maxWidth:430, margin:"0 auto", position:"relative",
+      paddingBottom: 115 // Clear the tab bar
     }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=DM+Sans:wght@400;500;600&display=swap');
@@ -2120,10 +2120,9 @@ function App() {
 
         {/* Bottom action bar — two clear actions only */}
         <div style={{
-          position:"absolute", bottom:0, left:0, right:0,
+          position:"absolute", bottom:96, left:0, right:0,
           background:"linear-gradient(transparent,#0a0a0a 50%)",
-          padding:"28px 14px 0",
-          paddingBottom:"max(16px, env(safe-area-inset-bottom, 16px))",
+          padding:"24px 14px 0",
           display:"flex", gap:8, pointerEvents:"none", zIndex:20,
         }}>
           {/* Primary: + Technique */}
