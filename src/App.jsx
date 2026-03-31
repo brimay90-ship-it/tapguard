@@ -172,19 +172,19 @@ function MainApp() {
 
   return (
     <div style={{
-      height: '100vh', display: 'flex', flexDirection: 'column',
+      height: '100dvh', display: 'flex', flexDirection: 'column',
       background: '#080808', maxWidth: 430, margin: '0 auto', overflow: 'hidden',
+      position: 'relative'
     }}>
-      {/* Header Blur Band - Liquid Glass Gradient Blur */}
       <div style={{ 
         position: 'absolute', top: 0, left: 0, right: 0, 
-        height: 100, zIndex: 110, padding: '48px 20px 0',
-        background: 'linear-gradient(to bottom, rgba(8,8,8,0.95) 0%, rgba(8,8,8,0.6) 60%, transparent 100%)',
+        height: 110, zIndex: 110, padding: '48px 20px 0',
+        background: 'linear-gradient(to bottom, rgba(8,8,8,1) 0%, rgba(8,8,8,0.8) 50%, transparent 100%)',
         backdropFilter: 'blur(32px) saturate(180%)',
         WebkitBackdropFilter: 'blur(32px) saturate(180%)',
-        WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)',
+        pointerEvents: 'none', // Allow scrolling through empty header space
       }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pointerEvents: 'auto' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <HexMark size={30} />
             <Wordmark size={18} />
@@ -206,13 +206,21 @@ function MainApp() {
         </div>
       </div>
 
-      {/* Content Area - shifted down to clear the thinner fixed header */}
-      <div style={{ flex: 1, position: 'relative', paddingTop: 90, paddingBottom: 110 }}>
+      {/* Content Area - Centralized Scroll Container */}
+      <div style={{ 
+        flex: 1, 
+        position: 'relative', 
+        overflowY: activeTab === 'matrix' ? 'hidden' : 'auto', 
+        WebkitOverflowScrolling: 'touch',
+        padding: activeTab === 'matrix' ? '110px 0 0' : '110px 0 180px', // Clear header always
+      }}>
         {NAV.map(tab => (
           <div key={tab.id} style={{
-            display: activeTab === tab.id ? 'block' : 'none',
-            height: '100%', position: 'relative', overflow: 'hidden',
+            display: activeTab === tab.id ? 'flex' : 'none',
+            flexDirection: 'column',
+            height: tab.id === 'matrix' ? '100%' : 'auto',
             animation: activeTab === tab.id ? 'tabEnter 0.28s ease both' : 'none',
+            position: 'relative', 
           }}>
             {tab.id === 'dash'     && <Dashboard key={tabKey} />}
             {tab.id === 'matrix'   && <BJJFlowBuilder />}
@@ -234,9 +242,10 @@ function MainApp() {
         borderRadius: 34,
         width: 'auto',
         minWidth: 320,
+        pointerEvents: 'none' // Allow scrolling through the container
       }} className="liquid-glass-pill">
         
-        <div style={{ position:'relative', display:'flex', width:'100%', height:'100%', padding:'0 8px', alignItems:'center' }}>
+        <div style={{ position:'relative', display:'flex', width:'100%', height:'100%', padding:'0 8px', alignItems:'center', pointerEvents: 'none' }}>
           {/* Animated Background Pill */}
           {(() => {
             const idx = NAV.findIndex(t => t.id === activeTab);
@@ -247,6 +256,7 @@ function MainApp() {
                 width: `calc(100% / ${NAV.length} - 4px)`,
                 left: `calc(${(idx * (100 / NAV.length))}% + 2px + ${currentOffset}px)`,
                 height: 52,
+                pointerEvents: 'none'
               }} />
             );
           })()}
@@ -263,7 +273,8 @@ function MainApp() {
                 margin: '0 2px',
                 padding: '0 8px',
                 minWidth: 58,
-                zIndex: 1
+                zIndex: 1,
+                pointerEvents: 'auto' // Re-enable pointer events for buttons
               }}>
                 <div style={{
                   position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2

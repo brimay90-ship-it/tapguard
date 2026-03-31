@@ -1,5 +1,6 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
+import { motion, useSpring, useMotionValue, useTransform, useVelocity } from 'framer-motion';
 
 const G = '#4ade80';
 
@@ -26,10 +27,11 @@ const STYLES = [
 ];
 const GOALS = ['💪 Build Strength','⚡ Get Faster','🧘 Improve Flexibility','⚖️ Gain Weight / Mass','🔥 Lose Weight','🫁 Cardio & Gas Tank','🛡️ Injury Prevention','🏅 Compete','😌 Stress Relief'];
 const FREQS = [
+  { val:'1', label:'1×', desc:'1 day / week' },
   { val:'2', label:'2×', desc:'2 days / week' },
   { val:'3', label:'3×', desc:'3 days / week' },
   { val:'4', label:'4×', desc:'4 days / week' },
-  { val:'5', label:'5+', desc:'Competition prep' },
+  { val:'5', label:'5+', desc:'Active competitor' },
 ];
 const COMP_KEYS = [
   { key:'guard',    label:'Guard Retention' },
@@ -176,109 +178,106 @@ function OptCard({ icon, title, desc, selected, onClick, large }) {
 
 function CompBar({ label, skillKey, value, onChange }) {
   const trackRef = useRef(null);
-  const isDragging = useRef(false);
+  const mValue = useMotionValue(value);
+  
+  // Spring physics for the knob - High-index optical feel
+  const springX = useSpring(mValue, { stiffness: 400, damping: 38, mass: 1 });
+  const velocity = useVelocity(springX);
+  
+  // Interaction Physics: High-elasticity warping
+  const scaleRefract = useTransform(velocity, [-3000, 0, 3000], [1.15, 1, 1.15]);
+  const skewRefract = useTransform(velocity, [-3000, 0, 3000], [-10, 0, 10]);
 
-  const getValueFromEvent = (clientX) => {
+  useEffect(() => {
+    mValue.set(value);
+  }, [value, mValue]);
+
+  const handleDrag = (_, info) => {
     const rect = trackRef.current.getBoundingClientRect();
-    const pct = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-    return Math.round(pct * 10);
+    const localX = info.point.x - rect.left;
+    const pct = Math.max(0, Math.min(1, localX / rect.width));
+    const newVal = Math.round(pct * 10);
+    if (newVal !== value) onChange(newVal);
   };
-
-  // Mouse events
-  const onMouseDown = (e) => {
-    e.preventDefault();
-    isDragging.current = true;
-    onChange(getValueFromEvent(e.clientX));
-
-    const onMouseMove = (e) => {
-      if (!isDragging.current) return;
-      onChange(getValueFromEvent(e.clientX));
-    };
-    const onMouseUp = () => {
-      isDragging.current = false;
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('mouseup', onMouseUp);
-    };
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mouseup', onMouseUp);
-  };
-
-  // Touch events
-  const onTouchStart = (e) => {
-    isDragging.current = true;
-    onChange(getValueFromEvent(e.touches[0].clientX));
-
-    const onTouchMove = (e) => {
-      e.preventDefault();
-      if (!isDragging.current) return;
-      onChange(getValueFromEvent(e.touches[0].clientX));
-    };
-    const onTouchEnd = () => {
-      isDragging.current = false;
-      window.removeEventListener('touchmove', onTouchMove);
-      window.removeEventListener('touchend', onTouchEnd);
-    };
-    window.addEventListener('touchmove', onTouchMove, { passive: false });
-    window.addEventListener('touchend', onTouchEnd);
-  };
-
-  const desc = SKILL_DESCS[skillKey]?.[value] || '';
 
   return (
-    <div style={{marginBottom:22}}>
-      <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:6}}>
-        <span style={{fontSize:14, fontWeight:600, color:'#ccc'}}>{label}</span>
-        <span style={{
-          fontFamily:"'Barlow Condensed',sans-serif",
-          fontWeight:800, fontSize:18, color:G, letterSpacing:1,
-        }}>{value} / 10</span>
+    <div style={{ marginBottom: 44 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+        <span style={{ 
+          fontSize: 14, fontWeight: 900, color: G, 
+          letterSpacing: 2, textTransform: 'uppercase', 
+          userSelect: 'none', pointerEvents: 'none',
+          textShadow: `0 0 15px ${G}33`
+        }}>{label}</span>
+        <motion.span 
+          style={{
+            fontFamily: "'Barlow Condensed', sans-serif",
+            fontWeight: 900, fontSize: 26, color: G, letterSpacing: 1,
+            userSelect: 'none'
+          }}
+          animate={{ scale: [1, 1.1, 1] }}
+          key={value}
+        >{value}</motion.span>
       </div>
 
       {/* Skill description */}
       <div style={{
-        fontSize:11, color:'#4ade80', opacity: value === 0 ? 0.3 : 0.8,
-        marginBottom:10, minHeight:16, fontStyle:'italic', lineHeight:1.4,
-        transition:'opacity 0.2s',
-      }}>{desc}</div>
+        fontSize: 13, color: '#666', opacity: value === 0 ? 0.35 : 0.9,
+        marginBottom: 16, minHeight: 16, fontStyle: 'italic', lineHeight: 1.4,
+        transition: 'opacity 0.2s', letterSpacing: 0.3, userSelect: 'none'
+      }}>{SKILL_DESCS[skillKey]?.[value] || ''}</div>
 
-      {/* Track */}
+      {/* Frosted Glass Filament Rail - iOS 26 Light Style */}
       <div
         ref={trackRef}
-        onMouseDown={onMouseDown}
-        onTouchStart={onTouchStart}
         style={{
-          width:'100%', height:6, background:'#1a1a1a',
-          borderRadius:3, position:'relative', cursor:'pointer',
-          touchAction:'none',
+          width: '100%', height: 10, 
+          background: 'rgba(255, 255, 255, 0.15)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          borderRadius: 5, position: 'relative', 
+          touchAction: 'none',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.2)',
+          userSelect: 'none'
         }}
       >
-        {/* Fill */}
-        <div style={{
-          width:`${value * 10}%`, height:'100%',
-          background:`linear-gradient(90deg, #166534, ${G})`,
-          borderRadius:3, pointerEvents:'none',
-        }}/>
-        {/* Handle */}
-        <div style={{
-          position:'absolute', top:'50%',
-          left:`${value * 10}%`,
-          transform:'translate(-50%, -50%)',
-          width:22, height:22, borderRadius:'50%',
-          background:'#fff', border:`2px solid ${G}`,
-          pointerEvents:'none',
-          boxShadow:'0 0 8px rgba(74,222,128,0.4)',
-          transition:'box-shadow 0.15s',
-        }}/>
-      </div>
+        {/* Interaction Surface (Invisible hit area) */}
+        <div style={{ position: 'absolute', inset: -20, zIndex: 5, cursor: 'grab' }} />
 
-      {/* Tick marks */}
-      <div style={{display:'flex', justifyContent:'space-between', marginTop:4}}>
-        {[0,1,2,3,4,5,6,7,8,9,10].map(n=>(
-          <div key={n} style={{
-            fontSize:8, color: n <= value ? G : '#333',
-            fontWeight:700, width:8, textAlign:'center',
-          }}>{n}</div>
-        ))}
+        {/* Light Frosted Glass Pill Handle */}
+        <motion.div
+          drag="x"
+          dragConstraints={trackRef}
+          dragElastic={0.02}
+          dragMomentum={false}
+          onDrag={handleDrag}
+          style={{
+            position: 'absolute', top: '50%',
+            left: `${value * 10}%`,
+            x: '-50%', y: '-50%',
+            width: 48, height: 26, borderRadius: 13,
+            background: 'rgba(255, 255, 255, 0.4)',
+            backdropFilter: 'blur(12px) saturate(140%) brightness(1.2)',
+            WebkitBackdropFilter: 'blur(12px) saturate(140%) brightness(1.2)',
+            border: '1px solid rgba(255, 255, 255, 0.6)',
+            boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
+            zIndex: 10,
+            cursor: 'grab',
+            WebkitTapHighlightColor: 'transparent',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            overflow: 'hidden',
+            filter: 'url(#optical-magnification)'
+          }}
+          whileDrag={{ cursor: 'grabbing', scale: 1.02 }}
+        >
+          {/* Subtle Glass Reflection Shine with Green Color Pass */}
+          <div style={{
+            position: 'absolute', top: 0, left: 0, right: 0, height: '50%',
+            background: `linear-gradient(${G}33, transparent)`,
+            borderRadius: '13px 13px 0 0'
+          }} />
+        </motion.div>
       </div>
     </div>
   );
@@ -387,15 +386,47 @@ export default function Onboarding() {
   const [step, setStep]       = useState(0);
   const [animKey, setAnimKey] = useState(0);
   const [giPref, setGiPref]   = useState('');
-  const [sex, setSex]         = useState('');
+  const [sex, setSex]         = useState('male');
   const [unit, setUnit]         = useState('imperial');
   const [weight, setWeight]     = useState('');
-  const [heightCm, setHeightCm] = useState('');
-  const [heightFt, setHeightFt] = useState('');
-  const [heightIn, setHeightIn] = useState('');
+  const [heightCm, setHeightCm] = useState('178');
+  const [heightFt, setHeightFt] = useState('5');
+  const [heightIn, setHeightIn] = useState('10');
   const [bodyType, setBodyType] = useState('');
   const [customGoal, setCustomGoal] = useState('');
   const [showCustomGoal, setShowCustomGoal] = useState(false);
+  const [showCustomFreq, setShowCustomFreq] = useState(false);
+  const [showCustomScFreq, setShowCustomScFreq] = useState(false);
+  const manualWorkoutRef = useRef(false);
+
+  useEffect(() => {
+    if (!freq) setFreq('2');
+    if (!scFreq) setScFreq('2');
+  }, []);
+
+  // Auto-suggest workout days based on BJJ days
+  useEffect(() => {
+    if (manualWorkoutRef.current) return;
+    if (bjjDays.length === 0 && workoutDays.length === 0) return;
+    
+    const count = parseInt(scFreq) || 0;
+    if (count === 0) {
+      setWorkoutDays([]);
+      return;
+    }
+
+    const available = [0,1,2,3,4,5,6].filter(d => !bjjDays.includes(d));
+    const suggested = available.slice(0, count);
+    
+    // If not enough non-BJJ days, fill with BJJ days as overflow
+    if (suggested.length < count) {
+      const remaining = count - suggested.length;
+      const bjjSorted = [...bjjDays].sort();
+      suggested.push(...bjjSorted.slice(0, remaining));
+    }
+
+    setWorkoutDays(suggested.sort((a,b) => a-b));
+  }, [bjjDays, scFreq]);
 
   const goNext = ()=>{ setAnimKey(k=>k+1); setStep(s=>s+1); };
   const goBack = ()=>{ setAnimKey(k=>k+1); setStep(s=>s-1); };
@@ -408,6 +439,7 @@ export default function Onboarding() {
     padding:'16px 18px', color:'#fff', fontFamily:"'Barlow Condensed',sans-serif",
     fontSize:28, fontWeight:800, letterSpacing:2, outline:'none', transition:'border-color 0.18s',
   };
+
 
   const steps = [
     // 0 – Name
@@ -576,26 +608,61 @@ export default function Onboarding() {
     // 7 – Frequency
     <StepWrapper key="freq" animKey={animKey}>
       <p style={lbl}>Step 8 of {TOTAL_STEPS}</p>
-      <h1 style={title()}>HOW OFTEN?</h1>
+      <h1 style={title()}>BJJ TRAINING<br/>DAYS</h1>
       <p style={sub}>How many days per week do you train BJJ?</p>
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginTop:20}}>
-        {FREQS.map(f=><OptCard key={f.val} title={f.label} desc={f.desc} large selected={freq===f.val} onClick={()=>setFreq(f.val)}/>)}
+        {FREQS.map(f=><OptCard key={f.val} title={f.label} desc={f.desc} large selected={freq===f.val && !showCustomFreq} onClick={()=>{setFreq(f.val); setShowCustomFreq(false);}}/>)}
+        <OptCard title="Other" desc="Custom schedule" large selected={showCustomFreq} onClick={()=>setShowCustomFreq(true)}/>
       </div>
+      {showCustomFreq && (
+        <div style={{marginTop:16, animation:'fadeUp 0.2s ease both'}}>
+          <div style={{...lbl, marginBottom:10}}>Days Per Week (1-7)</div>
+          <div style={{display:'flex', gap:6}}>
+            {[1,2,3,4,5,6,7].map(n => (
+              <div key={n} onClick={()=>setFreq(String(n))} style={{
+                flex:1, height:44, display:'flex', alignItems:'center', justifyContent:'center',
+                borderRadius:10, background: freq === String(n) ? G : '#111',
+                border: `1px solid ${freq === String(n) ? G : '#1f1f1f'}`,
+                color: freq === String(n) ? '#000' : '#fff',
+                fontSize:16, fontWeight:800, cursor:'pointer', transition:'all 0.18s'
+              }}>{n}</div>
+            ))}
+          </div>
+        </div>
+      )}
     </StepWrapper>,
 
     // 8 – S&C workouts per week
     <StepWrapper key="scfreq" animKey={animKey}>
       <p style={lbl}>Step 9 of {TOTAL_STEPS}</p>
-      <h1 style={title()}>OUTSIDE<br/>WORKOUTS?</h1>
-      <p style={sub}>How many strength & conditioning sessions do you want per week on top of your BJJ training?</p>
+      <h1 style={title()}>LIFTING / OTHER<br/>WORKOUTS?</h1>
+      <p style={sub}>How many weight-lifting or S&C sessions do you want per week in addition to BJJ?</p>
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginTop:20}}>
         {[
-          {val:'1',label:'1×',desc:'Minimal – just support work'},
+          {val:'1',label:'1×',desc:'Minimal intensity'},
           {val:'2',label:'2×',desc:'Balanced – most popular'},
           {val:'3',label:'3×',desc:'Serious – dedicated athlete'},
-          {val:'4',label:'4+',desc:'Full commitment'},
-        ].map(f=><OptCard key={f.val} title={f.label} desc={f.desc} large selected={scFreq===f.val} onClick={()=>setScFreq(f.val)}/>)}
+          {val:'4',label:'4×',desc:'High volume training'},
+          {val:'5',label:'5+',desc:'Intense competition prep'},
+        ].map(f=><OptCard key={f.val} title={f.label} desc={f.desc} large selected={scFreq===f.val && !showCustomScFreq} onClick={()=>{setScFreq(f.val); setShowCustomScFreq(false);}}/>)}
+        <OptCard title="Other" desc="Custom volume" large selected={showCustomScFreq} onClick={()=>setShowCustomScFreq(true)}/>
       </div>
+      {showCustomScFreq && (
+        <div style={{marginTop:16, animation:'fadeUp 0.2s ease both'}}>
+          <div style={{...lbl, marginBottom:10}}>Lifting Days Per Week (1-7)</div>
+          <div style={{display:'flex', gap:6}}>
+            {[1,2,3,4,5,6,7].map(n => (
+              <div key={n} onClick={()=>setScFreq(String(n))} style={{
+                flex:1, height:44, display:'flex', alignItems:'center', justifyContent:'center',
+                borderRadius:10, background: scFreq === String(n) ? G : '#111',
+                border: `1px solid ${scFreq === String(n) ? G : '#1f1f1f'}`,
+                color: scFreq === String(n) ? '#000' : '#fff',
+                fontSize:16, fontWeight:800, cursor:'pointer', transition:'all 0.18s'
+              }}>{n}</div>
+            ))}
+          </div>
+        </div>
+      )}
     </StepWrapper>,
 
     // 9 – Pick BJJ days + workout days
@@ -634,7 +701,10 @@ export default function Onboarding() {
             const active = workoutDays.includes(i);
             const isBjj  = bjjDays.includes(i);
             return (
-              <div key={d} onClick={()=>setWorkoutDays(prev=>prev.includes(i)?prev.filter(x=>x!==i):[...prev,i].sort())} style={{
+              <div key={d} onClick={()=>{
+                manualWorkoutRef.current = true;
+                setWorkoutDays(prev=>prev.includes(i)?prev.filter(x=>x!==i):[...prev,i].sort());
+              }} style={{
                 padding:'10px 14px', borderRadius:8, cursor:'pointer',
                 border:`1px solid ${active?'#f59e0b':'#1f1f1f'}`,
                 background:active?'rgba(245,158,11,0.1)':'#111',
@@ -674,7 +744,22 @@ export default function Onboarding() {
   ];
 
   return (
-    <div style={{height:'100vh',display:'flex',flexDirection:'column',background:'#000',maxWidth:430,margin:'0 auto',overflow:'hidden'}}>
+    <div style={{height:'100dvh',display:'flex',flexDirection:'column',background:'#000',maxWidth:430,margin:'0 auto',overflow:'hidden', userSelect: 'none'}}>
+      {/* Global Shader Definitions */}
+      <svg style={{ position: 'absolute', width: 0, height: 0 }}>
+        <defs>
+          <filter id="optical-magnification" x="-50%" y="-50%" width="200%" height="200%">
+            {/* Subtle refraction warping - iOS 26 feel */}
+            <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" result="noise" />
+            <feGaussianBlur in="noise" stdDeviation="5" result="smoothNoise" />
+            <feDisplacementMap in="SourceGraphic" in2="smoothNoise" scale="12" xChannelSelector="R" yChannelSelector="G" result="magnified" />
+            
+            {/* Clean refraction for realism — no chromatic split to avoid pink hue */}
+            <feComposite in="magnified" in2="SourceGraphic" operator="atop" />
+          </filter>
+        </defs>
+      </svg>
+
       <div style={{padding:'52px 24px 0',flexShrink:0}}>
         <Progress step={step}/>
       </div>
@@ -705,7 +790,7 @@ export default function Onboarding() {
           onMouseDown={e=>e.currentTarget.style.transform='scale(0.98)'}
           onMouseUp={e=>e.currentTarget.style.transform='scale(1)'}
         >
-          {step===TOTAL_STEPS-1?'BUILD MY PLAN':'NEXT →'}
+          {step===TOTAL_STEPS-1?'BUILD MY PLAN':'NEXT \u2192'}
         </button>
       </div>
     </div>

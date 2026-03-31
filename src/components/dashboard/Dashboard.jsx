@@ -312,7 +312,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <div style={{ padding:'16px 20px 180px', overflowY:'auto', height:'100%' }}>
+      <div style={{ padding:'16px 20px 20px' }}>
 
         {/* Greeting */}
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:16 }}>

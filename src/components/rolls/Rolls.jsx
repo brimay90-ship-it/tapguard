@@ -357,10 +357,10 @@ export default function Rolls() {
   };
 
   return (
-    <div style={{ position:'relative', height:'100%' }}>
+    <div style={{ position:'relative' }}>
       <input ref={fileInputRef} type="file" accept="video/mp4,video/quicktime,video/webm,.mp4,.mov,.webm" onChange={handleFileImport} style={{ display:'none' }} />
 
-      <div style={{ padding:'20px 20px 120px', overflowY:'auto', height:'100%' }}>
+      <div style={{ padding:'20px 20px 20px' }}>
         <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:'#444', marginBottom:6, fontWeight:700 }}>Session History</div>
         <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:30, color:'#fff', marginBottom:20, letterSpacing:1 }}>ROLL ANALYSIS</div>
 

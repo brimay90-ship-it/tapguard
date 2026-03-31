@@ -224,7 +224,7 @@ export default function Training() {
   const formattedDate = selectedDate.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
 
   return (
-    <div style={{ padding:'20px 20px 140px', overflowY:'auto', height:'100%' }}>
+    <div style={{ padding:'20px 20px 80px' }}>
 
       {/* Header */}
       <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:'#444', marginBottom:4, fontWeight:700 }}>Workout Plan</div>

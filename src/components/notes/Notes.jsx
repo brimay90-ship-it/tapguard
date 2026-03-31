@@ -37,8 +37,8 @@ export default function Notes() {
     : notes.filter(n => (n.category || 'Techniques') === filter);
 
   return (
-    <div style={{ position: 'relative', height: '100%' }}>
-      <div style={{ padding: '20px 20px 140px', overflowY: 'auto', height: '100%' }}>
+    <div style={{ position: 'relative' }}>
+      <div style={{ padding: '20px 20px 20px' }}>
         <div style={{ fontSize: 10, letterSpacing: 3, textTransform: 'uppercase', color: '#444', marginBottom: 6, fontWeight: 700 }}>Training Journal</div>
         <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 30, color: '#fff', marginBottom: 16, letterSpacing: 1 }}>CLASS NOTES</div>
 
