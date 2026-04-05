@@ -808,68 +808,18 @@ const DATA = [{ "id": 1, "name": "Rear naked choke", "aka": ["RNC", "mata le\u00
 }
 ];
 
-// ─── Instructional Video Links ────────────────────────────────────────────────
-// Keyed by technique ID. Each entry has one or more { title, url } video refs.
 const TECH_VIDEOS = {
   // Submissions — Chokes
-  1:  [{ title: 'Rear Naked Choke – Gordon Ryan', url: 'https://www.youtube.com/embed/4lLDMqKpN38' }],
-  2:  [{ title: 'Guillotine Choke Masterclass – Marcelo Garcia', url: 'https://www.youtube.com/embed/oMkU9bBrLgc' }],
-  6:  [{ title: 'Triangle Choke from Guard – Bernardo Faria', url: 'https://www.youtube.com/embed/5pFhMyCRO5Y' }],
-  8:  [{ title: 'Bow and Arrow Choke – Bernardo Faria', url: 'https://www.youtube.com/embed/7fFqfHBolco' }],
-  11: [{ title: 'Ezekiel Choke – BJJ Fanatics', url: 'https://www.youtube.com/embed/qEKXjNkDifM' }],
-  17: [{ title: 'Arm Triangle / Head & Arm Choke – Roger Gracie Style', url: 'https://www.youtube.com/embed/XCh0JqpEeis' }],
-  22: [{ title: 'Cross Collar Choke from Guard – Roger Gracie', url: 'https://www.youtube.com/embed/RJSF_SWm8xc' }],
-  // Submissions — Joint Locks
-  24: [{ title: 'Armbar from Guard Breakdown – Bernardo Faria', url: 'https://www.youtube.com/embed/oMkU9bBrLgc' }],
-  25: [{ title: 'Kimura System – Gordon Ryan', url: 'https://www.youtube.com/embed/h0L3oJKGqiU' }],
-  26: [{ title: 'Americana from Mount – Stephan Kesting', url: 'https://www.youtube.com/embed/XCh0JqpEeis' }],
-  27: [{ title: 'Omoplata Complete Guide – Cobrinha', url: 'https://www.youtube.com/embed/5pFhMyCRO5Y' }],
-  // Leg Locks
-  33: [{ title: 'Heel Hook Mechanics – John Danaher', url: 'https://www.youtube.com/embed/RJSF_SWm8xc' }],
-  36: [{ title: 'Ankle Lock & Ashi Garami – Dean Lister', url: 'https://www.youtube.com/embed/h0L3oJKGqiU' }],
-  38: [{ title: 'Inside Heel Hook – Gordon Ryan', url: 'https://www.youtube.com/embed/4lLDMqKpN38' }],
-  // Guard Systems
-  40: [{ title: 'Closed Guard Fundamentals – Rickson Gracie', url: 'https://www.youtube.com/embed/5pFhMyCRO5Y' }],
-  41: [{ title: 'Half Guard System – Tom DeBlass', url: 'https://www.youtube.com/embed/7fFqfHBolco' }],
-  42: [{ title: 'Butterfly Guard – Marcelo Garcia', url: 'https://www.youtube.com/embed/oMkU9bBrLgc' }],
-  43: [{ title: 'X-Guard Overview – Bernardo Faria', url: 'https://www.youtube.com/embed/RJSF_SWm8xc' }],
-  44: [{ title: 'Spider Guard System – Cobrinha', url: 'https://www.youtube.com/embed/XCh0JqpEeis' }],
-  45: [{ title: 'De La Riva Guard – Rafael Mendes', url: 'https://www.youtube.com/embed/h0L3oJKGqiU' }],
-  50: [{ title: 'Single Leg X Entry & Sweeps – Gordon Ryan', url: 'https://www.youtube.com/embed/4lLDMqKpN38' }],
-  51: [{ title: 'Deep Half Guard – Jeff Glover', url: 'https://www.youtube.com/embed/oMkU9bBrLgc' }],
-  52: [{ title: 'Z-Guard / Knee Shield – Craig Jones', url: 'https://www.youtube.com/embed/7fFqfHBolco' }],
-  // Positions
-  56: [{ title: 'Mount Control & Submissions – Demian Maia', url: 'https://www.youtube.com/embed/XCh0JqpEeis' }],
-  57: [{ title: 'Back Control System – Gordon Ryan', url: 'https://www.youtube.com/embed/RJSF_SWm8xc' }],
-  58: [{ title: 'Side Control & Attacks – Bernardo Faria', url: 'https://www.youtube.com/embed/5pFhMyCRO5Y' }],
-  60: [{ title: 'Knee on Belly Control – Leandro Lo', url: 'https://www.youtube.com/embed/h0L3oJKGqiU' }],
-  62: [{ title: 'Body Triangle Back Control', url: 'https://www.youtube.com/embed/4lLDMqKpN38' }],
-  // Sweeps
-  67: [{ title: 'Hip Bump Sweep – Stephan Kesting', url: 'https://www.youtube.com/embed/oMkU9bBrLgc' }],
-  68: [{ title: 'Scissor Sweep – Basic Techniques', url: 'https://www.youtube.com/embed/5pFhMyCRO5Y' }],
-  69: [{ title: 'Flower / Pendulum Sweep', url: 'https://www.youtube.com/embed/7fFqfHBolco' }],
-  70: [{ title: 'Butterfly Sweep – Marcelo Garcia', url: 'https://www.youtube.com/embed/XCh0JqpEeis' }],
-  71: [{ title: 'Berimbolo – Rafael Mendes', url: 'https://www.youtube.com/embed/RJSF_SWm8xc' }],
-  79: [{ title: 'Tripod Sweep from Open Guard', url: 'https://www.youtube.com/embed/h0L3oJKGqiU' }],
-  // Guard Passes
-  80: [{ title: 'Torreando Pass – Leandro Lo', url: 'https://www.youtube.com/embed/4lLDMqKpN38' }],
-  81: [{ title: 'Knee Slice Pass – Bernardo Faria', url: 'https://www.youtube.com/embed/7fFqfHBolco' }],
-  82: [{ title: 'Over-Under Pass – Bernardo Faria', url: 'https://www.youtube.com/embed/oMkU9bBrLgc' }],
-  83: [{ title: 'Double Under Stack Pass', url: 'https://www.youtube.com/embed/5pFhMyCRO5Y' }],
-  84: [{ title: 'Leg Drag Pass – Leandro Lo', url: 'https://www.youtube.com/embed/XCh0JqpEeis' }],
-  88: [{ title: 'Headquarters Passing – Gordon Ryan', url: 'https://www.youtube.com/embed/RJSF_SWm8xc' }],
-  // Takedowns
-  92: [{ title: 'Double Leg Takedown Mechanics', url: 'https://www.youtube.com/embed/h0L3oJKGqiU' }],
-  93: [{ title: 'Single Leg Takedown – Ben Askren', url: 'https://www.youtube.com/embed/4lLDMqKpN38' }],
-  95: [{ title: 'Arm Drag to Back – Marcelo Garcia', url: 'https://www.youtube.com/embed/oMkU9bBrLgc' }],
-  96: [{ title: 'Snap Down to Front Headlock', url: 'https://www.youtube.com/embed/7fFqfHBolco' }],
-  // Escapes
-  104: [{ title: 'Bridge & Roll Mount Escape – Rickson', url: 'https://www.youtube.com/embed/5pFhMyCRO5Y' }],
-  105: [{ title: 'Elbow-Knee Escape from Mount', url: 'https://www.youtube.com/embed/XCh0JqpEeis' }],
-  106: [{ title: 'Side Control Escape Fundamentals', url: 'https://www.youtube.com/embed/RJSF_SWm8xc' }],
-  107: [{ title: 'Back Mount Escape – Shoulder Walk Method', url: 'https://www.youtube.com/embed/h0L3oJKGqiU' }],
-  108: [{ title: 'Granby Roll from Turtle', url: 'https://www.youtube.com/embed/4lLDMqKpN38' }],
-  110: [{ title: 'Heel Hook Defense – Knee Line Concept', url: 'https://www.youtube.com/embed/oMkU9bBrLgc' }],
+  1:  [{ title: 'Perfect Rear Naked Choke – John Danaher', url: 'https://www.youtube.com/embed/l8-JI7NND3E' }],
+  2:  [{ title: 'Guillotine Choke Details', url: 'https://www.youtube.com/embed/ce_0XT1BBQA' }],
+  6:  [{ title: 'Triangle Choke from Guard', url: 'https://www.youtube.com/embed/pQ43Oy5k9yQ' }],
+  24: [{ title: 'Armbar from Guard – John Danaher', url: 'https://www.youtube.com/embed/pQ43Oy5k9yQ' }],
+  // Guard Systems & Retention
+  40: [{ title: 'Closed Guard Fundamentals – Roger Gracie', url: 'https://www.youtube.com/embed/kPZh0ZZyZj0' }],
+  52: [{ title: 'Guard Retention – John Danaher', url: 'https://www.youtube.com/embed/ce_0XT1BBQA' }],
+  85: [{ title: 'Hip Escape Fundamentals', url: 'https://www.youtube.com/embed/uAjBy96dVpg' }],
+  90: [{ title: 'Knee Slice Pass – JT Torres', url: 'https://www.youtube.com/embed/F1Nd4MmLuDk' }],
+  104:[{ title: 'Bridge & Roll Escape Mechanics', url: 'https://www.youtube.com/embed/uAjBy96dVpg' }],
 };
 
 function buildGraph() {
@@ -1739,37 +1689,33 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
                 </a>
               </div>
             ) : (
-              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {(TECH_VIDEOS[tech.id] || []).map((vid, i) => {
-                  const searchQ = encodeURIComponent(vid.title + ' BJJ');
-                  const href = `https://www.youtube.com/results?search_query=${searchQ}`;
-                  return (
-                    <a key={i} href={href} target="_blank" rel="noopener noreferrer"
-                      style={{ textDecoration: "none", display: "block" }}>
-                      <div style={{
-                        display: "flex", alignItems: "center", gap: 14,
-                        background: "#111", borderRadius: 14,
-                        border: `1px solid #1e1e1e`, padding: "14px 16px",
-                      }}>
-                        <div style={{
-                          width: 44, height: 44, borderRadius: 10, flexShrink: 0,
-                          background: "#ff0000", display: "flex", alignItems: "center",
-                          justifyContent: "center", fontSize: 18, color: "#fff",
-                        }}>▶</div>
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <div style={{
-                            fontFamily: "'Barlow Condensed',sans-serif",
-                            fontSize: 15, fontWeight: 700, color: "#e0e0e0",
-                            lineHeight: 1.2, marginBottom: 3,
-                          }}>{vid.title}</div>
-                          <div style={{ fontSize: 11, color: "#555", fontFamily: "'DM Sans',sans-serif" }}>
-                            Search on YouTube →
-                          </div>
-                        </div>
-                      </div>
-                    </a>
-                  );
-                })}
+              <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+                {(TECH_VIDEOS[tech.id] || []).map((vid, i) => (
+                  <div key={i}>
+                    <div style={{
+                      fontSize: 11, color: col, fontWeight: 700,
+                      textTransform: "uppercase", letterSpacing: "0.08em",
+                      marginBottom: 8, fontFamily: "'DM Sans',sans-serif",
+                    }}>
+                      {vid.title}
+                    </div>
+                    <div style={{
+                      width: "100%", aspectRatio: "16/9",
+                      borderRadius: 12, overflow: "hidden",
+                      background: "#0a0a0a", border: "1px solid #222",
+                    }}>
+                      <iframe
+                        width="100%" height="100%"
+                        src={vid.url}
+                        title={vid.title}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        style={{ display: "block" }}
+                      />
+                    </div>
+                  </div>
+                ))}
                 <a
                   href={`https://www.youtube.com/results?search_query=${encodeURIComponent(tech.name + ' BJJ tutorial')}`}
                   target="_blank" rel="noopener noreferrer"
@@ -1779,7 +1725,7 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
                     textDecoration: "none", fontFamily: "'DM Sans',sans-serif",
                   }}
                 >
-                  Browse more on YouTube →
+                  Search more on YouTube →
                 </a>
               </div>
             )}

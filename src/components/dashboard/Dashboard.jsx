@@ -10,9 +10,8 @@ const FOCUS_SKILLS = [
     desc: 'Drill shrimp + bridge combos 10 min before class.',
     detail: `The hip escape (shrimp) is the single most important movement in BJJ. Without it, you cannot recover guard, escape side control, or create frames.\n\nKey checkpoints:\n• Drive off your bottom foot, not your top\n• Keep your inside elbow glued to your inside knee\n• Shrimp THEN replace guard — not simultaneously\n• Chin tucked, don't give up your neck\n\nDrill: 3 sets of 10 full-length shrimps before every session.`,
     videos: [
-      { title: 'Hip Escape (Shrimp) Fundamentals', url: 'https://www.youtube.com/embed/5pFhMyCRO5Y' },
-      { title: 'Elbow-Knee Escape from Mount', url: 'https://www.youtube.com/embed/XCh0JqpEeis' },
-      { title: 'Side Control Escape Fundamentals', url: 'https://www.youtube.com/embed/RJSF_SWm8xc' },
+      { title: 'Hip Escape Fundamentals', url: 'https://www.youtube.com/embed/uAjBy96dVpg' },
+      { title: 'Recovering Guard with Shrimping', url: 'https://www.youtube.com/embed/ce_0XT1BBQA' },
     ],
   },
   {
@@ -20,9 +19,8 @@ const FOCUS_SKILLS = [
     desc: 'Weight forward, pin the hip before you slice.',
     detail: `The knee slice is one of the highest percentage guard passes at every level.\n\nKey checkpoints:\n• Establish a strong cross-collar or underhook grip first\n• Drop your hip onto their far hip — this IS the pass\n• Slice your knee across their thigh at a diagonal\n• Land in side control with your head on the mat side\n\nDrill: Slow-motion knee slice from standing — 5 on each side.`,
     videos: [
-      { title: 'Knee Slice Pass – Bernardo Faria', url: 'https://www.youtube.com/embed/7fFqfHBolco' },
-      { title: 'Headquarters Passing – Gordon Ryan', url: 'https://www.youtube.com/embed/RJSF_SWm8xc' },
-      { title: 'Over-Under Pass – Bernardo Faria', url: 'https://www.youtube.com/embed/oMkU9bBrLgc' },
+      { title: 'Efficient Knee Cut Pass (No-Gi)', url: 'https://www.youtube.com/embed/F1Nd4MmLuDk' },
+      { title: 'Precision Knee Slice Mechanics', url: 'https://www.youtube.com/embed/ce_0XT1BBQA' },
     ],
   },
   {
@@ -30,9 +28,8 @@ const FOCUS_SKILLS = [
     desc: 'Break posture completely before attacking the arm.',
     detail: `The most common mistake: attacking the arm before breaking posture.\n\nKey checkpoints:\n• Two hands on head/collar — break them DOWN first\n• Rotate 90° with hips UNDER their arm\n• Squeeze knees together throughout\n• Hips up, heels down to finish\n\nDrill: Posture break isolation — partner resists, you break 10 times.`,
     videos: [
-      { title: 'Armbar from Guard – Bernardo Faria', url: 'https://www.youtube.com/embed/oMkU9bBrLgc' },
-      { title: 'Triangle Choke from Guard', url: 'https://www.youtube.com/embed/5pFhMyCRO5Y' },
-      { title: 'Omoplata Complete Guide – Cobrinha', url: 'https://www.youtube.com/embed/h0L3oJKGqiU' },
+      { title: 'Armbar from Guard – John Danaher', url: 'https://www.youtube.com/embed/pQ43Oy5k9yQ' },
+      { title: 'Triangle & Armbar System', url: 'https://www.youtube.com/embed/ce_0XT1BBQA' },
     ],
   },
   {
@@ -40,9 +37,8 @@ const FOCUS_SKILLS = [
     desc: 'Hooks first, seatbelt locked, then choke.',
     detail: `The number one error: going for the choke before back control is established.\n\nKey checkpoints:\n• Top hook in first, bottom hook second\n• Seatbelt: top arm over shoulder, bottom under armpit\n• Bicep across throat, hand behind their head\n• Squeeze with your whole body — not just arms\n\nDrill: Back control retention 30 sec holds — no finish.`,
     videos: [
-      { title: 'Rear Naked Choke – Gordon Ryan', url: 'https://www.youtube.com/embed/4lLDMqKpN38' },
-      { title: 'Back Control System – Gordon Ryan', url: 'https://www.youtube.com/embed/RJSF_SWm8xc' },
-      { title: 'Body Triangle Back Control', url: 'https://www.youtube.com/embed/XCh0JqpEeis' },
+      { title: 'Perfect Rear Naked Choke – John Danaher', url: 'https://www.youtube.com/embed/l8-JI7NND3E' },
+      { title: 'Back Control Fundamentals', url: 'https://www.youtube.com/embed/ce_0XT1BBQA' },
     ],
   },
   {
@@ -50,9 +46,7 @@ const FOCUS_SKILLS = [
     desc: 'Level change first — stop reaching from standing.',
     detail: `The fatal flaw: reaching for the leg without a level change.\n\nKey checkpoints:\n• Level change first — bend knees, not your back\n• Penetration step between their feet\n• Head on outside of their hip\n• Lift and drive through — don't pull\n\nDrill: Level change shadow shots — 3 sets of 10.`,
     videos: [
-      { title: 'Single Leg Takedown – Ben Askren', url: 'https://www.youtube.com/embed/h0L3oJKGqiU' },
-      { title: 'Double Leg Takedown Mechanics', url: 'https://www.youtube.com/embed/4lLDMqKpN38' },
-      { title: 'Snap Down to Front Headlock', url: 'https://www.youtube.com/embed/7fFqfHBolco' },
+      { title: 'Refining the Single Leg', url: 'https://www.youtube.com/embed/F1Nd4MmLuDk' },
     ],
   },
   {
@@ -60,9 +54,7 @@ const FOCUS_SKILLS = [
     desc: 'Bridge to disturb, shrimp to escape — in that order.',
     detail: `Most beginners bridge randomly and hope. The bridge is a setup, not the escape.\n\nKey checkpoints:\n• Elbows IN — flared elbows gift armbars\n• Bridge explosively to disturb their base\n• Immediately shrimp as they post\n• Get to half guard — don't try to roll them\n\nDrill: Bridge and shrimp to half guard — 3 sets of 5 each side.`,
     videos: [
-      { title: 'Bridge & Roll Mount Escape – Rickson', url: 'https://www.youtube.com/embed/XCh0JqpEeis' },
-      { title: 'Elbow-Knee Escape from Mount', url: 'https://www.youtube.com/embed/5pFhMyCRO5Y' },
-      { title: 'Mount Control & Submissions – Demian Maia', url: 'https://www.youtube.com/embed/oMkU9bBrLgc' },
+      { title: 'Bridge & Roll Escape Mechanics', url: 'https://www.youtube.com/embed/uAjBy96dVpg' },
     ],
   },
   {
@@ -70,9 +62,8 @@ const FOCUS_SKILLS = [
     desc: 'Frame on their hip before they clear your leg.',
     detail: `Guard retention is about being proactive. By the time you react, you're already late.\n\nKey checkpoints:\n• Inside hand frames on their hip — straight arm\n• Outside hand controls their sleeve or wrist\n• Knee shield connected to elbow at all times\n• Move hips AWAY first, then re-engage\n\nDrill: Guard retention solo shrimping — 3 sets of 10.`,
     videos: [
-      { title: 'Guard Retention & Hip Escape', url: 'https://www.youtube.com/embed/RJSF_SWm8xc' },
-      { title: 'Closed Guard Fundamentals – Rickson Gracie', url: 'https://www.youtube.com/embed/5pFhMyCRO5Y' },
-      { title: 'Z-Guard / Knee Shield – Craig Jones', url: 'https://www.youtube.com/embed/7fFqfHBolco' },
+      { title: 'Perfect Guard Retention – John Danaher', url: 'https://www.youtube.com/embed/ce_0XT1BBQA' },
+      { title: 'Hip Escape & Framing', url: 'https://www.youtube.com/embed/uAjBy96dVpg' },
     ],
   },
 ];
@@ -164,47 +155,36 @@ function FocusOverlay({ focus, onClose }) {
       <div style={{ padding:'24px 20px 0' }}>
         <h1 style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:40, color:'#fff', lineHeight:0.95, marginBottom:20, letterSpacing:1 }}>{focus.skill}</h1>
 
-        {/* Video links */}
+        {/* Video player */}
         {videos.length > 0 && (
-          <div style={{ marginBottom: 24 }}>
-            <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:'#444', marginBottom:12, fontWeight:700 }}>
-              INSTRUCTIONAL VIDEOS
+          <div style={{ marginBottom: 20 }}>
+            <div style={{ width:'100%', aspectRatio:'16/9', borderRadius:12, overflow:'hidden', background:'#111', border:'1px solid #1A1C20' }}>
+              <iframe width="100%" height="100%" src={videos[activeVid].url} title={videos[activeVid].title}
+                frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen style={{display:'block'}}/>
             </div>
-            <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
-              {videos.map((v, i) => {
-                const searchQ = encodeURIComponent(v.title + ' BJJ');
-                const href = `https://www.youtube.com/results?search_query=${searchQ}`;
-                return (
-                  <a key={i} href={href} target="_blank" rel="noopener noreferrer"
-                    style={{ textDecoration:'none', display:'block' }}>
-                    <div style={{
-                      display:'flex', alignItems:'center', gap:14,
-                      background:'#111', borderRadius:14,
-                      border:'1px solid #1e1e1e', padding:'14px 16px',
-                      transition:'border-color 0.15s',
-                    }}
-                      onMouseEnter={e => e.currentTarget.style.borderColor = G + '55'}
-                      onMouseLeave={e => e.currentTarget.style.borderColor = '#1e1e1e'}
-                    >
-                      {/* YouTube play icon */}
-                      <div style={{
-                        width:44, height:44, borderRadius:10, flexShrink:0,
-                        background:'#ff0000', display:'flex', alignItems:'center',
-                        justifyContent:'center', fontSize:18,
-                      }}>▶</div>
-                      <div style={{ flex:1, minWidth:0 }}>
-                        <div style={{
-                          fontFamily:"'Barlow Condensed',sans-serif",
-                          fontSize:15, fontWeight:700, color:'#e0e0e0',
-                          lineHeight:1.2, marginBottom:3,
-                        }}>{v.title}</div>
-                        <div style={{ fontSize:11, color:'#444' }}>Search on YouTube →</div>
-                      </div>
-                    </div>
-                  </a>
-                );
-              })}
+            {/* Video title */}
+            <div style={{ fontSize:11, color:G, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', marginTop:10 }}>
+              {videos[activeVid].title}
             </div>
+            {/* Selector pills — only show when multiple videos */}
+            {videos.length > 1 && (
+              <div style={{ display:'flex', gap:8, marginTop:12, flexWrap:'wrap' }}>
+                {videos.map((v, i) => (
+                  <button key={i} onClick={() => setActiveVid(i)} style={{
+                    padding:'6px 14px', borderRadius:20,
+                    border:`1px solid ${i === activeVid ? G : '#2A2D32'}`,
+                    background: i === activeVid ? G + '18' : 'transparent',
+                    color: i === activeVid ? G : '#555',
+                    fontSize:11, fontWeight:600, cursor:'pointer',
+                    fontFamily:"'DM Sans',sans-serif",
+                    transition:'all 0.15s',
+                  }}>
+                    {i === activeVid ? '▶ ' : ''}{i + 1}. {v.title.split('–')[0].split('(')[0].trim()}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
