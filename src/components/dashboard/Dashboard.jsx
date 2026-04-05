@@ -5,13 +5,76 @@ import { RANK_ROSTER, SPECIAL_RANKS } from '../../data/rankRoster';
 
 const G = '#0BF571';
 const FOCUS_SKILLS = [
-  { skill: 'HIP ESCAPE MECHANICS',    image: '/hip_escape_mechanics_bg.png',    desc: 'Drill shrimp + bridge combos 10 min before class.', detail: `The hip escape (shrimp) is the single most important movement in BJJ. Without it, you cannot recover guard, escape side control, or create frames.\n\nKey checkpoints:\n• Drive off your bottom foot, not your top\n• Keep your inside elbow glued to your inside knee\n• Shrimp THEN replace guard — not simultaneously\n• Chin tucked, don't give up your neck\n\nDrill: 3 sets of 10 full-length shrimps before every session.`, youtube: 'https://www.youtube.com/embed/5pFhMyCRO5Y' },
-  { skill: 'KNEE SLICE PASS',          image: '/knee_slice_pass_bg.png',          desc: 'Weight forward, pin the hip before you slice.', detail: `The knee slice is one of the highest percentage guard passes at every level.\n\nKey checkpoints:\n• Establish a strong cross-collar or underhook grip first\n• Drop your hip onto their far hip — this IS the pass\n• Slice your knee across their thigh at a diagonal\n• Land in side control with your head on the mat side\n\nDrill: Slow-motion knee slice from standing — 5 on each side.`, youtube: 'https://www.youtube.com/embed/7fFqfHBolco' },
-  { skill: 'ARMBAR FROM GUARD',        image: '/armbar_from_guard_bg.png',        desc: 'Break posture completely before attacking the arm.', detail: `The most common mistake: attacking the arm before breaking posture.\n\nKey checkpoints:\n• Two hands on head/collar — break them DOWN first\n• Rotate 90° with hips UNDER their arm\n• Squeeze knees together throughout\n• Hips up, heels down to finish\n\nDrill: Posture break isolation — partner resists, you break 10 times.`, youtube: 'https://www.youtube.com/embed/oMkU9bBrLgc' },
-  { skill: 'REAR NAKED CHOKE',         image: '/rear_naked_choke_bg.png',         desc: 'Hooks first, seatbelt locked, then choke.', detail: `The number one error: going for the choke before back control is established.\n\nKey checkpoints:\n• Top hook in first, bottom hook second\n• Seatbelt: top arm over shoulder, bottom under armpit\n• Bicep across throat, hand behind their head\n• Squeeze with your whole body — not just arms\n\nDrill: Back control retention 30 sec holds — no finish.`, youtube: 'https://www.youtube.com/embed/4lLDMqKpN38' },
-  { skill: 'SINGLE LEG TAKEDOWN',      image: '/single_leg_takedown_bg.png',      desc: 'Level change first — stop reaching from standing.', detail: `The fatal flaw: reaching for the leg without a level change.\n\nKey checkpoints:\n• Level change first — bend knees, not your back\n• Penetration step between their feet\n• Head on outside of their hip\n• Lift and drive through — don't pull\n\nDrill: Level change shadow shots — 3 sets of 10.`, youtube: 'https://www.youtube.com/embed/h0L3oJKGqiU' },
-  { skill: 'MOUNT ESCAPES',            image: '/mount_escapes_bg.png',            desc: 'Bridge to disturb, shrimp to escape — in that order.', detail: `Most beginners bridge randomly and hope. The bridge is a setup, not the escape.\n\nKey checkpoints:\n• Elbows IN — flared elbows gift armbars\n• Bridge explosively to disturb their base\n• Immediately shrimp as they post\n• Get to half guard — don't try to roll them\n\nDrill: Bridge and shrimp to half guard — 3 sets of 5 each side.`, youtube: 'https://www.youtube.com/embed/XCh0JqpEeis' },
-  { skill: 'GUARD RETENTION',          image: '/grounded_hip_escape.png',          desc: 'Frame on their hip before they clear your leg.', detail: `Guard retention is about being proactive. By the time you react, you're already late.\n\nKey checkpoints:\n• Inside hand frames on their hip — straight arm\n• Outside hand controls their sleeve or wrist\n• Knee shield connected to elbow at all times\n• Move hips AWAY first, then re-engage\n\nDrill: Guard retention solo shrimping — 3 sets of 10.`, youtube: 'https://www.youtube.com/embed/RJSF_SWm8xc' },
+  {
+    skill: 'HIP ESCAPE MECHANICS', image: '/hip_escape_mechanics_bg.png',
+    desc: 'Drill shrimp + bridge combos 10 min before class.',
+    detail: `The hip escape (shrimp) is the single most important movement in BJJ. Without it, you cannot recover guard, escape side control, or create frames.\n\nKey checkpoints:\n• Drive off your bottom foot, not your top\n• Keep your inside elbow glued to your inside knee\n• Shrimp THEN replace guard — not simultaneously\n• Chin tucked, don't give up your neck\n\nDrill: 3 sets of 10 full-length shrimps before every session.`,
+    videos: [
+      { title: 'Hip Escape (Shrimp) Fundamentals', url: 'https://www.youtube.com/embed/5pFhMyCRO5Y' },
+      { title: 'Elbow-Knee Escape from Mount', url: 'https://www.youtube.com/embed/XCh0JqpEeis' },
+      { title: 'Side Control Escape Fundamentals', url: 'https://www.youtube.com/embed/RJSF_SWm8xc' },
+    ],
+  },
+  {
+    skill: 'KNEE SLICE PASS', image: '/knee_slice_pass_bg.png',
+    desc: 'Weight forward, pin the hip before you slice.',
+    detail: `The knee slice is one of the highest percentage guard passes at every level.\n\nKey checkpoints:\n• Establish a strong cross-collar or underhook grip first\n• Drop your hip onto their far hip — this IS the pass\n• Slice your knee across their thigh at a diagonal\n• Land in side control with your head on the mat side\n\nDrill: Slow-motion knee slice from standing — 5 on each side.`,
+    videos: [
+      { title: 'Knee Slice Pass – Bernardo Faria', url: 'https://www.youtube.com/embed/7fFqfHBolco' },
+      { title: 'Headquarters Passing – Gordon Ryan', url: 'https://www.youtube.com/embed/RJSF_SWm8xc' },
+      { title: 'Over-Under Pass – Bernardo Faria', url: 'https://www.youtube.com/embed/oMkU9bBrLgc' },
+    ],
+  },
+  {
+    skill: 'ARMBAR FROM GUARD', image: '/armbar_from_guard_bg.png',
+    desc: 'Break posture completely before attacking the arm.',
+    detail: `The most common mistake: attacking the arm before breaking posture.\n\nKey checkpoints:\n• Two hands on head/collar — break them DOWN first\n• Rotate 90° with hips UNDER their arm\n• Squeeze knees together throughout\n• Hips up, heels down to finish\n\nDrill: Posture break isolation — partner resists, you break 10 times.`,
+    videos: [
+      { title: 'Armbar from Guard – Bernardo Faria', url: 'https://www.youtube.com/embed/oMkU9bBrLgc' },
+      { title: 'Triangle Choke from Guard', url: 'https://www.youtube.com/embed/5pFhMyCRO5Y' },
+      { title: 'Omoplata Complete Guide – Cobrinha', url: 'https://www.youtube.com/embed/h0L3oJKGqiU' },
+    ],
+  },
+  {
+    skill: 'REAR NAKED CHOKE', image: '/rear_naked_choke_bg.png',
+    desc: 'Hooks first, seatbelt locked, then choke.',
+    detail: `The number one error: going for the choke before back control is established.\n\nKey checkpoints:\n• Top hook in first, bottom hook second\n• Seatbelt: top arm over shoulder, bottom under armpit\n• Bicep across throat, hand behind their head\n• Squeeze with your whole body — not just arms\n\nDrill: Back control retention 30 sec holds — no finish.`,
+    videos: [
+      { title: 'Rear Naked Choke – Gordon Ryan', url: 'https://www.youtube.com/embed/4lLDMqKpN38' },
+      { title: 'Back Control System – Gordon Ryan', url: 'https://www.youtube.com/embed/RJSF_SWm8xc' },
+      { title: 'Body Triangle Back Control', url: 'https://www.youtube.com/embed/XCh0JqpEeis' },
+    ],
+  },
+  {
+    skill: 'SINGLE LEG TAKEDOWN', image: '/single_leg_takedown_bg.png',
+    desc: 'Level change first — stop reaching from standing.',
+    detail: `The fatal flaw: reaching for the leg without a level change.\n\nKey checkpoints:\n• Level change first — bend knees, not your back\n• Penetration step between their feet\n• Head on outside of their hip\n• Lift and drive through — don't pull\n\nDrill: Level change shadow shots — 3 sets of 10.`,
+    videos: [
+      { title: 'Single Leg Takedown – Ben Askren', url: 'https://www.youtube.com/embed/h0L3oJKGqiU' },
+      { title: 'Double Leg Takedown Mechanics', url: 'https://www.youtube.com/embed/4lLDMqKpN38' },
+      { title: 'Snap Down to Front Headlock', url: 'https://www.youtube.com/embed/7fFqfHBolco' },
+    ],
+  },
+  {
+    skill: 'MOUNT ESCAPES', image: '/mount_escapes_bg.png',
+    desc: 'Bridge to disturb, shrimp to escape — in that order.',
+    detail: `Most beginners bridge randomly and hope. The bridge is a setup, not the escape.\n\nKey checkpoints:\n• Elbows IN — flared elbows gift armbars\n• Bridge explosively to disturb their base\n• Immediately shrimp as they post\n• Get to half guard — don't try to roll them\n\nDrill: Bridge and shrimp to half guard — 3 sets of 5 each side.`,
+    videos: [
+      { title: 'Bridge & Roll Mount Escape – Rickson', url: 'https://www.youtube.com/embed/XCh0JqpEeis' },
+      { title: 'Elbow-Knee Escape from Mount', url: 'https://www.youtube.com/embed/5pFhMyCRO5Y' },
+      { title: 'Mount Control & Submissions – Demian Maia', url: 'https://www.youtube.com/embed/oMkU9bBrLgc' },
+    ],
+  },
+  {
+    skill: 'GUARD RETENTION', image: '/grounded_hip_escape.png',
+    desc: 'Frame on their hip before they clear your leg.',
+    detail: `Guard retention is about being proactive. By the time you react, you're already late.\n\nKey checkpoints:\n• Inside hand frames on their hip — straight arm\n• Outside hand controls their sleeve or wrist\n• Knee shield connected to elbow at all times\n• Move hips AWAY first, then re-engage\n\nDrill: Guard retention solo shrimping — 3 sets of 10.`,
+    videos: [
+      { title: 'Guard Retention & Hip Escape', url: 'https://www.youtube.com/embed/RJSF_SWm8xc' },
+      { title: 'Closed Guard Fundamentals – Rickson Gracie', url: 'https://www.youtube.com/embed/5pFhMyCRO5Y' },
+      { title: 'Z-Guard / Knee Shield – Craig Jones', url: 'https://www.youtube.com/embed/7fFqfHBolco' },
+    ],
+  },
 ];
 
 function getPlayerMeta(score, styles, comp) {
@@ -85,6 +148,9 @@ function calcScore(comp) {
 }
 
 function FocusOverlay({ focus, onClose }) {
+  const [activeVid, setActiveVid] = useState(0);
+  const videos = focus.videos || (focus.youtube ? [{ title: focus.skill, url: focus.youtube }] : []);
+
   return (
     <div className="overlay-enter" style={{
       position:'fixed', inset:0, zIndex:50,
@@ -97,9 +163,51 @@ function FocusOverlay({ focus, onClose }) {
       </div>
       <div style={{ padding:'24px 20px 0' }}>
         <h1 style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:40, color:'#fff', lineHeight:0.95, marginBottom:20, letterSpacing:1 }}>{focus.skill}</h1>
-        <div style={{ width:'100%', aspectRatio:'16/9', borderRadius:12, overflow:'hidden', background:'#111', marginBottom:20, border:'1px solid #1A1C20' }}>
-          <iframe width="100%" height="100%" src={focus.youtube} title={focus.skill} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen style={{display:'block'}}/>
-        </div>
+
+        {/* Video links */}
+        {videos.length > 0 && (
+          <div style={{ marginBottom: 24 }}>
+            <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:'#444', marginBottom:12, fontWeight:700 }}>
+              INSTRUCTIONAL VIDEOS
+            </div>
+            <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
+              {videos.map((v, i) => {
+                const searchQ = encodeURIComponent(v.title + ' BJJ');
+                const href = `https://www.youtube.com/results?search_query=${searchQ}`;
+                return (
+                  <a key={i} href={href} target="_blank" rel="noopener noreferrer"
+                    style={{ textDecoration:'none', display:'block' }}>
+                    <div style={{
+                      display:'flex', alignItems:'center', gap:14,
+                      background:'#111', borderRadius:14,
+                      border:'1px solid #1e1e1e', padding:'14px 16px',
+                      transition:'border-color 0.15s',
+                    }}
+                      onMouseEnter={e => e.currentTarget.style.borderColor = G + '55'}
+                      onMouseLeave={e => e.currentTarget.style.borderColor = '#1e1e1e'}
+                    >
+                      {/* YouTube play icon */}
+                      <div style={{
+                        width:44, height:44, borderRadius:10, flexShrink:0,
+                        background:'#ff0000', display:'flex', alignItems:'center',
+                        justifyContent:'center', fontSize:18,
+                      }}>▶</div>
+                      <div style={{ flex:1, minWidth:0 }}>
+                        <div style={{
+                          fontFamily:"'Barlow Condensed',sans-serif",
+                          fontSize:15, fontWeight:700, color:'#e0e0e0',
+                          lineHeight:1.2, marginBottom:3,
+                        }}>{v.title}</div>
+                        <div style={{ fontSize:11, color:'#444' }}>Search on YouTube →</div>
+                      </div>
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:'#555', marginBottom:14, fontWeight:600 }}>TECHNIQUE BREAKDOWN</div>
         {focus.detail.split('\n').map((line,i)=>{
           const isBullet=line.startsWith('•'); const isHeader=line.endsWith(':')&&!isBullet; const isEmpty=line.trim()==='';
@@ -428,7 +536,30 @@ export default function Dashboard() {
                       : '#2A2D32',
           }}/>
 
-          <div style={{padding:'14px 16px'}}>
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => setActiveTab('training')}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setActiveTab('training');
+              }
+            }}
+            style={{
+              padding: '14px 16px',
+              cursor: 'pointer',
+              outline: 'none',
+              transition: 'background 0.18s, border-color 0.18s',
+              borderRadius: 22,
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'transparent';
+            }}
+          >
             <div style={{fontSize:10,letterSpacing:3,textTransform:'uppercase',fontWeight:700,marginBottom:8,
               color: isBjjToday && !isWorkoutToday ? G : isWorkoutToday && !isBjjToday ? '#F0A020' : isBjjToday && isWorkoutToday ? G : '#444'
             }}>Workout of the Day</div>
@@ -541,11 +672,35 @@ export default function Dashboard() {
               </div>
             )}
 
-            {/* View full plan link */}
-            <div onClick={() => setActiveTab('training')} style={{
-              marginTop:12, fontSize:11, color:'#333', cursor:'pointer',
-              display:'flex', alignItems:'center', gap:4,
-            }}>View full plan →</div>
+            {/* CTA strip — whole card above is tappable; this is visual emphasis */}
+            <div
+              style={{
+                marginTop: 14,
+                width: '100%',
+                padding: '12px 14px',
+                borderRadius: 12,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                background: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(255,255,255,0.12)',
+                transition: 'all 0.18s',
+                userSelect: 'none',
+                pointerEvents: 'none',
+              }}
+            >
+              <div>
+                <div style={{ fontSize: 10, letterSpacing: 2, textTransform: 'uppercase', color: '#555', fontWeight: 800, marginBottom: 3 }}>
+                  Start workout
+                </div>
+                <div style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 900, fontSize: 16, color: '#fff', letterSpacing: 0.6 }}>
+                  View full plan
+                </div>
+              </div>
+              <div style={{ fontSize: 18, color: isWorkoutToday ? '#F0A020' : '#666', fontWeight: 900, paddingLeft: 10 }}>
+                →
+              </div>
+            </div>
           </div>
         </div>
 

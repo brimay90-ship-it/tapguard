@@ -6,6 +6,7 @@ import BJJFlowBuilder from './components/matrix/BJJFlowBuilder';
 import Rolls from './components/rolls/Rolls';
 import Notes from './components/notes/Notes';
 import Training from './components/training/Training';
+import HamburgerMenu from './components/menu/HamburgerMenu';
 
 // ── Brand tokens (from Figma ColorSystem.tsx) ─────────────────────────────────
 export const t = {
@@ -180,8 +181,8 @@ function MainApp() {
         position: 'absolute', top: 0, left: 0, right: 0, 
         height: 110, zIndex: 110, padding: '48px 20px 0',
         background: 'linear-gradient(to bottom, rgba(8,8,8,1) 0%, rgba(8,8,8,0.8) 50%, transparent 100%)',
-        backdropFilter: 'blur(32px) saturate(180%)',
-        WebkitBackdropFilter: 'blur(32px) saturate(180%)',
+        backdropFilter: 'blur(20px) saturate(160%)',
+        WebkitBackdropFilter: 'blur(20px) saturate(160%)',
         pointerEvents: 'none', // Allow scrolling through empty header space
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pointerEvents: 'auto' }}>
@@ -189,20 +190,8 @@ function MainApp() {
             <HexMark size={30} />
             <Wordmark size={18} />
           </div>
-          {/* Belt badge */}
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: 6,
-            padding: '5px 12px', borderRadius: 50,
-            background: 'rgba(11,245,113,0.08)',
-            border: '1px solid rgba(11,245,113,0.2)',
-          }}>
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: beltColor, display: 'inline-block' }} />
-            <span style={{
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: 11, fontWeight: 700, letterSpacing: '0.1em',
-              color: '#0BF571', textTransform: 'uppercase',
-            }}>{beltLabel}</span>
-          </div>
+          {/* Hamburger menu */}
+          <HamburgerMenu />
         </div>
       </div>
 
@@ -220,7 +209,7 @@ function MainApp() {
             flexDirection: 'column',
             height: tab.id === 'matrix' ? '100%' : 'auto',
             animation: activeTab === tab.id ? 'tabEnter 0.28s ease both' : 'none',
-            position: 'relative', 
+            position: 'relative',
           }}>
             {tab.id === 'dash'     && <Dashboard key={tabKey} />}
             {tab.id === 'matrix'   && <BJJFlowBuilder />}

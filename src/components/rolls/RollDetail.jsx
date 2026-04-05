@@ -1,3 +1,5 @@
+import { createPortal } from 'react-dom';
+
 const G     = '#0BF571';
 const AMBER = '#F0A020';
 const RED   = '#FF3B5C';
@@ -13,11 +15,10 @@ export default function RollDetail({ session, onBack }) {
   const hasVideo   = !!session.videoBlobUrl;
   const hasYouTube = !!session.youtubeEmbed;
 
-  return (
+  const overlay = (
     <div className="overlay-enter" style={{
-      position: 'absolute', inset: 0, background: 'rgba(8,8,8,0.4)',
-      backdropFilter: 'blur(60px) saturate(250%)',
-      overflowY: 'auto', padding: '20px 20px 80px', zIndex: 10,
+      position: 'fixed', inset: 0, background: 'rgba(8,8,8,0.96)',
+      overflowY: 'auto', padding: '20px 20px 80px', zIndex: 9999,
     }}>
       <button onClick={onBack} style={{
         display: 'flex', alignItems: 'center', gap: 6, fontSize: 13,
@@ -147,4 +148,6 @@ export default function RollDetail({ session, onBack }) {
       </div>
     </div>
   );
+
+  return createPortal(overlay, document.body);
 }

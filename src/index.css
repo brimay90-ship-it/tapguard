@@ -53,27 +53,28 @@ input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
 /* ── Modern Premium (iOS 26/28 Aesthetic) ────────────────────────────────────── */
 
 .liquid-glass {
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(40px) saturate(190%);
-  -webkit-backdrop-filter: blur(40px) saturate(190%);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
   border: 1px solid rgba(255, 255, 255, 0.14);
   box-shadow: 
     inset 0 1px 1px rgba(255, 255, 255, 0.08),
-    0 16px 48px rgba(0, 0, 0, 0.5);
+    0 8px 24px rgba(0, 0, 0, 0.4);
   position: relative;
-  overflow: hidden;
+  isolation: isolate;
   transition: all 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
 }
 
 .liquid-glass-pill {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(50px) saturate(220%);
-  -webkit-backdrop-filter: blur(50px) saturate(220%);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
   border: 0.5px solid rgba(255, 255, 255, 0.2);
   box-shadow: 
     inset 0 0 0 1px rgba(255, 255, 255, 0.05),
-    0 24px 60px rgba(0, 0, 0, 0.8);
+    0 12px 40px rgba(0, 0, 0, 0.7);
   position: relative;
+  isolation: isolate;
 }
 
 .tab-active-pill {

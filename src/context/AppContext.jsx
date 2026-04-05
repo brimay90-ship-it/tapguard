@@ -1,9 +1,10 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { rollSessions as seedSessions } from '../data/weekPlan';
+import { rollSessions as seedSessions, notesSample } from '../data/weekPlan';
 
 const AppContext = createContext(null);
 
 const STORAGE_KEY = 'tapguard_state';
+const NOTES_SESSION_KEY = 'tapguard_notes_session';
 
 function loadState() {
   try {
@@ -15,6 +16,75 @@ function loadState() {
 function saveState(state) {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
   catch { /* quota exceeded — fail silently */ }
+}
+
+function loadNotesForSession(fallbackNotes) {
+  try {
+    const raw = sessionStorage.getItem(NOTES_SESSION_KEY);
+    return raw ? JSON.parse(raw) : fallbackNotes;
+  } catch {
+    return fallbackNotes;
+  }
+}
+
+function saveNotesForSession(notes) {
+  try { sessionStorage.setItem(NOTES_SESSION_KEY, JSON.stringify(notes)); }
+  catch { /* quota exceeded — fail silently */ }
+}
+
+function migrateStyles(input) {
+  const arr = Array.isArray(input) ? input : [];
+  const mapped = arr.map((s) => {
+    switch (s) {
+      // Already-migrated keys
+      case 'standing':
+      case 'judo':
+      case 'closed-guard':
+      case 'open-guard':
+      case 'half-guard':
+      case 'butterfly':
+      case 'rubber':
+      case 'passing':
+      case 'pressure':
+      case 'pins':
+      case 'back-control':
+      case 'leg-lock':
+      case 'sub-hunting':
+        return s;
+
+      // Legacy broad keys
+      case 'bottom':
+        return 'open-guard';
+      case 'wrestling':
+        return 'standing';
+
+      // Legacy specific guards
+      case 'dlr':
+      case 'spider':
+      case 'x-guard':
+      case 'slx':
+        return 'open-guard';
+
+      // Legacy top/passing
+      case 'knee-slice':
+      case 'float-pass':
+        return 'passing';
+      case 'side-control':
+      case 'mount':
+      case 'north-south':
+        return 'pins';
+
+      // Legacy leg-lock specifics
+      case 'ashi':
+      case 'saddle':
+        return 'leg-lock';
+
+      default:
+        return null;
+    }
+  }).filter(Boolean);
+
+  return Array.from(new Set(mapped));
 }
 
 const BELT_COLORS = {
@@ -37,7 +107,7 @@ export function AppProvider({ children }) {
   const [nickname,    setNickname]    = useState(saved?.nickname    ?? '');
   const [belt,        setBelt]        = useState(saved?.belt        ?? '');
   const [giPref,      setGiPref]      = useState(saved?.giPref      ?? '');
-  const [styles,      setStyles]      = useState(saved?.styles      ?? []);
+  const [styles,      setStyles]      = useState(() => migrateStyles(saved?.styles ?? []));
   const [goals,       setGoals]       = useState(saved?.goals       ?? []);
   const [freq,        setFreq]        = useState(saved?.freq        ?? '');
   const [scFreq,      setScFreq]      = useState(saved?.scFreq      ?? '');
@@ -52,11 +122,7 @@ export function AppProvider({ children }) {
   const [height,   setHeight]   = useState(saved?.height   ?? '');
   const [bodyType, setBodyType] = useState(saved?.bodyType ?? '');
 
-  const [notes, setNotes] = useState(saved?.notes ?? [
-    { id: 0, date: 'Mar 14 · Thursday', title: 'De La Riva Guard Entries',  moves: ['DLR Hook', 'Berimbolo', 'X-Guard Entry'], feel: 'okay', note: 'DLR hook needs more reps.' },
-    { id: 1, date: 'Mar 11 · Monday',   title: 'Knee Slice Pass Series',    moves: ['Knee Slice', 'Leg Weave', 'Torreando'],   feel: 'good', note: 'Clicking now.' },
-    { id: 2, date: 'Mar 7 · Friday',    title: 'Back Takes & RNC',          moves: ['Seatbelt', 'Hook Insertion', 'RNC'],      feel: 'lost', note: 'Struggling with seatbelt.' },
-  ]);
+  const [notes, setNotes] = useState(() => loadNotesForSession(saved?.notes ?? notesSample));
 
   // Sessions — seeded from weekPlan, persisted after that
   const [sessions, setSessions] = useState(saved?.sessions ?? seedSessions);
@@ -93,15 +159,19 @@ export function AppProvider({ children }) {
       nickname, belt, giPref, styles, goals,
       freq, scFreq, bjjDays, workoutDays, comp,
       sex, weight, height, bodyType,
-      notes, sessions, exerciseDone, setLogs,
+      sessions, exerciseDone, setLogs,
     });
   }, [
     onboardingDone,
     nickname, belt, giPref, styles, goals,
     freq, scFreq, bjjDays, workoutDays, comp,
     sex, weight, height, bodyType,
-    notes, sessions, exerciseDone, setLogs,
+    sessions, exerciseDone, setLogs,
   ]);
+
+  useEffect(() => {
+    saveNotesForSession(notes);
+  }, [notes]);
 
   return (
     <AppContext.Provider value={{

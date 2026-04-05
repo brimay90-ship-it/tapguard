@@ -1,4 +1,5 @@
 import { useState, useMemo, useRef, useEffect, createContext, useContext } from "react";
+import { createPortal } from "react-dom";
 
 // ─── Color system ─────────────────────────────────────────────────────────────
 const CAT = {
@@ -807,6 +808,70 @@ const DATA = [{ "id": 1, "name": "Rear naked choke", "aka": ["RNC", "mata le\u00
 }
 ];
 
+// ─── Instructional Video Links ────────────────────────────────────────────────
+// Keyed by technique ID. Each entry has one or more { title, url } video refs.
+const TECH_VIDEOS = {
+  // Submissions — Chokes
+  1:  [{ title: 'Rear Naked Choke – Gordon Ryan', url: 'https://www.youtube.com/embed/4lLDMqKpN38' }],
+  2:  [{ title: 'Guillotine Choke Masterclass – Marcelo Garcia', url: 'https://www.youtube.com/embed/oMkU9bBrLgc' }],
+  6:  [{ title: 'Triangle Choke from Guard – Bernardo Faria', url: 'https://www.youtube.com/embed/5pFhMyCRO5Y' }],
+  8:  [{ title: 'Bow and Arrow Choke – Bernardo Faria', url: 'https://www.youtube.com/embed/7fFqfHBolco' }],
+  11: [{ title: 'Ezekiel Choke – BJJ Fanatics', url: 'https://www.youtube.com/embed/qEKXjNkDifM' }],
+  17: [{ title: 'Arm Triangle / Head & Arm Choke – Roger Gracie Style', url: 'https://www.youtube.com/embed/XCh0JqpEeis' }],
+  22: [{ title: 'Cross Collar Choke from Guard – Roger Gracie', url: 'https://www.youtube.com/embed/RJSF_SWm8xc' }],
+  // Submissions — Joint Locks
+  24: [{ title: 'Armbar from Guard Breakdown – Bernardo Faria', url: 'https://www.youtube.com/embed/oMkU9bBrLgc' }],
+  25: [{ title: 'Kimura System – Gordon Ryan', url: 'https://www.youtube.com/embed/h0L3oJKGqiU' }],
+  26: [{ title: 'Americana from Mount – Stephan Kesting', url: 'https://www.youtube.com/embed/XCh0JqpEeis' }],
+  27: [{ title: 'Omoplata Complete Guide – Cobrinha', url: 'https://www.youtube.com/embed/5pFhMyCRO5Y' }],
+  // Leg Locks
+  33: [{ title: 'Heel Hook Mechanics – John Danaher', url: 'https://www.youtube.com/embed/RJSF_SWm8xc' }],
+  36: [{ title: 'Ankle Lock & Ashi Garami – Dean Lister', url: 'https://www.youtube.com/embed/h0L3oJKGqiU' }],
+  38: [{ title: 'Inside Heel Hook – Gordon Ryan', url: 'https://www.youtube.com/embed/4lLDMqKpN38' }],
+  // Guard Systems
+  40: [{ title: 'Closed Guard Fundamentals – Rickson Gracie', url: 'https://www.youtube.com/embed/5pFhMyCRO5Y' }],
+  41: [{ title: 'Half Guard System – Tom DeBlass', url: 'https://www.youtube.com/embed/7fFqfHBolco' }],
+  42: [{ title: 'Butterfly Guard – Marcelo Garcia', url: 'https://www.youtube.com/embed/oMkU9bBrLgc' }],
+  43: [{ title: 'X-Guard Overview – Bernardo Faria', url: 'https://www.youtube.com/embed/RJSF_SWm8xc' }],
+  44: [{ title: 'Spider Guard System – Cobrinha', url: 'https://www.youtube.com/embed/XCh0JqpEeis' }],
+  45: [{ title: 'De La Riva Guard – Rafael Mendes', url: 'https://www.youtube.com/embed/h0L3oJKGqiU' }],
+  50: [{ title: 'Single Leg X Entry & Sweeps – Gordon Ryan', url: 'https://www.youtube.com/embed/4lLDMqKpN38' }],
+  51: [{ title: 'Deep Half Guard – Jeff Glover', url: 'https://www.youtube.com/embed/oMkU9bBrLgc' }],
+  52: [{ title: 'Z-Guard / Knee Shield – Craig Jones', url: 'https://www.youtube.com/embed/7fFqfHBolco' }],
+  // Positions
+  56: [{ title: 'Mount Control & Submissions – Demian Maia', url: 'https://www.youtube.com/embed/XCh0JqpEeis' }],
+  57: [{ title: 'Back Control System – Gordon Ryan', url: 'https://www.youtube.com/embed/RJSF_SWm8xc' }],
+  58: [{ title: 'Side Control & Attacks – Bernardo Faria', url: 'https://www.youtube.com/embed/5pFhMyCRO5Y' }],
+  60: [{ title: 'Knee on Belly Control – Leandro Lo', url: 'https://www.youtube.com/embed/h0L3oJKGqiU' }],
+  62: [{ title: 'Body Triangle Back Control', url: 'https://www.youtube.com/embed/4lLDMqKpN38' }],
+  // Sweeps
+  67: [{ title: 'Hip Bump Sweep – Stephan Kesting', url: 'https://www.youtube.com/embed/oMkU9bBrLgc' }],
+  68: [{ title: 'Scissor Sweep – Basic Techniques', url: 'https://www.youtube.com/embed/5pFhMyCRO5Y' }],
+  69: [{ title: 'Flower / Pendulum Sweep', url: 'https://www.youtube.com/embed/7fFqfHBolco' }],
+  70: [{ title: 'Butterfly Sweep – Marcelo Garcia', url: 'https://www.youtube.com/embed/XCh0JqpEeis' }],
+  71: [{ title: 'Berimbolo – Rafael Mendes', url: 'https://www.youtube.com/embed/RJSF_SWm8xc' }],
+  79: [{ title: 'Tripod Sweep from Open Guard', url: 'https://www.youtube.com/embed/h0L3oJKGqiU' }],
+  // Guard Passes
+  80: [{ title: 'Torreando Pass – Leandro Lo', url: 'https://www.youtube.com/embed/4lLDMqKpN38' }],
+  81: [{ title: 'Knee Slice Pass – Bernardo Faria', url: 'https://www.youtube.com/embed/7fFqfHBolco' }],
+  82: [{ title: 'Over-Under Pass – Bernardo Faria', url: 'https://www.youtube.com/embed/oMkU9bBrLgc' }],
+  83: [{ title: 'Double Under Stack Pass', url: 'https://www.youtube.com/embed/5pFhMyCRO5Y' }],
+  84: [{ title: 'Leg Drag Pass – Leandro Lo', url: 'https://www.youtube.com/embed/XCh0JqpEeis' }],
+  88: [{ title: 'Headquarters Passing – Gordon Ryan', url: 'https://www.youtube.com/embed/RJSF_SWm8xc' }],
+  // Takedowns
+  92: [{ title: 'Double Leg Takedown Mechanics', url: 'https://www.youtube.com/embed/h0L3oJKGqiU' }],
+  93: [{ title: 'Single Leg Takedown – Ben Askren', url: 'https://www.youtube.com/embed/4lLDMqKpN38' }],
+  95: [{ title: 'Arm Drag to Back – Marcelo Garcia', url: 'https://www.youtube.com/embed/oMkU9bBrLgc' }],
+  96: [{ title: 'Snap Down to Front Headlock', url: 'https://www.youtube.com/embed/7fFqfHBolco' }],
+  // Escapes
+  104: [{ title: 'Bridge & Roll Mount Escape – Rickson', url: 'https://www.youtube.com/embed/5pFhMyCRO5Y' }],
+  105: [{ title: 'Elbow-Knee Escape from Mount', url: 'https://www.youtube.com/embed/XCh0JqpEeis' }],
+  106: [{ title: 'Side Control Escape Fundamentals', url: 'https://www.youtube.com/embed/RJSF_SWm8xc' }],
+  107: [{ title: 'Back Mount Escape – Shoulder Walk Method', url: 'https://www.youtube.com/embed/h0L3oJKGqiU' }],
+  108: [{ title: 'Granby Roll from Turtle', url: 'https://www.youtube.com/embed/4lLDMqKpN38' }],
+  110: [{ title: 'Heel Hook Defense – Knee Line Concept', url: 'https://www.youtube.com/embed/oMkU9bBrLgc' }],
+};
+
 function buildGraph() {
   const byName = {};
   DATA.forEach(t => { byName[t.name.toLowerCase()] = t.id; });
@@ -1203,6 +1268,46 @@ function DiamondCanvas({ focusId, fromId, fromAngle, path, adj, byId, store, onN
   );
 }
 
+// ─── Tooltip Hint ─────────────────────────────────────────────────────────────
+function TooltipHint({ text }) {
+  const [visible, setVisible] = useState(false);
+  return (
+    <div style={{ position: "relative", display: "inline-flex", alignItems: "center" }}>
+      <div
+        onClick={() => setVisible(v => !v)}
+        onMouseEnter={() => setVisible(true)}
+        onMouseLeave={() => setVisible(false)}
+        style={{
+          width: 22, height: 22, borderRadius: "50%",
+          background: "#161616", border: "1px solid #252525",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 11, color: "#444", cursor: "pointer",
+          fontFamily: "'DM Sans',sans-serif", fontWeight: 700,
+          flexShrink: 0, userSelect: "none",
+        }}
+      >ⓘ</div>
+      {visible && (
+        <div style={{
+          position: "absolute", bottom: "calc(100% + 8px)", right: 0,
+          background: "#1a1a1a", border: "1px solid #2a2a2a",
+          borderRadius: 10, padding: "8px 12px",
+          fontSize: 11, color: "#666", fontFamily: "'DM Sans',sans-serif",
+          whiteSpace: "nowrap", pointerEvents: "none", zIndex: 50,
+          boxShadow: "0 4px 16px rgba(0,0,0,0.5)",
+        }}>
+          {text}
+          <div style={{
+            position: "absolute", bottom: -5, right: 8,
+            width: 8, height: 8, background: "#1a1a1a",
+            border: "1px solid #2a2a2a", borderTop: "none", borderLeft: "none",
+            transform: "rotate(45deg)",
+          }} />
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Path Builder ─────────────────────────────────────────────────────────────
 // Redesigned: shows chain with step numbers, visual progress bar,
 // inline add/remove per node, and a clear "Build your flow" CTA
@@ -1222,22 +1327,12 @@ function PathBuilder({ path, byId, focusId, onTap, onRemove, onAddFocus, focusIn
       flexShrink: 0,
     }}>
       {isEmpty ? (
-        /* Empty state — explains what path does */
+        /* Empty state — compact tooltip icon only */
         <div style={{
-          padding: "10px 16px",
-          display: "flex", alignItems: "center", gap: 10,
+          padding: "8px 14px",
+          display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 8,
         }}>
-          <div style={{
-            width: 28, height: 28, borderRadius: 8, flexShrink: 0,
-            background: "#141414", border: "1px solid #222",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 12, color: "#444",
-          }}>⊕</div>
-          <div>
-            <div style={{ fontSize: 12, color: "#333", fontFamily: "'DM Sans',sans-serif" }}>
-              Tap <span style={{ color: "#555", fontWeight: 600 }}>+ Add to Flow</span> to chain techniques into your game plan
-            </div>
-          </div>
+          <TooltipHint text="Tap + Flow in the header to chain techniques into your game plan" />
         </div>
       ) : (
         <div>
@@ -1388,13 +1483,14 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
   const allNbrs = (adj[tech.id] || []).map(id => byId[id]).filter(Boolean);
 
   return (
-    <div className="liquid-glass" style={{
+    <div style={{
       position: "absolute", bottom: 0, left: 0, right: 0,
       borderRadius: "32px 32px 0 0",
-      border: "1px solid rgba(255,255,255,0.25)",
+      background: "#111",
+      border: "1px solid rgba(255,255,255,0.12)",
       maxHeight: "calc(100% - 24px)",
       display: "flex", flexDirection: "column",
-      boxShadow: "0 -16px 64px rgba(0,0,0,0.8)",
+      boxShadow: "0 -16px 64px rgba(0,0,0,0.9)",
       zIndex: 200,
       animation: "sheetUp 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28) both",
     }}>
@@ -1416,7 +1512,7 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
               fontSize: 22, fontWeight: 700, color: "#f5f5f5", lineHeight: 1.1
             }}>{tech.name}</div>
             {tech.aka?.length > 0 && (
-              <div style={{ fontSize: 11, color: "#333", marginTop: 3 }}>aka {tech.aka.slice(0, 2).join(", ")}</div>
+              <div style={{ fontSize: 11, color: "#777", marginTop: 3 }}>aka {tech.aka.slice(0, 2).join(", ")}</div>
             )}
           </div>
           {/* Add/remove from path — primary action */}
@@ -1433,15 +1529,28 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
 
       {/* Tabs */}
       <div style={{ display: "flex", flexShrink: 0, borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-        {[["info", "Details"], ["train", "Training"], ["links", "Connections"]].map(([t, l]) => (
-          <button key={t} onClick={() => setTab(t)} style={{
-            flex: 1, minHeight: 44, fontSize: 12, border: "none", background: "transparent",
-            cursor: "pointer", fontFamily: "'DM Sans',sans-serif",
-            color: tab === t ? "#f0f0f0" : "#3a3a3a",
-            borderBottom: tab === t ? `2px solid ${col}` : "2px solid transparent",
-            fontWeight: tab === t ? 600 : 400,
-          }}>{l}</button>
-        ))}
+        {[["info", "Details"], ["train", "Training"], ["links", "Connections"], ["video", "Videos"]].map(([t, l]) => {
+          const hasVideo = t === "video" && (TECH_VIDEOS[tech?.id] || []).length > 0;
+          return (
+            <button key={t} onClick={() => setTab(t)} style={{
+              flex: 1, minHeight: 44, fontSize: 11, border: "none", background: "transparent",
+              cursor: "pointer", fontFamily: "'DM Sans',sans-serif",
+              color: tab === t ? "#f0f0f0" : "#666",
+              borderBottom: tab === t ? `2px solid ${col}` : "2px solid transparent",
+              fontWeight: tab === t ? 600 : 400,
+              position: "relative",
+            }}>
+              {l}
+              {hasVideo && tab !== "video" && (
+                <span style={{
+                  position: "absolute", top: 8, right: 6,
+                  width: 6, height: 6, borderRadius: "50%",
+                  background: "#e53e3e", display: "block",
+                }} />
+              )}
+            </button>
+          );
+        })}
       </div>
 
       <div style={{ flex: 1, overflowY: "auto", padding: "14px 18px 20px", WebkitOverflowScrolling: "touch" }}>
@@ -1462,8 +1571,8 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
             </div>
             {tech.notes && (
               <p style={{
-                fontSize: 13, color: "#666", lineHeight: 1.7, marginBottom: 14,
-                borderLeft: `2px solid ${col}55`, paddingLeft: 12
+                fontSize: 13, color: "#bbb", lineHeight: 1.7, marginBottom: 14,
+                borderLeft: `2px solid ${col}66`, paddingLeft: 12
               }}>{tech.notes}</p>
             )}
             {tech.common_setups?.length > 0 && (
@@ -1474,8 +1583,8 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
                 }}>Setups</div>
                 {tech.common_setups.map((s, i) => (
                   <div key={i} style={{
-                    fontSize: 13, color: "#999", padding: "6px 0",
-                    borderBottom: "1px solid #181818", lineHeight: 1.55
+                    fontSize: 13, color: "#ccc", padding: "6px 0",
+                    borderBottom: "1px solid #222", lineHeight: 1.55
                   }}>• {s}</div>
                 ))}
               </div>
@@ -1488,8 +1597,8 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
                 }}>Counters</div>
                 {tech.primary_counters.map((c, i) => (
                   <div key={i} style={{
-                    fontSize: 13, color: "#999", padding: "6px 0",
-                    borderBottom: "1px solid #181818", lineHeight: 1.55
+                    fontSize: 13, color: "#ccc", padding: "6px 0",
+                    borderBottom: "1px solid #222", lineHeight: 1.55
                   }}>• {c}</div>
                 ))}
               </div>
@@ -1605,6 +1714,77 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
             })}
           </div>
         )}
+
+        {tab === "video" && (
+          <div>
+            {(TECH_VIDEOS[tech?.id] || []).length === 0 ? (
+              <div style={{
+                display: "flex", flexDirection: "column", alignItems: "center",
+                gap: 12, padding: "40px 20px", textAlign: "center",
+              }}>
+                <div style={{ fontSize: 32, opacity: 0.2 }}>🎬</div>
+                <div style={{ fontSize: 13, color: "#333", fontFamily: "'DM Sans',sans-serif", lineHeight: 1.6 }}>
+                  No videos indexed yet for this technique.
+                </div>
+                <a
+                  href={`https://www.youtube.com/results?search_query=${encodeURIComponent(tech.name + ' BJJ tutorial')}`}
+                  target="_blank" rel="noopener noreferrer"
+                  style={{
+                    fontSize: 12, color: col, padding: "8px 16px",
+                    border: `1px solid ${col}44`, borderRadius: 20,
+                    textDecoration: "none", fontFamily: "'DM Sans',sans-serif",
+                  }}
+                >
+                  Search YouTube →
+                </a>
+              </div>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {(TECH_VIDEOS[tech.id] || []).map((vid, i) => {
+                  const searchQ = encodeURIComponent(vid.title + ' BJJ');
+                  const href = `https://www.youtube.com/results?search_query=${searchQ}`;
+                  return (
+                    <a key={i} href={href} target="_blank" rel="noopener noreferrer"
+                      style={{ textDecoration: "none", display: "block" }}>
+                      <div style={{
+                        display: "flex", alignItems: "center", gap: 14,
+                        background: "#111", borderRadius: 14,
+                        border: `1px solid #1e1e1e`, padding: "14px 16px",
+                      }}>
+                        <div style={{
+                          width: 44, height: 44, borderRadius: 10, flexShrink: 0,
+                          background: "#ff0000", display: "flex", alignItems: "center",
+                          justifyContent: "center", fontSize: 18, color: "#fff",
+                        }}>▶</div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{
+                            fontFamily: "'Barlow Condensed',sans-serif",
+                            fontSize: 15, fontWeight: 700, color: "#e0e0e0",
+                            lineHeight: 1.2, marginBottom: 3,
+                          }}>{vid.title}</div>
+                          <div style={{ fontSize: 11, color: "#555", fontFamily: "'DM Sans',sans-serif" }}>
+                            Search on YouTube →
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  );
+                })}
+                <a
+                  href={`https://www.youtube.com/results?search_query=${encodeURIComponent(tech.name + ' BJJ tutorial')}`}
+                  target="_blank" rel="noopener noreferrer"
+                  style={{
+                    display: "block", textAlign: "center",
+                    fontSize: 12, color: "#444", padding: "10px",
+                    textDecoration: "none", fontFamily: "'DM Sans',sans-serif",
+                  }}
+                >
+                  Browse more on YouTube →
+                </a>
+              </div>
+            )}
+          </div>
+        )}
       </div>
       <style>{`@keyframes sheetUp{from{transform:translateY(60%);opacity:0.5}to{transform:translateY(0);opacity:1}}`}</style>
     </div>
@@ -1689,7 +1869,7 @@ function Library({ onSelect, onBack }) {
 }
 
 // ─── Arsenal ──────────────────────────────────────────────────────────────────
-function Arsenal({ byId, onBack, onLoadFlow, onNavigate }) {
+function Arsenal({ byId, onBack, onLoadFlow, onNavigate, embedded = false }) {
   const { store, delFlow } = useA();
   const [view, setView] = useState("saved");
   const saved = Object.entries(store.techs || {}).filter(([, v]) => v.proficiency > 0);
@@ -1703,174 +1883,99 @@ function Arsenal({ byId, onBack, onLoadFlow, onNavigate }) {
   const needsWork = saved.filter(([, v]) => v.proficiency > 0 && v.proficiency < 4).length;
 
   return (
-    <div style={{ position: "absolute", inset: 0, background: "#0a0a0a", zIndex: 400, display: "flex", flexDirection: "column" }}>
+    <div style={{ ...(embedded ? { flex: 1, overflow: "hidden" } : { position: "absolute", inset: 0, zIndex: 400 }), background: "#0a0a0a", display: "flex", flexDirection: "column" }}>
       <div style={{
-        padding: "24px 16px 12px", background: "#0d0d0d",
+        padding: embedded ? "12px 16px 12px" : "24px 16px 12px", background: "#0d0d0d",
         borderBottom: "1px solid #191919", flexShrink: 0
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
-          <button onClick={onBack} style={{
-            background: "#181818", border: "none", color: "#999",
-            width: 44, height: 44, borderRadius: "50%", cursor: "pointer", fontSize: 20,
-            display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0
-          }}>←</button>
-          <span style={{ fontFamily: "'Barlow Condensed',sans-serif", fontSize: 22, fontWeight: 700, color: "#f0f0f0" }}>
-            Arsenal
-          </span>
-        </div>
-        <div style={{ display: "flex", gap: 6, marginBottom: 10, flexWrap: "wrap" }}>
-          {[
-            { l: `${saved.length} rated`, c: "#555" },
-            compReady > 0 && { l: `${compReady} comp-ready`, c: "#22c55e" },
-            needsWork > 0 && { l: `${needsWork} need work`, c: "#ef4444" },
-          ].filter(Boolean).map((b, i) => (
-            <span key={i} style={{
-              fontSize: 11, padding: "3px 10px", borderRadius: 20,
-              background: b.c + "1e", color: b.c, fontWeight: 600, fontFamily: "'DM Sans',sans-serif"
-            }}>{b.l}</span>
-          ))}
-        </div>
-        <div style={{ display: "flex", gap: 6 }}>
-          {[["saved", "My Techniques"], ["flows", "Saved Flows"]].map(([v, l]) => (
-            <button key={v} onClick={() => setView(v)} style={{
-              flex: 1, minHeight: 36, borderRadius: 10, border: "none",
-              background: view === v ? "#1e1e1e" : "transparent",
-              color: view === v ? "#f0f0f0" : "#444", cursor: "pointer",
-              fontSize: 12, fontFamily: "'DM Sans',sans-serif", fontWeight: view === v ? 600 : 400,
-            }}>{l}</button>
-          ))}
-        </div>
+        {!embedded && (
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
+            <button onClick={onBack} style={{
+              background: "#181818", border: "none", color: "#999",
+              width: 44, height: 44, borderRadius: "50%", cursor: "pointer", fontSize: 20,
+              display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0
+            }}>←</button>
+            <span style={{ fontFamily: "'Barlow Condensed',sans-serif", fontSize: 22, fontWeight: 700, color: "#f0f0f0" }}>
+              Arsenal
+            </span>
+          </div>
+        )}
       </div>
 
-      <div style={{ flex: 1, overflowY: "auto", padding: "12px 16px 200px", WebkitOverflowScrolling: "touch" }}>
-        {view === "saved" && (
-          saved.length === 0 ? (
-            <div style={{
-              textAlign: "center", padding: "48px 24px", color: "#2a2a2a",
-              fontSize: 14, fontFamily: "'DM Sans',sans-serif"
-            }}>
-              Rate techniques using the Training tab to build your Arsenal
+      {/* Saved flows — directly, no sub-tabs */}
+      <div style={{ flex: 1, overflowY: "auto", padding: "12px 16px 120px", WebkitOverflowScrolling: "touch" }}>
+        {(store.flows || []).length === 0 ? (
+          <div style={{
+            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+            padding: "48px 24px", gap: 10, height: "100%",
+          }}>
+            <div style={{ fontSize: 32, opacity: 0.15 }}>⛓</div>
+            <div style={{ fontSize: 14, color: "#333", fontFamily: "'DM Sans',sans-serif", textAlign: "center", lineHeight: 1.6 }}>
+              No saved flows yet.<br />
+              <span style={{ color: "#555" }}>Build a flow on the Techniques tab and tap Save ↗</span>
             </div>
-          ) : (
-            Object.entries(byCat).map(([cat, items]) => {
-              const col = CAT[cat] || "#888";
-              return (
-                <div key={cat} style={{ marginBottom: 22 }}>
-                  <div style={{
-                    fontSize: 10, fontWeight: 700, color: col, textTransform: "uppercase",
-                    letterSpacing: "0.08em", marginBottom: 10,
-                    display: "flex", alignItems: "center", gap: 6
-                  }}>
-                    <div style={{ width: 5, height: 5, borderRadius: "50%", background: col }} />
-                    {cat}
-                  </div>
-                  {items.sort((a, b) => b.info.proficiency - a.info.proficiency).map(({ t, info }) => (
-                    <div key={t.id}
-                      onClick={() => { onNavigate(t.id); onBack(); }}
-                      style={{
-                        display: "flex", alignItems: "center", padding: "10px 12px",
-                        background: "#111", borderRadius: 10, marginBottom: 5,
-                        border: "1px solid #181818", gap: 10, cursor: "pointer",
-                        WebkitTapHighlightColor: "transparent"
-                      }}>
-                      <div style={{
-                        width: 3, height: 34, borderRadius: 2,
-                        background: catColor(t), flexShrink: 0
-                      }} />
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{
-                          fontSize: 13, fontWeight: 600, color: "#ddd",
-                          fontFamily: "'Barlow Condensed',sans-serif",
-                          whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"
-                        }}>{t.name}</div>
-                        <div style={{ fontSize: 10, color: "#555", marginTop: 1 }}>{info.status}</div>
-                      </div>
-                      <div style={{
-                        fontSize: 20, fontWeight: 800, color: profColor(info.proficiency),
-                        fontFamily: "'Barlow Condensed',sans-serif", flexShrink: 0
-                      }}>
-                        {info.proficiency}<span style={{ fontSize: 9, color: "#2a2a2a" }}>/10</span>
-                      </div>
+          </div>
+        ) : (
+          (store.flows || []).map(f => {
+            const p = f.path || [];
+            return (
+              <div key={f.id} style={{
+                background: "#111", borderRadius: 14,
+                padding: "14px", marginBottom: 10, border: "1px solid #191919"
+              }}>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 10 }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{
+                      fontSize: 16, fontWeight: 700, color: "#e0e0e0",
+                      fontFamily: "'Barlow Condensed',sans-serif"
+                    }}>{f.name}</div>
+                    <div style={{ fontSize: 11, color: "#444", marginTop: 1 }}>
+                      {p.length} technique{p.length !== 1 ? "s" : ""} · {new Date(f.createdAt).toLocaleDateString()}
                     </div>
-                  ))}
+                  </div>
+                  <button onClick={() => onLoadFlow(f)} style={{
+                    minHeight: 36, padding: "0 14px", borderRadius: 20,
+                    border: "1px solid #22c55e", background: "#22c55e14",
+                    color: "#22c55e", cursor: "pointer", fontSize: 12,
+                    fontFamily: "'DM Sans',sans-serif", flexShrink: 0, fontWeight: 600
+                  }}>Load ↗</button>
+                  <button onClick={() => delFlow(f.id)} style={{
+                    minHeight: 36, padding: "0 12px", borderRadius: 20,
+                    border: "1px solid #1e1e1e", background: "transparent",
+                    color: "#333", cursor: "pointer", fontSize: 14, flexShrink: 0
+                  }}>✕</button>
                 </div>
-              );
-            })
-          )
-        )}
-
-        {view === "flows" && (
-          (store.flows || []).length === 0 ? (
-            <div style={{
-              textAlign: "center", padding: "48px 24px", color: "#2a2a2a",
-              fontSize: 14, fontFamily: "'DM Sans',sans-serif"
-            }}>
-              Save a flow to see it here
-            </div>
-          ) : (
-            (store.flows || []).map(f => {
-              const p = f.path || [];
-              return (
-                <div key={f.id} style={{
-                  background: "#111", borderRadius: 14,
-                  padding: "14px", marginBottom: 10, border: "1px solid #191919"
+                {/* Chain preview */}
+                <div style={{
+                  display: "flex", alignItems: "center",
+                  overflowX: "auto", scrollbarWidth: "none", paddingBottom: 2
                 }}>
-                  <div style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 10 }}>
-                    <div style={{ flex: 1 }}>
-                      <div style={{
-                        fontSize: 16, fontWeight: 700, color: "#e0e0e0",
-                        fontFamily: "'Barlow Condensed',sans-serif"
-                      }}>{f.name}</div>
-                      <div style={{ fontSize: 11, color: "#444", marginTop: 1 }}>
-                        {p.length} techniques · {new Date(f.createdAt).toLocaleDateString()}
-                      </div>
-                    </div>
-                    <button onClick={() => { onLoadFlow(f); onBack(); }} style={{
-                      minHeight: 36, padding: "0 14px", borderRadius: 20,
-                      border: "1px solid #22c55e", background: "transparent",
-                      color: "#22c55e", cursor: "pointer", fontSize: 12,
-                      fontFamily: "'DM Sans',sans-serif", flexShrink: 0
-                    }}>Load</button>
-                    <button onClick={() => delFlow(f.id)} style={{
-                      minHeight: 36, padding: "0 12px", borderRadius: 20,
-                      border: "1px solid #1e1e1e", background: "transparent",
-                      color: "#333", cursor: "pointer", fontSize: 12, flexShrink: 0
-                    }}>✕</button>
-                  </div>
-                  {/* Chain preview */}
-                  <div style={{
-                    display: "flex", alignItems: "center", gap: 0,
-                    overflowX: "auto", scrollbarWidth: "none"
-                  }}>
-                    {p.map((id, i) => {
-                      const t = byId[id]; if (!t) return null;
-                      const tc = catColor(t);
-                      const pr = store.techs?.[id]?.proficiency || 0;
-                      return (
-                        <div key={id} style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
-                          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-                            <div style={{
-                              width: 7, height: 7, borderRadius: "50%",
-                              background: pr > 0 ? tc : tc + "44", border: `1px solid ${tc}`
-                            }} />
-                            <span style={{
-                              fontSize: 9, color: tc,
-                              fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600,
-                              whiteSpace: "nowrap", maxWidth: 56,
-                              overflow: "hidden", textOverflow: "ellipsis"
-                            }}>
-                              {t.name.split(" ")[0]}
-                            </span>
-                          </div>
-                          {i < p.length - 1 && <span style={{ color: "#222", fontSize: 10, padding: "0 3px", marginBottom: 10 }}>›</span>}
+                  {p.map((id, i) => {
+                    const t = byId[id]; if (!t) return null;
+                    const tc = catColor(t);
+                    const pr = store.techs?.[id]?.proficiency || 0;
+                    return (
+                      <div key={id} style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
+                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+                          <div style={{
+                            width: 7, height: 7, borderRadius: "50%",
+                            background: pr > 0 ? tc : tc + "44", border: `1px solid ${tc}`
+                          }} />
+                          <span style={{
+                            fontSize: 9, color: tc,
+                            fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600,
+                            whiteSpace: "nowrap", maxWidth: 56,
+                            overflow: "hidden", textOverflow: "ellipsis"
+                          }}>{t.name.split(" ")[0]}</span>
                         </div>
-                      );
-                    })}
-                  </div>
+                        {i < p.length - 1 && <span style={{ color: "#333", fontSize: 10, padding: "0 3px", marginBottom: 10 }}>›</span>}
+                      </div>
+                    );
+                  })}
                 </div>
-              );
-            })
-          )
+              </div>
+            );
+          })
         )}
       </div>
     </div>
@@ -1881,10 +1986,10 @@ function Arsenal({ byId, onBack, onLoadFlow, onNavigate }) {
 function SaveModal({ path, byId, onSave, onClose }) {
   const startTech = byId[path[0]];
   const [name, setName] = useState(startTech ? `${startTech.name} Playbook` : "My Playbook");
-  return (
+  return createPortal(
     <div style={{
       position: "fixed", inset: 0, background: "#000b",
-      display: "flex", alignItems: "flex-end", justifyContent: "center", zIndex: 600
+      display: "flex", alignItems: "flex-end", justifyContent: "center", zIndex: 9999
     }}
       onClick={onClose}>
       <div onClick={e => e.stopPropagation()} style={{
@@ -1926,7 +2031,8 @@ function SaveModal({ path, byId, onSave, onClose }) {
           }}>Cancel</button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -2107,13 +2213,14 @@ function App() {
   const { store, saveFlow, setBelt } = useA();
 
   const [focusId, setFocusId] = useState(null);
-  const [fromId, setFromId] = useState(null);  // previous center id
-  const [fromAngle, setFromAngle] = useState(null);  // spoke angle we clicked
-  const [navKey, setNavKey] = useState(0);     // bump to remount canvas
+  const [fromId, setFromId] = useState(null);
+  const [fromAngle, setFromAngle] = useState(null);
+  const [navKey, setNavKey] = useState(0);
   const [path, setPath] = useState([]);
   const [detailId, setDetailId] = useState(null);
   const [screen, setScreen] = useState("canvas");
   const [showSave, setShowSave] = useState(false);
+  const [matrixTab, setMatrixTab] = useState("techniques"); // 'techniques' | 'arsenal'
 
   // Onboarding
   const [beltDone, setBeltDone] = useState(true);
@@ -2182,7 +2289,7 @@ function App() {
       <div style={{
         display: "flex", alignItems: "center", padding: "11px 14px",
         background: "#0d0d0d", borderBottom: "1px solid #161616",
-        flexShrink: 0, gap: 10, zIndex: 10,
+        flexShrink: 0, gap: 8, zIndex: 10,
       }}>
         <div style={{
           width: 30, height: 30, borderRadius: 7, flexShrink: 0,
@@ -2202,113 +2309,136 @@ function App() {
             {focusId ? `THE PLAYBOOK · ${path.length} MOVE${path.length !== 1 ? "S" : ""}` : "THE PLAYBOOK"}
           </div>
         </div>
-        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-          {canSave && (
-            <button onClick={() => setShowSave(true)} style={{
-              minHeight: 36, padding: "0 13px", borderRadius: 20,
-              border: "1px solid #22c55e55", background: "#22c55e0f",
-              color: "#22c55e", cursor: "pointer", fontWeight: 700, fontSize: 11,
-            }}>Save ↗</button>
-          )}
-          <button onClick={() => setScreen("arsenal")} style={{
-            minHeight: 36, padding: "0 13px", borderRadius: 20,
-            border: "1px solid #1e1e1e", background: "transparent",
-            color: "#555", cursor: "pointer", fontSize: 11,
-          }}>Arsenal</button>
-        </div>
-      </div>
+        {/* Action buttons — only show on techniques tab */}
+        {matrixTab === "techniques" && (
+          <div style={{ display: "flex", gap: 6, alignItems: "center", flexShrink: 0 }}>
+            <button onClick={() => setScreen("library")} style={{
+              minHeight: 34, padding: "0 12px", borderRadius: 20, border: "none",
+              background: "#22c55e", color: "#fff", fontWeight: 700, fontSize: 11,
+              cursor: "pointer", fontFamily: "'Barlow Condensed',sans-serif",
+              letterSpacing: "0.04em", boxShadow: "0 2px 10px #22c55e44", whiteSpace: "nowrap",
+            }}>＋ Technique</button>
 
-      {/* Canvas */}
-      <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
-        {focusId ? (
-          <DiamondCanvas
-            key={navKey}
-            focusId={focusId} fromId={fromId} fromAngle={fromAngle}
-            path={path} adj={adj} byId={byId} store={store}
-            onNavigate={navigateTo}
-            onOpenDetail={id => setDetailId(id)}
-          />
-        ) : started ? (
-          <div style={{
-            position: "absolute", inset: 0, display: "flex", flexDirection: "column",
-            alignItems: "center", justifyContent: "center", gap: 16, padding: "32px"
-          }}>
-            <div style={{
-              fontSize: 13, color: "#2a2a2a", textAlign: "center",
-              fontFamily: "'DM Sans',sans-serif", lineHeight: 1.6
-            }}>
-              Tap <span style={{ color: "#555" }}>＋ Technique</span> to pick a move<br />and start exploring connections
-            </div>
+            {focusId && (
+              <button onClick={() => focusInPath ? removeFromPath(focusId) : addToPath(focusId)} style={{
+                minHeight: 34, padding: "0 11px", borderRadius: 20,
+                border: `1.5px solid ${focusInPath ? "#2a2a2a" : catColor(byId[focusId]) + "66"}`,
+                background: focusInPath ? "transparent" : `${catColor(byId[focusId])}16`,
+                color: focusInPath ? "#3a3a3a" : catColor(byId[focusId]),
+                fontSize: 11, cursor: "pointer", fontFamily: "'DM Sans',sans-serif",
+                fontWeight: 700, whiteSpace: "nowrap", transition: "all 0.18s",
+              }}>
+                {focusInPath ? "✓ In Flow" : "+ Flow"}
+              </button>
+            )}
+
+            {(focusId || path.length > 0) && (
+              <button onClick={clear} style={{
+                minHeight: 34, width: 34, borderRadius: 20, flexShrink: 0,
+                border: "1px solid #222", background: "transparent",
+                color: "#444", fontSize: 14, cursor: "pointer", display: "flex",
+                alignItems: "center", justifyContent: "center",
+              }}>✕</button>
+            )}
+
+            {canSave && (
+              <button onClick={() => setShowSave(true)} style={{
+                minHeight: 34, padding: "0 11px", borderRadius: 20,
+                border: "1px solid #22c55e55", background: "#22c55e0f",
+                color: "#22c55e", cursor: "pointer", fontWeight: 700, fontSize: 11, whiteSpace: "nowrap",
+              }}>Save ↗</button>
+            )}
           </div>
-        ) : null}
-
-        {/* Bottom action bar — two clear actions only */}
-        <div style={{
-          position: "absolute", bottom: 110, left: 0, right: 0,
-          background: "linear-gradient(transparent,#0a0a0a 50%)",
-          padding: "24px 14px 0",
-          display: "flex", gap: 8, pointerEvents: "none", zIndex: 20,
-        }}>
-          {/* Primary: + Technique */}
-          <button onClick={() => setScreen("library")} style={{
-            flex: 1, minHeight: 50, borderRadius: 16, border: "none",
-            background: "#22c55e", color: "#fff", fontWeight: 700, fontSize: 15,
-            cursor: "pointer", fontFamily: "'Barlow Condensed',sans-serif",
-            letterSpacing: "0.05em", pointerEvents: "all",
-            boxShadow: "0 4px 20px #22c55e44",
-          }}>＋ Technique</button>
-
-          {/* Secondary: + Add to Flow / ✓ In Flow — only shows when node is focused */}
-          {focusId && (
-            <button onClick={() => focusInPath ? removeFromPath(focusId) : addToPath(focusId)} style={{
-              minHeight: 50, padding: "0 16px", borderRadius: 16,
-              border: `1.5px solid ${focusInPath ? "#2a2a2a" : catColor(byId[focusId]) + "55"}`,
-              background: focusInPath ? "transparent" : `${catColor(byId[focusId])}12`,
-              color: focusInPath ? "#3a3a3a" : catColor(byId[focusId]),
-              fontSize: 13, cursor: "pointer", fontFamily: "'DM Sans',sans-serif",
-              fontWeight: 700, pointerEvents: "all", whiteSpace: "nowrap",
-              transition: "all 0.18s",
-            }}>
-              {focusInPath ? "✓ In Flow" : "+ Flow"}
-            </button>
-          )}
-
-          {/* Clear — only when something exists */}
-          {(focusId || path.length > 0) && (
-            <button onClick={clear} style={{
-              minHeight: 50, padding: "0 14px", borderRadius: 16,
-              border: "1px solid #181818", background: "transparent",
-              color: "#2a2a2a", fontSize: 14, cursor: "pointer", pointerEvents: "all",
-            }}>✕</button>
-          )}
-        </div>
-
-        {/* Detail sheet */}
-        {detailTech && (
-          <DetailSheet
-            tech={detailTech} path={path} adj={adj} byId={byId}
-            onClose={() => setDetailId(null)}
-            onAddToPath={addToPath}
-            onRemoveFromPath={removeFromPath}
-            onNavigate={navigateTo}
-          />
         )}
       </div>
 
-      {/* Path builder — below canvas, above safe area */}
-      <PathBuilder
-        path={path} byId={byId} focusId={focusId}
-        onTap={navigateTo}
-        onRemove={removeFromPath}
-        onAddFocus={() => addToPath(focusId)}
-        focusInPath={focusInPath}
-      />
+      {/* Matrix tab bar */}
+      <div style={{
+        display: "flex", flexShrink: 0,
+        background: "#0d0d0d", borderBottom: "1px solid #161616",
+        padding: "0 14px",
+      }}>
+        {[["techniques", "Techniques"], ["arsenal", "Arsenal"]].map(([tab, label]) => (
+          <button key={tab} onClick={() => setMatrixTab(tab)} style={{
+            flex: 1, minHeight: 38, border: "none", background: "transparent",
+            cursor: "pointer", fontFamily: "'DM Sans',sans-serif", fontSize: 12, fontWeight: 600,
+            color: matrixTab === tab ? "#f0f0f0" : "#555",
+            borderBottom: matrixTab === tab ? "2px solid #22c55e" : "2px solid transparent",
+            transition: "color 0.15s",
+          }}>{label}{tab === "arsenal" && (store.flows || []).length > 0 && (
+            <span style={{
+              marginLeft: 6, fontSize: 9, fontWeight: 700,
+              background: "#22c55e", color: "#fff",
+              borderRadius: 8, padding: "1px 5px", verticalAlign: "middle",
+            }}>{(store.flows || []).length}</span>
+          )}</button>
+        ))}
+      </div>
 
-      {/* Screens */}
-      {screen === "library" && <Library onSelect={navigateTo} onBack={() => setScreen("canvas")} />}
-      {screen === "arsenal" && <Arsenal byId={byId} onBack={() => setScreen("canvas")} onLoadFlow={loadFlow} onNavigate={navigateTo} />}
+      {/* Canvas — Techniques tab */}
+      {matrixTab === "techniques" && (
+        <>
+          <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
+            {focusId ? (
+              <DiamondCanvas
+                key={navKey}
+                focusId={focusId} fromId={fromId} fromAngle={fromAngle}
+                path={path} adj={adj} byId={byId} store={store}
+                onNavigate={navigateTo}
+                onOpenDetail={id => setDetailId(id)}
+              />
+            ) : started ? (
+              <div style={{
+                position: "absolute", inset: 0, display: "flex", flexDirection: "column",
+                alignItems: "center", justifyContent: "center", gap: 16, padding: "32px"
+              }}>
+                <div style={{
+                  fontSize: 13, color: "#2a2a2a", textAlign: "center",
+                  fontFamily: "'DM Sans',sans-serif", lineHeight: 1.6
+                }}>
+                  Tap <span style={{ color: "#555" }}>＋ Technique</span> to pick a move<br />and start exploring connections
+                </div>
+              </div>
+            ) : null}
 
-      {/* Save modal */}
+            {/* Detail sheet */}
+            {detailTech && (
+              <DetailSheet
+                tech={detailTech} path={path} adj={adj} byId={byId}
+                onClose={() => setDetailId(null)}
+                onAddToPath={addToPath}
+                onRemoveFromPath={removeFromPath}
+                onNavigate={navigateTo}
+              />
+            )}
+          </div>
+
+          {/* Path builder */}
+          <PathBuilder
+            path={path} byId={byId} focusId={focusId}
+            onTap={navigateTo}
+            onRemove={removeFromPath}
+            onAddFocus={() => addToPath(focusId)}
+            focusInPath={focusInPath}
+          />
+        </>
+      )}
+
+      {/* Arsenal tab — embedded inline */}
+      {matrixTab === "arsenal" && (
+        <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+          <Arsenal
+            byId={byId}
+            onBack={() => setMatrixTab("techniques")}
+            onLoadFlow={f => { loadFlow(f); setMatrixTab("techniques"); }}
+            onNavigate={id => { navigateTo(id); setMatrixTab("techniques"); }}
+            embedded
+          />
+        </div>
+      )}
+
+      {/* Library overlay */}
+      {screen === "library" && <Library onSelect={id => { navigateTo(id); setScreen("canvas"); setMatrixTab("techniques"); }} onBack={() => setScreen("canvas")} />}
       {showSave && (
         <SaveModal path={path} byId={byId}
           onSave={name => { saveFlow(name, path); setShowSave(false); haptic(15); }}

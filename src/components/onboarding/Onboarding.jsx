@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
-import { motion, useSpring, useMotionValue, useTransform, useVelocity } from 'framer-motion';
+import { motion, AnimatePresence, useSpring, useMotionValue, useTransform, useVelocity } from 'framer-motion';
 
 const G = '#4ade80';
 
@@ -18,12 +18,26 @@ const GI_PREFS = [
   { val:'both',        title:'Gi & No Gi',   desc:'Equal time in both – maximalist approach',      icon:'🔄' },
 ];
 const STYLES = [
-  { val:'bottom',    title:'Guard Player',   desc:'Play from the bottom, sweeps & subs',  icon:'🛡️' },
-  { val:'pressure',  title:'Top Pressure',   desc:'Pass & grind, positional dominance',    icon:'⬇️' },
-  { val:'leg-lock',  title:'Leg Lock Game',  desc:'Entries, outside heel hooks, reaping', icon:'🦵' },
-  { val:'rubber',    title:'Rubber Guard',   desc:'Mission control, unorthodox guards',    icon:'🔄' },
-  { val:'wrestling', title:'Wrestling Base', desc:'Takedowns, top control, scrambles',     icon:'💪' },
-  { val:'judo',      title:'Judo / Throws',  desc:'Uchimata, seoi nage, grips',           icon:'🏆' },
+  // Stand-up and entry
+  { val:'standing',     title:'Standing Game',      desc:'Takedowns, clinch, scrambles',                    icon:'🤼' },
+  { val:'judo',         title:'Throws & Trips',     desc:'Trips, hip throws, grip fighting',                icon:'🏆' },
+
+  // Guard families (bottom)
+  { val:'closed-guard', title:'Closed Guard',       desc:'Posture breaks, controls, submissions',           icon:'🔒' },
+  { val:'open-guard',   title:'Open Guard',         desc:'Hooks, distance, angles & off-balancing',         icon:'🛡️' },
+  { val:'half-guard',   title:'Half Guard',         desc:'Knee shield, underhooks, dogfight',               icon:'🟫' },
+  { val:'butterfly',    title:'Butterfly Guard',    desc:'Elevation, sweeps, upper-body ties',              icon:'🦋' },
+  { val:'rubber',       title:'Rubber Guard',       desc:'Mission control, high guard attacks',             icon:'🔄' },
+
+  // Passing / top control
+  { val:'passing',      title:'Guard Passing',      desc:'Knee slice, float passing, pressure or speed',    icon:'🗡️' },
+  { val:'pressure',     title:'Top Pressure',       desc:'Crossface, smash, slow cooking',                  icon:'⬇️' },
+  { val:'pins',         title:'Top Control',        desc:'Side control, mount, north-south',                icon:'📌' },
+  { val:'back-control', title:'Back Control',       desc:'Seatbelt, hooks, RNC system',                     icon:'🎒' },
+  { val:'sub-hunting',  title:'Submission Hunting', desc:'Chaining attacks and finishing sequences',         icon:'💀' },
+
+  // Leg attacks
+  { val:'leg-lock',     title:'Leg Locks',          desc:'Ashi, straight ankles, heel hook entries',        icon:'🦵' },
 ];
 const GOALS = ['💪 Build Strength','⚡ Get Faster','🧘 Improve Flexibility','⚖️ Gain Weight / Mass','🔥 Lose Weight','🫁 Cardio & Gas Tank','🛡️ Injury Prevention','🏅 Compete','😌 Stress Relief'];
 const FREQS = [
@@ -179,6 +193,7 @@ function OptCard({ icon, title, desc, selected, onClick, large }) {
 function CompBar({ label, skillKey, value, onChange }) {
   const trackRef = useRef(null);
   const mValue = useMotionValue(value);
+  const isScrubbingRef = useRef(false);
   
   // Spring physics for the knob - High-index optical feel
   const springX = useSpring(mValue, { stiffness: 400, damping: 38, mass: 1 });
@@ -192,9 +207,11 @@ function CompBar({ label, skillKey, value, onChange }) {
     mValue.set(value);
   }, [value, mValue]);
 
-  const handleDrag = (_, info) => {
-    const rect = trackRef.current.getBoundingClientRect();
-    const localX = info.point.x - rect.left;
+  const setFromClientX = (clientX) => {
+    const el = trackRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const localX = clientX - rect.left;
     const pct = Math.max(0, Math.min(1, localX / rect.width));
     const newVal = Math.round(pct * 10);
     if (newVal !== value) onChange(newVal);
@@ -222,10 +239,29 @@ function CompBar({ label, skillKey, value, onChange }) {
 
       {/* Skill description */}
       <div style={{
-        fontSize: 13, color: '#666', opacity: value === 0 ? 0.35 : 0.9,
-        marginBottom: 16, minHeight: 16, fontStyle: 'italic', lineHeight: 1.4,
-        transition: 'opacity 0.2s', letterSpacing: 0.3, userSelect: 'none'
-      }}>{SKILL_DESCS[skillKey]?.[value] || ''}</div>
+        marginBottom: 16,
+        minHeight: 34,
+        userSelect: 'none',
+      }}>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={`${skillKey}-${value}`}
+            initial={{ opacity: 0, y: 3 }}
+            animate={{ opacity: value === 0 ? 0.35 : 0.9, y: 0 }}
+            exit={{ opacity: 0, y: -3 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+            style={{
+              fontSize: 13,
+              color: '#666',
+              fontStyle: 'italic',
+              lineHeight: 1.4,
+              letterSpacing: 0.3,
+            }}
+          >
+            {SKILL_DESCS[skillKey]?.[value] || ''}
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
       {/* Frosted Glass Filament Rail - iOS 26 Light Style */}
       <div
@@ -242,16 +278,24 @@ function CompBar({ label, skillKey, value, onChange }) {
           userSelect: 'none'
         }}
       >
-        {/* Interaction Surface (Invisible hit area) */}
-        <div style={{ position: 'absolute', inset: -20, zIndex: 5, cursor: 'grab' }} />
+        {/* Interaction Surface (tap + scrub) */}
+        <div
+          onPointerDown={(e) => {
+            isScrubbingRef.current = true;
+            e.currentTarget.setPointerCapture?.(e.pointerId);
+            setFromClientX(e.clientX);
+          }}
+          onPointerMove={(e) => {
+            if (!isScrubbingRef.current) return;
+            setFromClientX(e.clientX);
+          }}
+          onPointerUp={() => { isScrubbingRef.current = false; }}
+          onPointerCancel={() => { isScrubbingRef.current = false; }}
+          style={{ position: 'absolute', inset: -20, zIndex: 20, cursor: 'pointer' }}
+        />
 
         {/* Light Frosted Glass Pill Handle */}
         <motion.div
-          drag="x"
-          dragConstraints={trackRef}
-          dragElastic={0.02}
-          dragMomentum={false}
-          onDrag={handleDrag}
           style={{
             position: 'absolute', top: '50%',
             left: `${value * 10}%`,
@@ -263,13 +307,12 @@ function CompBar({ label, skillKey, value, onChange }) {
             border: '1px solid rgba(255, 255, 255, 0.6)',
             boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
             zIndex: 10,
-            cursor: 'grab',
+            pointerEvents: 'none',
             WebkitTapHighlightColor: 'transparent',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             overflow: 'hidden',
             filter: 'url(#optical-magnification)'
           }}
-          whileDrag={{ cursor: 'grabbing', scale: 1.02 }}
         >
           {/* Subtle Glass Reflection Shine with Green Color Pass */}
           <div style={{
