@@ -28,27 +28,28 @@ function parseYouTubeId(url) {
 // ── Camera Picker ─────────────────────────────────────────────────────────────
 function CameraPickerSheet({ onPick, onDismiss }) {
   return (
-    <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.85)', zIndex:200, display:'flex', alignItems:'flex-end', maxWidth:430, margin:'0 auto' }}>
-      <div style={{ width:'100%', background:'#080808', borderRadius:'20px 20px 0 0', padding:'24px 20px 40px', border:'1px solid #1f1f1f', borderBottom:'none', animation:'fadeUp 0.25s ease both' }}>
+    <div style={{ position:'fixed', inset:0, background:'var(--overlay-bg)', zIndex:200, display:'flex', alignItems:'flex-end', maxWidth:430, margin:'0 auto' }}>
+      <div style={{ width:'100%', background:'var(--bg-card)', borderRadius:'20px 20px 0 0', padding:'24px 20px 40px', border:'1px solid var(--border)', borderBottom:'none', animation:'fadeUp 0.25s ease both' }}>
         <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:G, fontWeight:700, marginBottom:6 }}>Start Recording</div>
-        <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:26, color:'#fff', letterSpacing:1, marginBottom:20 }}>CHOOSE CAMERA</div>
+        <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:26, color:'var(--text-pri)', letterSpacing:1, marginBottom:20 }}>CHOOSE CAMERA</div>
+        {/* Option cards */}
         {[
           { label:'Rear Camera',  sub:'Best for filming your rolls',      icon:'📷', facing:'environment' },
           { label:'Front Camera', sub:'Selfie cam — good for solo drill', icon:'🤳', facing:'user' },
         ].map(opt => (
-          <div key={opt.facing} onClick={() => onPick(opt.facing)} style={{ background:'#111', border:'1px solid #1f1f1f', borderRadius:12, padding:'16px 18px', marginBottom:10, cursor:'pointer', display:'flex', alignItems:'center', gap:14, transition:'border-color 0.18s' }}
+          <div key={opt.facing} onClick={() => onPick(opt.facing)} style={{ background:'var(--bg-total)', border:'1px solid var(--border)', borderRadius:12, padding:'16px 18px', marginBottom:10, cursor:'pointer', display:'flex', alignItems:'center', gap:14, transition:'border-color 0.18s' }}
             onMouseEnter={e => e.currentTarget.style.borderColor = G}
-            onMouseLeave={e => e.currentTarget.style.borderColor = '#1f1f1f'}
+            onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
           >
             <span style={{ fontSize:28 }}>{opt.icon}</span>
             <div>
-              <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:18, color:'#fff', letterSpacing:0.5 }}>{opt.label}</div>
-              <div style={{ fontSize:12, color:'#444', marginTop:2 }}>{opt.sub}</div>
+              <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:18, color:'var(--text-pri)', letterSpacing:0.5 }}>{opt.label}</div>
+              <div style={{ fontSize:12, color:'var(--text-sec)', marginTop:2, opacity:0.6 }}>{opt.sub}</div>
             </div>
-            <span style={{ marginLeft:'auto', color:'#333', fontSize:18 }}>›</span>
+            <span style={{ marginLeft:'auto', color:'var(--border)', fontSize:18 }}>›</span>
           </div>
         ))}
-        <button onClick={onDismiss} style={{ width:'100%', background:'transparent', border:'1px solid #1f1f1f', color:'#444', padding:12, borderRadius:10, fontSize:13, fontWeight:700, cursor:'pointer', marginTop:4 }}>Cancel</button>
+        <button onClick={onDismiss} style={{ width:'100%', background:'transparent', border:'1px solid var(--border)', color:'var(--text-sec)', padding:12, borderRadius:10, fontSize:13, fontWeight:700, cursor:'pointer', marginTop:4 }}>Cancel</button>
       </div>
     </div>
   );
@@ -66,22 +67,22 @@ function YouTubeLinkSheet({ onConfirm, onDismiss }) {
   };
 
   return (
-    <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.85)', zIndex:200, display:'flex', alignItems:'flex-end', maxWidth:430, margin:'0 auto' }}>
-      <div style={{ width:'100%', background:'#080808', borderRadius:'20px 20px 0 0', padding:'24px 20px 40px', border:'1px solid #1f1f1f', borderBottom:'none', animation:'fadeUp 0.25s ease both' }}>
+    <div style={{ position:'fixed', inset:0, background:'var(--overlay-bg)', zIndex:200, display:'flex', alignItems:'flex-end', maxWidth:430, margin:'0 auto' }}>
+      <div style={{ width:'100%', background:'var(--bg-card)', borderRadius:'20px 20px 0 0', padding:'24px 20px 40px', border:'1px solid var(--border)', borderBottom:'none', animation:'fadeUp 0.25s ease both' }}>
         <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:BLUE, fontWeight:700, marginBottom:6 }}>YouTube</div>
-        <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:26, color:'#fff', letterSpacing:1, marginBottom:6 }}>PASTE VIDEO LINK</div>
-        <div style={{ fontSize:13, color:'#444', marginBottom:20, lineHeight:1.5 }}>Paste a link to your YouTube roll and we'll embed it in the session for review.</div>
+        <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:26, color:'var(--text-pri)', letterSpacing:1, marginBottom:6 }}>PASTE VIDEO LINK</div>
+        <div style={{ fontSize:13, color:'var(--text-sec)', marginBottom:20, lineHeight:1.5, opacity:0.7 }}>Paste a link to your YouTube roll and we'll embed it in the session for review.</div>
         <input
           autoFocus value={url}
           onChange={e => { setUrl(e.target.value); setErr(''); }}
           placeholder="https://youtube.com/watch?v=..."
-          style={{ width:'100%', background:'#111', border:`1px solid ${err ? RED : '#1f1f1f'}`, borderRadius:10, padding:'13px 14px', color:'#fff', fontFamily:"'Space Grotesk',sans-serif", fontSize:14, outline:'none', boxSizing:'border-box', transition:'border-color 0.18s', marginBottom: err ? 8 : 16 }}
+          style={{ width:'100%', background:'var(--bg-total)', border:`1px solid ${err ? RED : 'var(--border)'}`, borderRadius:10, padding:'13px 14px', color:'var(--text-pri)', fontFamily:"'Space Grotesk',sans-serif", fontSize:14, outline:'none', boxSizing:'border-box', transition:'border-color 0.18s', marginBottom: err ? 8 : 16 }}
           onFocus={e => e.target.style.borderColor = BLUE}
-          onBlur={e  => e.target.style.borderColor = err ? RED : '#1f1f1f'}
+          onBlur={e  => e.target.style.borderColor = err ? RED : 'var(--border)'}
         />
         {err && <div style={{ fontSize:12, color:RED, marginBottom:14 }}>{err}</div>}
         <button onClick={handleConfirm} style={{ width:'100%', background:BLUE, color:'#fff', border:'none', padding:14, borderRadius:10, fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:18, letterSpacing:2, cursor:'pointer', marginBottom:10 }}>USE THIS VIDEO →</button>
-        <button onClick={onDismiss} style={{ width:'100%', background:'transparent', border:'1px solid #1f1f1f', color:'#444', padding:12, borderRadius:10, fontSize:13, fontWeight:700, cursor:'pointer' }}>Cancel</button>
+        <button onClick={onDismiss} style={{ width:'100%', background:'transparent', border:'1px solid var(--border)', color:'var(--text-sec)', padding:12, borderRadius:10, fontSize:13, fontWeight:700, cursor:'pointer' }}>Cancel</button>
       </div>
     </div>
   );
@@ -142,7 +143,7 @@ Generate 3–5 missed moves and 7–10 timeline entries. Use real BJJ terminolog
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
+          model: 'claude-sonnet-3-5',
           max_tokens: 1200,
           messages: [{ role: 'user', content: prompt }],
         }),
@@ -179,12 +180,12 @@ Generate 3–5 missed moves and 7–10 timeline entries. Use real BJJ terminolog
     }
   };
 
-  const inp = { width:'100%', background:'#111', border:'1px solid #1f1f1f', borderRadius:10, padding:'12px 14px', color:'#fff', fontFamily:"'Space Grotesk',sans-serif", fontSize:14, fontWeight:500, outline:'none', transition:'border-color 0.18s', boxSizing:'border-box' };
-  const lbl = { fontSize:10, letterSpacing:2, textTransform:'uppercase', color:'#444', marginBottom:8, fontWeight:700 };
+  const inp = { width:'100%', background:'var(--bg-total)', border:'1px solid var(--border)', borderRadius:10, padding:'12px 14px', color:'var(--text-pri)', fontFamily:"'Space Grotesk',sans-serif", fontSize:14, fontWeight:500, outline:'none', transition:'border-color 0.18s', boxSizing:'border-box' };
+  const lbl = { fontSize:10, letterSpacing:2, textTransform:'uppercase', color:'var(--text-sec)', opacity:0.6, marginBottom:8, fontWeight:700 };
 
   return (
-    <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.92)', zIndex:100, display:'flex', alignItems:'flex-end', maxWidth:430, margin:'0 auto' }}>
-      <div style={{ width:'100%', background:'#080808', borderRadius:'20px 20px 0 0', padding:'24px 20px 40px', border:'1px solid #1f1f1f', borderBottom:'none', animation:'fadeUp 0.3s ease both', maxHeight:'92vh', overflowY:'auto' }}>
+    <div style={{ position:'fixed', inset:0, background:'var(--overlay-bg)', zIndex:100, display:'flex', alignItems:'flex-end', maxWidth:430, margin:'0 auto' }}>
+      <div style={{ width:'100%', background:'var(--bg-card)', borderRadius:'20px 20px 0 0', padding:'24px 20px 40px', border:'1px solid var(--border)', borderBottom:'none', animation:'fadeUp 0.3s ease both', maxHeight:'92vh', overflowY:'auto' }}>
 
         {/* Header */}
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:20 }}>
@@ -192,19 +193,19 @@ Generate 3–5 missed moves and 7–10 timeline entries. Use real BJJ terminolog
             <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:G, fontWeight:700, marginBottom:4 }}>
               {mediaSource?.type === 'youtube' ? 'YouTube Linked' : mediaSource?.type === 'blob' && duration === 0 ? 'Video Imported' : 'Session Complete'}
             </div>
-            <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:28, color:'#fff', letterSpacing:1 }}>AI ROLL ANALYSIS</div>
+            <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:28, color:'var(--text-pri)', letterSpacing:1 }}>AI ROLL ANALYSIS</div>
           </div>
-          <div style={{ background:'#111', border:`1px solid ${G}`, borderRadius:8, padding:'8px 12px', textAlign:'center' }}>
+          <div style={{ background:'var(--bg-total)', border:`1px solid ${G}`, borderRadius:8, padding:'8px 12px', textAlign:'center' }}>
             <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:20, color:G }}>{durationLabel}</div>
-            <div style={{ fontSize:9, letterSpacing:2, textTransform:'uppercase', color:'#444', fontWeight:700 }}>{rounds} round{rounds !== 1 ? 's' : ''}</div>
+            <div style={{ fontSize:9, letterSpacing:2, textTransform:'uppercase', color:'var(--text-sec)', opacity:0.6, fontWeight:700 }}>{rounds} round{rounds !== 1 ? 's' : ''}</div>
           </div>
         </div>
 
         {/* Profile pill — shows what AI is using */}
-        <div style={{ background:'rgba(74,222,128,0.04)', border:'1px solid rgba(74,222,128,0.12)', borderRadius:10, padding:'12px 14px', marginBottom:18 }}>
+        <div style={{ background:'var(--accent)11', border:`1px solid ${G}33`, borderRadius:10, padding:'12px 14px', marginBottom:18 }}>
           <div style={{ fontSize:10, letterSpacing:2, textTransform:'uppercase', color:G, fontWeight:700, marginBottom:6 }}>Analyzing as</div>
-          <div style={{ fontSize:13, color:'#aaa', lineHeight:1.6 }}>
-            <span style={{ color:'#fff', fontWeight:600 }}>{belt ? belt.charAt(0).toUpperCase()+belt.slice(1) : 'White'} belt</span>
+          <div style={{ fontSize:13, color:'var(--text-sec)', lineHeight:1.6 }}>
+            <span style={{ color:'var(--text-pri)', fontWeight:600 }}>{belt ? belt.charAt(0).toUpperCase()+belt.slice(1) : 'White'} belt</span>
             {' · '}Weakest: <span style={{ color:AMBER, fontWeight:600 }}>{weakest}</span>
             {' · '}Style: {styleStr}
           </div>
@@ -240,11 +241,11 @@ Generate 3–5 missed moves and 7–10 timeline entries. Use real BJJ terminolog
         </div>
 
         <div style={{ marginBottom:20 }}>
-          <p style={lbl}>Partner Belt <span style={{ color:'#333' }}>(optional)</span></p>
+          <p style={lbl}>Partner Belt <span style={{ color:'var(--text-sec)', opacity:0.4 }}>(optional)</span></p>
           <input style={inp} placeholder="e.g. Blue belt, 2 stripe" value={partner}
             onChange={e => setPartner(e.target.value)}
             onFocus={e => e.target.style.borderColor = G}
-            onBlur={e  => e.target.style.borderColor = '#1f1f1f'} />
+            onBlur={e  => e.target.style.borderColor = 'var(--border)'} />
         </div>
 
         {error && (
@@ -257,7 +258,7 @@ Generate 3–5 missed moves and 7–10 timeline entries. Use real BJJ terminolog
           ) : '⚡ ANALYZE SESSION'}
         </button>
 
-        <button onClick={onDismiss} style={{ width:'100%', background:'transparent', border:'1px solid #1f1f1f', color:'#444', padding:12, borderRadius:10, fontSize:13, fontWeight:700, cursor:'pointer' }}>Discard</button>
+        <button onClick={onDismiss} style={{ width:'100%', background:'transparent', border:'1px solid var(--border)', color:'var(--text-sec)', padding:12, borderRadius:10, fontSize:13, fontWeight:700, cursor:'pointer' }}>Discard</button>
       </div>
     </div>
   );
@@ -361,36 +362,36 @@ export default function Rolls() {
       <input ref={fileInputRef} type="file" accept="video/mp4,video/quicktime,video/webm,.mp4,.mov,.webm" onChange={handleFileImport} style={{ display:'none' }} />
 
       <div style={{ padding:'20px 20px 20px' }}>
-        <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:'#444', marginBottom:6, fontWeight:700 }}>Session History</div>
-        <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:30, color:'#fff', marginBottom:20, letterSpacing:1 }}>ROLL ANALYSIS</div>
+        <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:'var(--text-sec)', opacity:0.6, marginBottom:6, fontWeight:700 }}>Session History</div>
+        <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:30, color:'var(--text-pri)', marginBottom:20, letterSpacing:1 }}>ROLL ANALYSIS</div>
 
         {sessions.map(session => (
           <div key={session.id} onClick={() => setSelected(session)} className="liquid-glass" style={{
             borderRadius:20, padding:'20px', marginBottom:12,
             cursor:'pointer', display:'flex', gap:14, alignItems:'flex-start',
             transition:'all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28)',
-            border:'1px solid rgba(255,255,255,0.14)'
+            border:'1px solid var(--border)'
           }}
             onMouseEnter={e => e.currentTarget.style.borderColor = G}
-            onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.14)'}
+            onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
           >
             <div style={{ textAlign:'center', minWidth:42 }}>
               <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:32, lineHeight:1, color:G }}>{session.day}</div>
-              <div style={{ fontSize:10, letterSpacing:2, textTransform:'uppercase', color:'#555', fontWeight:800 }}>{session.month}</div>
+              <div style={{ fontSize:10, letterSpacing:2, textTransform:'uppercase', color:'var(--text-sec)', opacity:0.6, fontWeight:800 }}>{session.month}</div>
             </div>
             <div style={{ flex:1 }}>
               <div style={{ display:'flex', alignItems:'center', gap:8, flexWrap:'wrap', marginBottom:8 }}>
-                <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:20, color:'#fff', letterSpacing:0.5 }}>{session.title.toUpperCase()}</div>
-                {session.aiGenerated && <span style={{ fontSize:9, letterSpacing:1.5, textTransform:'uppercase', padding:'3px 8px', background:'rgba(11,245,113,0.1)', border:'1px solid rgba(11,245,113,0.3)', borderRadius:20, color:G, fontWeight:800 }}>AI ANALYZED</span>}
+                <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:20, color:'var(--text-pri)', letterSpacing:0.5 }}>{session.title.toUpperCase()}</div>
+                {session.aiGenerated && <span style={{ fontSize:9, letterSpacing:1.5, textTransform:'uppercase', padding:'3px 8px', background:G+'11', border:`1px solid ${G}33`, borderRadius:20, color:G, fontWeight:800 }}>AI ANALYZED</span>}
               </div>
               <div style={{ display:'flex', gap:6, flexWrap:'wrap', marginBottom:8 }}>
-                {session.tags.map(t => <span key={t} style={{ fontSize:10, letterSpacing:1, textTransform:'uppercase', padding:'3px 10px', background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:20, color:'#888', fontWeight:700 }}>{t}</span>)}
+                {session.tags.map(t => <span key={t} style={{ fontSize:10, letterSpacing:1, textTransform:'uppercase', padding:'3px 10px', background:'var(--glass-bg)', border:'1px solid var(--glass-border)', borderRadius:20, color:'var(--text-sec)', opacity:0.8, fontWeight:700 }}>{t}</span>)}
               </div>
               <div style={{ fontSize:13, color:AMBER, display:'flex', alignItems:'center', gap:6, fontWeight:700, letterSpacing:0.3 }}>
                 <span style={{fontSize:16}}>⚡</span> {session.missed} MISSED OPPORTUNITIES
               </div>
             </div>
-            <span style={{ color:'#444', fontSize:22, alignSelf:'center' }}>›</span>
+            <span style={{ color:'var(--border)', fontSize:22, alignSelf:'center' }}>›</span>
           </div>
         ))}
 
@@ -403,37 +404,37 @@ export default function Rolls() {
               width:'100%', borderRadius:24, padding:'20px', cursor:'pointer', 
               display:'flex', alignItems:'center', gap:16, 
               transition:'all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28)', marginBottom:12,
-              border:'1px solid rgba(11,245,113,0.4)',
-              background: 'rgba(11,245,113,0.05)'
+              border:`1px solid ${G}66`,
+              background: G+'11'
             }}
-              onMouseEnter={e => e.currentTarget.style.background = 'rgba(11,245,113,0.1)'}
-              onMouseLeave={e => e.currentTarget.style.background = 'rgba(11,245,113,0.05)'}
+              onMouseEnter={e => e.currentTarget.style.background = G+'22'}
+              onMouseLeave={e => e.currentTarget.style.background = G+'11'}
             >
-              <div style={{ width:48, height:48, borderRadius:'50%', background:'rgba(11,245,113,0.2)', border:'1px solid rgba(11,245,113,0.4)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:20, flexShrink:0 }}>⏺</div>
+              <div style={{ width:48, height:48, borderRadius:'50%', background:G+'33', border:`1px solid ${G}66`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:20, flexShrink:0 }}>⏺</div>
               <div>
                 <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:19, color:G, letterSpacing:1 }}>RECORD SESSION</div>
-                <div style={{ fontSize:12, color:'#888', marginTop:2, fontWeight:500 }}>High-fidelity video analysis enabled.</div>
+                <div style={{ fontSize:12, color:'var(--text-sec)', opacity:0.6, marginTop:2, fontWeight:500 }}>High-fidelity video analysis enabled.</div>
               </div>
               <span style={{ marginLeft:'auto', color:G, fontSize:22 }}>›</span>
             </div>
 
             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
-              <div onClick={() => fileInputRef.current.click()} style={{ background:'#111', border:'1px solid #1f1f1f', borderRadius:12, padding:'14px 16px', cursor:'pointer', transition:'border-color 0.18s' }}
+              <div onClick={() => fileInputRef.current.click()} style={{ background:'var(--bg-total)', border:'1px solid var(--border)', borderRadius:12, padding:'14px 16px', cursor:'pointer', transition:'border-color 0.18s' }}
                 onMouseEnter={e => e.currentTarget.style.borderColor = AMBER}
-                onMouseLeave={e => e.currentTarget.style.borderColor = '#1f1f1f'}
+                onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
               >
                 <div style={{ fontSize:22, marginBottom:8 }}>📂</div>
-                <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:15, color:'#fff', letterSpacing:0.5, marginBottom:3 }}>IMPORT VIDEO</div>
-                <div style={{ fontSize:11, color:'#444' }}>mp4 · mov · webm</div>
+                <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:15, color:'var(--text-pri)', letterSpacing:0.5, marginBottom:3 }}>IMPORT VIDEO</div>
+                <div style={{ fontSize:11, color:'var(--text-sec)', opacity:0.6 }}>mp4 · mov · webm</div>
               </div>
 
-              <div onClick={() => setPhase('youtube')} style={{ background:'#111', border:'1px solid #1f1f1f', borderRadius:12, padding:'14px 16px', cursor:'pointer', transition:'border-color 0.18s' }}
+              <div onClick={() => setPhase('youtube')} style={{ background:'var(--bg-total)', border:'1px solid var(--border)', borderRadius:12, padding:'14px 16px', cursor:'pointer', transition:'border-color 0.18s' }}
                 onMouseEnter={e => e.currentTarget.style.borderColor = BLUE}
-                onMouseLeave={e => e.currentTarget.style.borderColor = '#1f1f1f'}
+                onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
               >
                 <div style={{ fontSize:22, marginBottom:8 }}>▶</div>
-                <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:15, color:'#fff', letterSpacing:0.5, marginBottom:3 }}>YOUTUBE LINK</div>
-                <div style={{ fontSize:11, color:'#444' }}>Paste any YT URL</div>
+                <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:15, color:'var(--text-pri)', letterSpacing:0.5, marginBottom:3 }}>YOUTUBE LINK</div>
+                <div style={{ fontSize:11, color:'var(--text-sec)', opacity:0.6 }}>Paste any YT URL</div>
               </div>
             </div>
           </div>

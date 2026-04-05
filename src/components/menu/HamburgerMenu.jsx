@@ -2,8 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { useApp } from '../../context/AppContext';
 
-const G = '#0BF571';
-const DARK = '#0a0a0a';
+const G = 'var(--accent)';
+const DARK = 'var(--bg-total)';
 
 // ─── BJJ Terminology data ──────────────────────────────────────────────────────
 const TERMS = [
@@ -168,7 +168,7 @@ function TerminologyScreen({ onBack }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       {/* Search bar */}
-      <div style={{ padding: '16px 20px 12px', background: '#0d0d0d', borderBottom: '1px solid #1a1a1a', flexShrink: 0 }}>
+      <div style={{ padding: '16px 20px 12px', background: 'var(--bg-total)', borderBottom: '1px solid var(--border)', flexShrink: 0 }}>
         <div style={{ position: 'relative' }}>
           <span style={{
             position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)',
@@ -181,8 +181,8 @@ function TerminologyScreen({ onBack }) {
             autoFocus
             style={{
               width: '100%', boxSizing: 'border-box',
-              background: '#111', border: '1px solid #222', borderRadius: 12,
-              padding: '11px 14px 11px 36px', color: '#f0f0f0',
+              background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 12,
+              padding: '11px 14px 11px 36px', color: 'var(--text-pri)',
               fontFamily: "'DM Sans', sans-serif", fontSize: 14, outline: 'none',
             }}
           />
@@ -206,7 +206,7 @@ function TerminologyScreen({ onBack }) {
           </div>
         ) : filtered.map((item, i) => (
           <div key={i} style={{
-            padding: '13px 0', borderBottom: '1px solid #181818',
+            padding: '13px 0', borderBottom: '1px solid var(--border)',
             borderTop: i === 0 ? 'none' : undefined,
           }}>
             <div style={{
@@ -217,7 +217,7 @@ function TerminologyScreen({ onBack }) {
               {q ? highlightMatch(item.term, q) : item.term}
             </div>
             <div style={{
-              fontSize: 13, color: '#777', fontFamily: "'DM Sans', sans-serif",
+              fontSize: 13, color: 'var(--text-sec)', fontFamily: "'DM Sans', sans-serif",
               lineHeight: 1.55,
             }}>
               {item.def}
@@ -291,9 +291,9 @@ function SettingsScreen() {
         <div style={{ display: 'flex', gap: 8 }}>
           {BELTS.map(b => (
             <button key={b} onClick={() => setBelt(b)} style={{
-              flex: 1, minHeight: 38, borderRadius: 10, border: `1.5px solid ${belt === b ? BELT_COLORS[b] : '#222'}`,
+              flex: 1, minHeight: 38, borderRadius: 10, border: `1.5px solid ${belt === b ? BELT_COLORS[b] : 'var(--border)'}`,
               background: belt === b ? BELT_COLORS[b] + '22' : 'transparent',
-              color: belt === b ? BELT_COLORS[b] : '#444',
+              color: belt === b ? BELT_COLORS[b] : 'var(--text-sec)',
               fontSize: 9, fontWeight: 700, cursor: 'pointer', textTransform: 'uppercase',
               letterSpacing: '0.03em', fontFamily: "'DM Sans', sans-serif",
               transition: 'all 0.15s',
@@ -310,9 +310,9 @@ function SettingsScreen() {
         <div style={{ display: 'flex', gap: 8 }}>
           {GI_PREFS.map(g => (
             <button key={g.val} onClick={() => setGiPref(g.val)} style={{
-              flex: 1, minHeight: 38, borderRadius: 10, border: `1.5px solid ${giPref === g.val ? G : '#222'}`,
+              flex: 1, minHeight: 38, borderRadius: 10, border: `1.5px solid ${giPref === g.val ? G : 'var(--border)'}`,
               background: giPref === g.val ? G + '18' : 'transparent',
-              color: giPref === g.val ? G : '#444',
+              color: giPref === g.val ? G : 'var(--text-sec)',
               fontSize: 12, fontWeight: 600, cursor: 'pointer',
               fontFamily: "'DM Sans', sans-serif", transition: 'all 0.15s',
             }}>{g.label}</button>
@@ -377,24 +377,45 @@ function SettingsScreen() {
       <Section label="App Preferences">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ fontSize: 13, color: '#f0f0f0', fontFamily: "'DM Sans', sans-serif" }}>Units</div>
-            <div style={{ display: 'flex', background: '#111', borderRadius: 8, padding: 3, border: '1px solid #222' }}>
+            <div style={{ fontSize: 13, color: 'var(--text-pri)', fontFamily: "'DM Sans', sans-serif" }}>Units</div>
+            <div style={{ display: 'flex', background: 'var(--bg-card)', borderRadius: 8, padding: 3, border: '1px solid var(--border)' }}>
               {['Metric', 'Imperial'].map(u => (
                 <div key={u} style={{
                   padding: '4px 12px', fontSize: 11, borderRadius: 6, fontWeight: 700,
-                  background: u === 'Metric' ? '#222' : 'transparent',
-                  color: u === 'Metric' ? '#f0f0f0' : '#444',
-                  fontFamily: "'DM Sans', sans-serif", cursor: 'pointer',
+                  background: u === 'Metric' ? 'var(--border)' : 'transparent',
+                  color: u === 'Metric' ? 'var(--text-pri)' : 'var(--text-sec)',
+                  fontFamily: "'DM Sans', sans-serif", cursor: 'not-allowed',
                 }}>{u}</div>
               ))}
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ fontSize: 13, color: '#f0f0f0', fontFamily: "'DM Sans', sans-serif" }}>Appearance</div>
-            <div style={{ fontSize: 11, color: '#444', fontFamily: "'DM Sans', sans-serif", fontWeight: 700 }}>DARK MODE (Active)</div>
+            <div style={{ fontSize: 13, color: 'var(--text-pri)', fontFamily: "'DM Sans', sans-serif" }}>Appearance</div>
+            <div style={{ display: 'flex', background: 'var(--bg-card)', borderRadius: 8, padding: 3, border: '1px solid var(--border)' }}>
+              {[
+                { val: 'dark', label: 'DARK' },
+                { val: 'light', label: 'LIGHT' }
+              ].map(t => (
+                <button
+                  key={t.val}
+                  onClick={() => setTheme(t.val)}
+                  style={{
+                    padding: '4px 12px', fontSize: 10, borderRadius: 6, fontWeight: 800,
+                    border: 'none', cursor: 'pointer',
+                    background: theme === t.val ? 'var(--accent)' : 'transparent',
+                    color: theme === t.val ? '#000' : 'var(--text-sec)',
+                    fontFamily: "'DM Sans', sans-serif",
+                    transition: 'all 0.2s',
+                  }}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </Section>
+
 
     </div>
   );
@@ -414,10 +435,10 @@ function Section({ label, children }) {
 
 const fieldStyle = {
   width: '100%', boxSizing: 'border-box', padding: '12px 14px',
-  background: '#111', border: '1px solid #222', borderRadius: 12,
-  color: '#f0f0f0', fontFamily: "'DM Sans', sans-serif", fontSize: 14, outline: 'none',
+  background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 12,
+  color: 'var(--text-pri)', fontFamily: "'DM Sans', sans-serif", fontSize: 14, outline: 'none',
 };
-const sublabel = { fontSize: 11, color: '#444', marginBottom: 6, fontFamily: "'DM Sans', sans-serif" };
+const sublabel = { fontSize: 11, color: 'var(--text-sec)', marginBottom: 6, fontFamily: "'DM Sans', sans-serif" };
 
 // ─── Main Hamburger Menu ───────────────────────────────────────────────────────
 export default function HamburgerMenu() {
@@ -484,37 +505,37 @@ export default function HamburgerMenu() {
       <div style={{
         position: 'fixed', top: 0, right: 0, bottom: 0,
         width: 'min(88vw, 380px)',
-        background: '#0d0d0d',
-        borderLeft: '1px solid #1a1a1a',
+        background: 'var(--bg-total)',
+        borderLeft: '1px solid var(--border)',
         zIndex: 9001,
         display: 'flex', flexDirection: 'column',
         transform: open ? 'translateX(0)' : 'translateX(100%)',
         transition: 'transform 0.3s cubic-bezier(0.32, 0.72, 0, 1)',
-        boxShadow: open ? '-20px 0 60px rgba(0,0,0,0.8)' : 'none',
+        boxShadow: open ? '-20px 0 60px rgba(0,0,0,0.4)' : 'none',
       }}>
         {/* Drawer header */}
         <div style={{
           display: 'flex', alignItems: 'center', gap: 10,
           padding: '52px 20px 16px',
-          borderBottom: '1px solid #161616', flexShrink: 0,
-          background: '#0a0a0a',
+          borderBottom: '1px solid var(--border)', flexShrink: 0,
+          background: 'var(--bg-total)',
         }}>
           {screen ? (
             <button onClick={() => setScreen(null)} style={{
-              background: '#181818', border: 'none', borderRadius: '50%',
+              background: 'var(--bg-card)', border: 'none', borderRadius: '50%',
               width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: '#888', cursor: 'pointer', fontSize: 16, flexShrink: 0,
+              color: 'var(--text-sec)', cursor: 'pointer', fontSize: 16, flexShrink: 0,
             }}>←</button>
           ) : (
             <button onClick={close} style={{
-              background: '#181818', border: 'none', borderRadius: '50%',
+              background: 'var(--bg-card)', border: 'none', borderRadius: '50%',
               width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: '#888', cursor: 'pointer', fontSize: 18, flexShrink: 0,
+              color: 'var(--text-sec)', cursor: 'pointer', fontSize: 18, flexShrink: 0,
             }}>✕</button>
           )}
           <div style={{
             fontFamily: "'Barlow Condensed', sans-serif",
-            fontSize: 20, fontWeight: 700, color: '#f0f0f0',
+            fontSize: 20, fontWeight: 700, color: 'var(--text-pri)',
           }}>
             {screen ? screenTitle : 'Menu'}
           </div>
@@ -529,26 +550,26 @@ export default function HamburgerMenu() {
                   width: '100%', display: 'flex', alignItems: 'center', gap: 14,
                   padding: '16px 20px', border: 'none', background: 'transparent',
                   cursor: 'pointer', textAlign: 'left',
-                  borderBottom: '1px solid #141414', transition: 'background 0.12s',
+                  borderBottom: '1px solid var(--border)', transition: 'background 0.12s',
                 }}
-                  onMouseEnter={e => e.currentTarget.style.background = '#141414'}
+                  onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-card)'}
                   onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                 >
                   <div style={{
-                    width: 44, height: 44, borderRadius: 12, background: '#161616',
-                    border: '1px solid #222', display: 'flex', alignItems: 'center',
+                    width: 44, height: 44, borderRadius: 12, background: 'var(--bg-card)',
+                    border: '1px solid var(--border)', display: 'flex', alignItems: 'center',
                     justifyContent: 'center', fontSize: 20, flexShrink: 0,
                   }}>{item.icon}</div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{
-                      fontSize: 15, fontWeight: 600, color: '#e0e0e0',
+                      fontSize: 15, fontWeight: 600, color: 'var(--text-pri)',
                       fontFamily: "'Barlow Condensed', sans-serif",
                     }}>{item.label}</div>
-                    <div style={{ fontSize: 11, color: '#444', marginTop: 2, fontFamily: "'DM Sans', sans-serif" }}>
+                    <div style={{ fontSize: 11, color: 'var(--text-sec)', marginTop: 2, fontFamily: "'DM Sans', sans-serif" }}>
                       {item.sub}
                     </div>
                   </div>
-                  <span style={{ color: '#2a2a2a', fontSize: 16 }}>›</span>
+                  <span style={{ color: 'var(--border)', fontSize: 16 }}>›</span>
                 </button>
               ))}
 

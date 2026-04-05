@@ -122,6 +122,16 @@ export function AppProvider({ children }) {
   const [height,   setHeight]   = useState(saved?.height   ?? '');
   const [bodyType, setBodyType] = useState(saved?.bodyType ?? '');
 
+  const [theme, setInternalTheme] = useState(saved?.theme ?? 'dark');
+  const setTheme = (t) => {
+    setInternalTheme(t);
+    document.documentElement.setAttribute('data-theme', t);
+  };
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, []);
+
   const [notes, setNotes] = useState(() => loadNotesForSession(saved?.notes ?? notesSample));
 
   // Sessions — seeded from weekPlan, persisted after that
@@ -158,14 +168,14 @@ export function AppProvider({ children }) {
       onboardingDone,
       nickname, belt, giPref, styles, goals,
       freq, scFreq, bjjDays, workoutDays, comp,
-      sex, weight, height, bodyType,
+      sex, weight, height, bodyType, theme,
       sessions, exerciseDone, setLogs,
     });
   }, [
     onboardingDone,
     nickname, belt, giPref, styles, goals,
     freq, scFreq, bjjDays, workoutDays, comp,
-    sex, weight, height, bodyType,
+    sex, weight, height, bodyType, theme,
     sessions, exerciseDone, setLogs,
   ]);
 
@@ -191,6 +201,7 @@ export function AppProvider({ children }) {
       weight, setWeight,
       height, setHeight,
       bodyType, setBodyType,
+      theme, setTheme,
       notes, addNote, updateNote,
       sessions, addSession,
       exerciseDone, toggleExercise,

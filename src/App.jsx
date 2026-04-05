@@ -24,12 +24,12 @@ export const t = {
   red:    '#FF3B5C', // Submit Red
 };
 
-// ── Nav with SVG icons (from AppMockup.tsx) ───────────────────────────────────
+// ── Nav with SVG icons (Reactive) ─────────────────────────────────────────────
 const NAV = [
   {
     id: 'dash', label: 'HOME',
     icon: (active) => (
-      <svg width="18" height="18" viewBox="0 0 20 20" fill={active ? '#0BF571' : '#5A5D65'}>
+      <svg width="18" height="18" viewBox="0 0 20 20" fill={active ? 'var(--accent)' : 'var(--text-sec)'}>
         <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
       </svg>
     ),
@@ -37,7 +37,7 @@ const NAV = [
   {
     id: 'matrix', label: 'MATRIX',
     icon: (active) => (
-      <svg width="18" height="18" viewBox="0 0 20 20" fill={active ? '#0BF571' : '#5A5D65'}>
+      <svg width="18" height="18" viewBox="0 0 20 20" fill={active ? 'var(--accent)' : 'var(--text-sec)'}>
         <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
       </svg>
     ),
@@ -45,7 +45,7 @@ const NAV = [
   {
     id: 'roll', label: 'ROLLS',
     icon: (active) => (
-      <svg width="18" height="18" viewBox="0 0 20 20" fill={active ? '#0BF571' : '#5A5D65'}>
+      <svg width="18" height="18" viewBox="0 0 20 20" fill={active ? 'var(--accent)' : 'var(--text-sec)'}>
         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
       </svg>
     ),
@@ -53,7 +53,7 @@ const NAV = [
   {
     id: 'notes', label: 'NOTES',
     icon: (active) => (
-      <svg width="18" height="18" viewBox="0 0 20 20" fill={active ? '#0BF571' : '#5A5D65'}>
+      <svg width="18" height="18" viewBox="0 0 20 20" fill={active ? 'var(--accent)' : 'var(--text-sec)'}>
         <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
         <path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" />
       </svg>
@@ -62,7 +62,7 @@ const NAV = [
   {
     id: 'training', label: 'WORKOUT',
     icon: (active) => (
-      <svg width="18" height="18" viewBox="0 0 20 20" fill={active ? '#0BF571' : '#5A5D65'}>
+      <svg width="18" height="18" viewBox="0 0 20 20" fill={active ? 'var(--accent)' : 'var(--text-sec)'}>
         <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.298.057-.594.125-.882a.75.75 0 01.065-.139 6 6 0 10-4.38 0 .75.75 0 01.065.139c.068.288.11.584.125.882h4z" />
       </svg>
     ),
@@ -94,15 +94,15 @@ function HexMark({ size = 32, glow = false }) {
   );
 }
 
-// ── Wordmark (from TapGuardLogo.tsx) ──────────────────────────────────────────
+// ── Wordmark (Reactive) ──────────────────────────────────────────────────────
 function Wordmark({ size = 20 }) {
   return (
     <div style={{ fontFamily: "'Space Grotesk', sans-serif", lineHeight: 1 }}>
       <div style={{ display: 'flex', alignItems: 'baseline' }}>
-        <span style={{ color: '#0BF571', fontWeight: 700, fontSize: size, letterSpacing: '0.04em' }}>TAP</span>
-        <span style={{ color: '#FFFFFF', fontWeight: 700, fontSize: size, letterSpacing: '0.04em' }}>GUARD</span>
+        <span style={{ color: 'var(--accent)', fontWeight: 700, fontSize: size, letterSpacing: '0.04em' }}>TAP</span>
+        <span style={{ color: 'var(--text-pri)', fontWeight: 700, fontSize: size, letterSpacing: '0.04em' }}>GUARD</span>
       </div>
-      <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: size * 0.28, letterSpacing: '0.22em', fontWeight: 500, marginTop: 1 }}>
+      <div style={{ color: 'var(--text-sec)', opacity: 0.3, fontSize: size * 0.28, letterSpacing: '0.22em', fontWeight: 500, marginTop: 1 }}>
         FROM THE GROUND UP
       </div>
     </div>
@@ -131,7 +131,7 @@ function Splash({ onDone }) {
         <HexMark size={72} glow />
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
           <div style={{ fontFamily: "'Space Grotesk', sans-serif", display: 'flex', alignItems: 'baseline' }}>
-            <span style={{ color: '#0BF571', fontWeight: 700, fontSize: 38, letterSpacing: '0.04em' }}>TAP</span>
+            <span style={{ color: 'var(--accent)', fontWeight: 700, fontSize: 38, letterSpacing: '0.04em' }}>TAP</span>
             <span style={{ color: '#FFFFFF', fontWeight: 700, fontSize: 38, letterSpacing: '0.04em' }}>GUARD</span>
           </div>
           <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10, letterSpacing: '0.22em', fontWeight: 500, fontFamily: "'Space Grotesk', sans-serif" }}>
@@ -143,10 +143,10 @@ function Splash({ onDone }) {
       {/* Loading bar */}
       <div style={{
         position: 'absolute', bottom: 56,
-        width: 100, height: 2, background: '#1A1C20', borderRadius: 2, overflow: 'hidden',
+        width: 100, height: 2, background: 'var(--bg-card)', borderRadius: 2, overflow: 'hidden',
       }}>
         <div style={{
-          height: '100%', background: '#0BF571', borderRadius: 2,
+          height: '100%', background: 'var(--accent)', borderRadius: 2,
           animation: 'splashBar 2.4s ease forwards',
         }} />
       </div>
@@ -174,13 +174,13 @@ function MainApp() {
   return (
     <div style={{
       height: '100dvh', display: 'flex', flexDirection: 'column',
-      background: '#080808', maxWidth: 430, margin: '0 auto', overflow: 'hidden',
+      background: 'var(--bg-page)', maxWidth: 430, margin: '0 auto', overflow: 'hidden',
       position: 'relative'
     }}>
       <div style={{ 
         position: 'absolute', top: 0, left: 0, right: 0, 
         height: 110, zIndex: 110, padding: '48px 20px 0',
-        background: 'linear-gradient(to bottom, rgba(8,8,8,1) 0%, rgba(8,8,8,0.8) 50%, transparent 100%)',
+        background: 'var(--header-bg)',
         backdropFilter: 'blur(20px) saturate(160%)',
         WebkitBackdropFilter: 'blur(20px) saturate(160%)',
         pointerEvents: 'none', // Allow scrolling through empty header space
@@ -273,7 +273,7 @@ function MainApp() {
                     fontFamily: "'Space Grotesk', sans-serif",
                     fontSize: 9, letterSpacing: '0.04em', textTransform: 'uppercase',
                     fontWeight: 800,
-                    color: isActive ? '#fff' : 'rgba(255,255,255,0.3)',
+                    color: isActive ? 'var(--text-pri)' : 'var(--text-sec)',
                     transition: 'color 0.2s',
                     marginTop: 2
                   }}>{tab.label}</span>

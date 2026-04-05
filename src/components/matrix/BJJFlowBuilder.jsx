@@ -1,7 +1,7 @@
 import { useState, useMemo, useRef, useEffect, createContext, useContext } from "react";
 import { createPortal } from "react-dom";
 
-// ─── Color system ─────────────────────────────────────────────────────────────
+// ─── Color system (Reactive) ──────────────────────────────────────────────────
 const CAT = {
   "Submission": "#e53e3e",
   "Guard System": "#7c3aed",
@@ -14,7 +14,7 @@ const CAT = {
   "Style & Meta-system": "#64748b",
 };
 const SKILL_COL = { Beginner: "#22c55e", Intermediate: "#f59e0b", Advanced: "#ef4444", Elite: "#a855f7" };
-const profColor = p => p >= 8 ? "#fbbf24" : p >= 5 ? "#22c55e" : p >= 3 ? "#f59e0b" : "#555";
+const profColor = p => p >= 8 ? "#fbbf24" : p >= 5 ? "#22c55e" : p >= 3 ? "#f59e0b" : "var(--text-sec)";
 const catColor = t => CAT[t?.category] || "#64748b";
 const haptic = (ms = 8) => { try { navigator.vibrate?.(ms); } catch { } };
 
@@ -1350,7 +1350,7 @@ function PathBuilder({ path, byId, focusId, onTap, onRemove, onAddFocus, focusIn
                     }}>{i + 1}</div>
                     <span style={{
                       fontSize: 12, fontWeight: isFocus ? 700 : 500,
-                      color: isFocus ? col : "#999",
+                      color: isFocus ? col : "var(--text-sec)",
                       fontFamily: "'DM Sans',sans-serif",
                     }}>{t.name}</span>
                     {/* Remove button */}
@@ -1358,9 +1358,9 @@ function PathBuilder({ path, byId, focusId, onTap, onRemove, onAddFocus, focusIn
                       onClick={e => { e.stopPropagation(); onRemove(id); }}
                       style={{
                         width: 16, height: 16, borderRadius: "50%", flexShrink: 0,
-                        background: "#1e1e1e",
+                        background: "var(--bg-card)",
                         display: "flex", alignItems: "center", justifyContent: "center",
-                        fontSize: 9, color: "#444", cursor: "pointer", marginLeft: 2,
+                        fontSize: 9, color: "var(--text-sec)", cursor: "pointer", marginLeft: 2,
                       }}
                     >✕</div>
                   </div>
@@ -1436,17 +1436,17 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
     <div style={{
       position: "absolute", bottom: 0, left: 0, right: 0,
       borderRadius: "32px 32px 0 0",
-      background: "#111",
-      border: "1px solid rgba(255,255,255,0.12)",
+      background: "var(--bg-card)",
+      border: "1px solid var(--border)",
       maxHeight: "calc(100% - 24px)",
       display: "flex", flexDirection: "column",
-      boxShadow: "0 -16px 64px rgba(0,0,0,0.9)",
+      boxShadow: "0 -16px 64px rgba(0,0,0,0.4)",
       zIndex: 200,
       animation: "sheetUp 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28) both",
     }}>
       {/* Handle — tap to close */}
       <div onClick={onClose} style={{ padding: "12px 0 0", display: "flex", justifyContent: "center", cursor: "pointer" }}>
-        <div style={{ width: 40, height: 4, borderRadius: 2, background: "#262626" }} />
+        <div style={{ width: 40, height: 4, borderRadius: 2, background: "var(--border)" }} />
       </div>
 
       {/* Header */}
@@ -1547,8 +1547,8 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
                 }}>Counters</div>
                 {tech.primary_counters.map((c, i) => (
                   <div key={i} style={{
-                    fontSize: 13, color: "#ccc", padding: "6px 0",
-                    borderBottom: "1px solid #222", lineHeight: 1.55
+                    fontSize: 13, color: "var(--text-sec)", padding: "6px 0",
+                    borderBottom: "1px solid var(--border)", lineHeight: 1.55
                   }}>• {c}</div>
                 ))}
               </div>
@@ -1562,8 +1562,8 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                   {tech.notable_practitioners.map((p, i) => (
                     <span key={i} style={{
-                      fontSize: 12, padding: "3px 10px", background: "#181818",
-                      borderRadius: 20, color: "#bbb", border: "1px solid #202020"
+                      fontSize: 12, padding: "3px 10px", background: "var(--bg-total)",
+                      borderRadius: 20, color: "var(--text-sec)", border: "1px solid var(--border)"
                     }}>{p}</span>
                   ))}
                 </div>
@@ -1576,19 +1576,19 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
           <div>
             <div style={{ marginBottom: 18 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 10 }}>
-                <span style={{ fontSize: 12, color: "#555" }}>Proficiency</span>
+                <span style={{ fontSize: 12, color: "var(--text-sec)" }}>Proficiency</span>
                 <span style={{
                   fontSize: 32, fontWeight: 800, color: profColor(prof),
                   fontFamily: "'Barlow Condensed',sans-serif"
                 }}>
-                  {prof}<span style={{ fontSize: 13, color: "#2a2a2a" }}>/10</span>
+                  {prof}<span style={{ fontSize: 13, color: "var(--text-sec)", opacity: 0.5 }}>/10</span>
                 </span>
               </div>
               <input type="range" min={0} max={10} step={1} value={prof}
                 onChange={e => setProf(+e.target.value)}
                 style={{ width: "100%", accentColor: profColor(prof), cursor: "pointer" }}
               />
-              <div style={{ height: 3, background: "#181818", borderRadius: 2, marginTop: 8, overflow: "hidden" }}>
+              <div style={{ height: 3, background: "var(--bg-total)", borderRadius: 2, marginTop: 8, overflow: "hidden" }}>
                 <div style={{
                   height: "100%", width: `${prof * 10}%`, background: profColor(prof),
                   borderRadius: 2, transition: "width 0.2s,background 0.2s"
@@ -1599,9 +1599,9 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
               {["Not started", "Learning", "Drilling", "Competition ready"].map(s => (
                 <button key={s} onClick={() => setStatus(s)} style={{
                   minHeight: 44, borderRadius: 12,
-                  border: `1px solid ${status === s ? col : "#1e1e1e"}`,
-                  background: status === s ? col + "1e" : "#0d0d0d",
-                  color: status === s ? col : "#3a3a3a",
+                  border: `1px solid ${status === s ? col : "var(--border)"}`,
+                  background: status === s ? col + "1e" : "var(--bg-total)",
+                  color: status === s ? col : "var(--text-sec)",
                   cursor: "pointer", fontSize: 12, fontFamily: "'DM Sans',sans-serif",
                 }}>{s}</button>
               ))}
@@ -1609,8 +1609,8 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
             <textarea value={notes} onChange={e => setNotes(e.target.value)}
               placeholder="Personal notes..."
               style={{
-                width: "100%", boxSizing: "border-box", background: "#0a0a0a",
-                border: "1px solid #1e1e1e", borderRadius: 10, padding: 12, color: "#bbb",
+                width: "100%", boxSizing: "border-box", background: "var(--bg-total)",
+                border: "1px solid var(--border)", borderRadius: 10, padding: 12, color: "var(--text-sec)",
                 fontSize: 13, fontFamily: "'DM Sans',sans-serif", resize: "none", height: 68, marginBottom: 14
               }}
             />
@@ -1625,7 +1625,7 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
 
         {tab === "links" && (
           <div>
-            <div style={{ fontSize: 11, color: "#444", marginBottom: 12, fontFamily: "'DM Sans',sans-serif" }}>
+            <div style={{ fontSize: 11, color: "var(--text-sec)", opacity: 0.6, marginBottom: 12, fontFamily: "'DM Sans',sans-serif" }}>
               {allNbrs.length} connected techniques — tap to navigate
             </div>
             {allNbrs.map(nb => {
@@ -1639,11 +1639,11 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
                   <div style={{ width: 3, height: 36, borderRadius: 2, background: nc, flexShrink: 0 }} />
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{
-                      fontSize: 14, fontWeight: 600, color: "#e0e0e0",
+                      fontSize: 14, fontWeight: 600, color: "var(--text-pri)",
                       fontFamily: "'Barlow Condensed',sans-serif",
                       whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"
                     }}>{nb.name}</div>
-                    <div style={{ fontSize: 10, color: "#555", marginTop: 1 }}>{nb.subcategory}</div>
+                    <div style={{ fontSize: 10, color: "var(--text-sec)", opacity: 0.6, marginTop: 1 }}>{nb.subcategory}</div>
                   </div>
                   <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
                     <button onClick={() => { onNavigate(nb.id); onClose(); }} style={{

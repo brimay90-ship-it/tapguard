@@ -40,21 +40,21 @@ export default function Calendar({ selectedDate, onSelectDate }) {
     <div className="liquid-glass" style={{borderRadius:20,overflow:'hidden',marginBottom:20}}>
 
       {/* Header */}
-      <div style={{padding:'14px 16px 10px',borderBottom:'1px solid #1a1a1a'}}>
+      <div style={{padding:'14px 16px 10px',borderBottom:'1px solid var(--border)'}}>
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:10}}>
           <div style={{display:'flex',alignItems:'center',gap:10}}>
-            <button onClick={()=>setOffset(o=>o-1)} style={{background:'none',border:'none',color:'#555',fontSize:16,cursor:'pointer',padding:'2px 6px',borderRadius:4,transition:'color 0.15s'}}
-              onMouseEnter={e=>e.currentTarget.style.color='#fff'} onMouseLeave={e=>e.currentTarget.style.color='#555'}>‹</button>
-            <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:17,color:'#fff',letterSpacing:0.5,minWidth:160,textAlign:'center'}}>{navLabel}</span>
-            <button onClick={()=>setOffset(o=>o+1)} style={{background:'none',border:'none',color:'#555',fontSize:16,cursor:'pointer',padding:'2px 6px',borderRadius:4,transition:'color 0.15s'}}
-              onMouseEnter={e=>e.currentTarget.style.color='#fff'} onMouseLeave={e=>e.currentTarget.style.color='#555'}>›</button>
+            <button onClick={()=>setOffset(o=>o-1)} style={{background:'none',border:'none',color:'var(--text-sec)',opacity:0.6,fontSize:16,cursor:'pointer',padding:'2px 6px',borderRadius:4,transition:'color 0.15s'}}
+              onMouseEnter={e=>e.currentTarget.style.color='var(--text-pri)'} onMouseLeave={e=>e.currentTarget.style.color='var(--text-sec)'}>‹</button>
+            <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:17,color:'var(--text-pri)',letterSpacing:0.5,minWidth:160,textAlign:'center'}}>{navLabel}</span>
+            <button onClick={()=>setOffset(o=>o+1)} style={{background:'none',border:'none',color:'var(--text-sec)',opacity:0.6,fontSize:16,cursor:'pointer',padding:'2px 6px',borderRadius:4,transition:'color 0.15s'}}
+              onMouseEnter={e=>e.currentTarget.style.color='var(--text-pri)'} onMouseLeave={e=>e.currentTarget.style.color='var(--text-sec)'}>›</button>
           </div>
           {/* Legend */}
           <div style={{display:'flex',gap:10}}>
-            <div style={{display:'flex',alignItems:'center',gap:4,fontSize:10,color:'#555',fontWeight:600}}>
+            <div style={{display:'flex',alignItems:'center',gap:4,fontSize:10,color:'var(--text-sec)',opacity:0.6,fontWeight:600}}>
               <span style={{width:6,height:6,borderRadius:'50%',background:G,display:'inline-block'}}/>BJJ
             </div>
-            <div style={{display:'flex',alignItems:'center',gap:4,fontSize:10,color:'#555',fontWeight:600}}>
+            <div style={{display:'flex',alignItems:'center',gap:4,fontSize:10,color:'var(--text-sec)',opacity:0.6,fontWeight:600}}>
               <span style={{width:6,height:6,borderRadius:'50%',background:AMBER,display:'inline-block'}}/>WKT
             </div>
           </div>
@@ -63,7 +63,7 @@ export default function Calendar({ selectedDate, onSelectDate }) {
         {/* Day name row */}
         <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)'}}>
           {DAY_NAMES.map(d=>(
-            <div key={d} style={{textAlign:'center',fontSize:9,letterSpacing:1,textTransform:'uppercase',color:'#333',fontWeight:700,padding:'2px 0'}}>{d}</div>
+            <div key={d} style={{textAlign:'center',fontSize:9,letterSpacing:1,textTransform:'uppercase',color:'var(--text-sec)',opacity:0.3,fontWeight:700,padding:'2px 0'}}>{d}</div>
           ))}
         </div>
       </div>
@@ -83,13 +83,13 @@ export default function Calendar({ selectedDate, onSelectDate }) {
 
           let bg = 'transparent';
           let borderColor = 'transparent';
-          let color = '#555';
+          let color = 'var(--text-sec)';
 
           if (sel) { bg = G; color = '#000'; borderColor = G; }
-          else if (bjj && wkt) { bg = 'rgba(74,222,128,0.12)'; borderColor = 'rgba(74,222,128,0.3)'; color = '#fff'; }
-          else if (bjj)        { bg = 'rgba(74,222,128,0.08)'; borderColor = 'rgba(74,222,128,0.2)'; color = G; }
-          else if (wkt)        { bg = 'rgba(245,158,11,0.08)'; borderColor = 'rgba(245,158,11,0.2)'; color = AMBER; }
-          else if (isToday)    { borderColor = '#444'; color = '#fff'; }
+          else if (bjj && wkt) { bg = G+'11'; borderColor = G+'33'; color = 'var(--text-pri)'; }
+          else if (bjj)        { bg = G+'11'; borderColor = G+'22'; color = G; }
+          else if (wkt)        { bg = AMBER+'11'; borderColor = AMBER+'22'; color = AMBER; }
+          else if (isToday)    { borderColor = 'var(--border)'; color = 'var(--text-pri)'; }
 
           return (
             <div
@@ -109,7 +109,7 @@ export default function Calendar({ selectedDate, onSelectDate }) {
                 position:'relative',
               }}
             >
-              <span style={{fontSize:11,fontWeight:isToday||sel?900:500,color: sel?'#000':isToday?'#fff':color}}>{dayNum}</span>
+              <span style={{fontSize:11,fontWeight:isToday||sel?900:500,color: sel?'#000':isToday?'var(--text-pri)':color}}>{dayNum}</span>
               {!sel && (bjj || wkt) && (
                 <div style={{display:'flex',gap:2,marginTop:1}}>
                   {bjj && <span style={{width:3,height:3,borderRadius:'50%',background:G,display:'inline-block'}}/>}

@@ -3,7 +3,7 @@ import { useApp } from '../../context/AppContext';
 import { weekPlan, bjjDayTips } from '../../data/weekPlan';
 import { RANK_ROSTER, SPECIAL_RANKS } from '../../data/rankRoster';
 
-const G = '#0BF571';
+const G = 'var(--accent)';
 const FOCUS_SKILLS = [
   {
     skill: 'HIP ESCAPE MECHANICS', image: '/hip_escape_mechanics_bg.png',
@@ -158,7 +158,7 @@ function FocusOverlay({ focus, onClose }) {
         {/* Video player */}
         {videos.length > 0 && (
           <div style={{ marginBottom: 20 }}>
-            <div style={{ width:'100%', aspectRatio:'16/9', borderRadius:12, overflow:'hidden', background:'#111', border:'1px solid #1A1C20' }}>
+            <div style={{ width:'100%', aspectRatio:'16/9', borderRadius:12, overflow:'hidden', background:'var(--bg-card)', border:'1px solid var(--border)' }}>
               <iframe width="100%" height="100%" src={videos[activeVid].url} title={videos[activeVid].title}
                 frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen style={{display:'block'}}/>
@@ -173,9 +173,9 @@ function FocusOverlay({ focus, onClose }) {
                 {videos.map((v, i) => (
                   <button key={i} onClick={() => setActiveVid(i)} style={{
                     padding:'6px 14px', borderRadius:20,
-                    border:`1px solid ${i === activeVid ? G : '#2A2D32'}`,
+                    border:`1px solid ${i === activeVid ? G : 'var(--border)'}`,
                     background: i === activeVid ? G + '18' : 'transparent',
-                    color: i === activeVid ? G : '#555',
+                    color: i === activeVid ? G : 'var(--text-sec)',
                     fontSize:11, fontWeight:600, cursor:'pointer',
                     fontFamily:"'DM Sans',sans-serif",
                     transition:'all 0.15s',
@@ -188,13 +188,13 @@ function FocusOverlay({ focus, onClose }) {
           </div>
         )}
 
-        <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:'#555', marginBottom:14, fontWeight:600 }}>TECHNIQUE BREAKDOWN</div>
+        <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:'var(--text-sec)', marginBottom:14, fontWeight:600 }}>TECHNIQUE BREAKDOWN</div>
         {focus.detail.split('\n').map((line,i)=>{
           const isBullet=line.startsWith('•'); const isHeader=line.endsWith(':')&&!isBullet; const isEmpty=line.trim()==='';
           if(isEmpty) return <div key={i} style={{height:10}}/>;
-          if(isHeader) return <div key={i} style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:18,color:'#fff',marginBottom:8,marginTop:4}}>{line}</div>;
-          if(isBullet) return <div key={i} style={{display:'flex',gap:10,marginBottom:6}}><span style={{color:G,flexShrink:0}}>•</span><span style={{fontSize:14,color:'#aaa',fontWeight:400,lineHeight:1.6}}>{line.slice(2)}</span></div>;
-          return <p key={i} style={{fontSize:14,color:'#aaa',fontWeight:400,lineHeight:1.7,marginBottom:8}}>{line}</p>;
+          if(isHeader) return <div key={i} style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:18,color:'var(--text-pri)',marginBottom:8,marginTop:4}}>{line}</div>;
+          if(isBullet) return <div key={i} style={{display:'flex',gap:10,marginBottom:6}}><span style={{color:G,flexShrink:0}}>•</span><span style={{fontSize:14,color:'var(--text-sec)',fontWeight:400,lineHeight:1.6,opacity:0.8}}>{line.slice(2)}</span></div>;
+          return <p key={i} style={{fontSize:14,color:'var(--text-sec)',fontWeight:400,lineHeight:1.7,marginBottom:8,opacity:0.8}}>{line}</p>;
         })}
       </div>
     </div>
@@ -404,12 +404,12 @@ export default function Dashboard() {
 
         {/* Greeting */}
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:16 }}>
-          <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:32, color:'#fff', lineHeight:1.0, letterSpacing:1 }}>
+          <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:32, color:'var(--text-pri)', lineHeight:1.0, letterSpacing:1 }}>
             {`GOOD ${timeOfDay},`}<br/>{displayName}
           </div>
-          <div style={{ fontSize:11, color:'#444', textAlign:'right', paddingTop:2, lineHeight:1.6, fontWeight:600 }}>
+          <div style={{ fontSize:11, color:'var(--text-sec)', textAlign:'right', paddingTop:2, lineHeight:1.6, fontWeight:600 }}>
             {days[now.getDay()]}<br/>
-            <span style={{color:'#888'}}>{months[now.getMonth()]} {now.getDate()}</span>
+            <span style={{color:'var(--text-sec)', opacity:0.6}}>{months[now.getMonth()]} {now.getDate()}</span>
           </div>
         </div>
 
@@ -435,10 +435,11 @@ export default function Dashboard() {
             zIndex:1
           }} />
           
-          {/* Liquid Glass Overlays */}
           <div style={{
             position:'absolute', inset:0,
-            background:'linear-gradient(to top, rgba(8,8,8,0.98) 0%, rgba(8,8,8,0.4) 45%, transparent 100%)',
+            background: theme === 'light' 
+              ? 'linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(255,255,255,0.4) 45%, transparent 100%)'
+              : 'linear-gradient(to top, rgba(8,8,8,0.98) 0%, rgba(8,8,8,0.4) 45%, transparent 100%)',
             zIndex:2
           }} />
 
@@ -460,16 +461,16 @@ export default function Dashboard() {
             onClick={e=>{ e.stopPropagation(); setFocusIndex(i=>(i+1)%FOCUS_SKILLS.length); }}
             style={{
               position:'absolute', top:24, right:24, zIndex:3,
-              background:'rgba(255,255,255,0.05)',
+              background:'var(--glass-bg)',
               backdropFilter:'blur(12px)',
-              border:'1px solid rgba(255,255,255,0.1)',
+              border:'1px solid var(--glass-border)',
               borderRadius:24, padding:'8px 16px',
-              color:'#fff', fontSize:10, fontWeight:700, letterSpacing:1,
+              color:'var(--text-pri)', fontSize:10, fontWeight:700, letterSpacing:1,
               cursor:'pointer', transition:'all 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28)',
               fontFamily:"'Space Grotesk',sans-serif",
             }}
-            onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.15)'}
-            onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
+            onMouseEnter={e => e.currentTarget.style.background = 'var(--glass-border)'}
+            onMouseLeave={e => e.currentTarget.style.background = 'var(--glass-bg)'}
           >
             NOT THIS WEEK →
           </button>
@@ -478,10 +479,10 @@ export default function Dashboard() {
           <div style={{ position:'relative', zIndex:3, padding:28 }}>
             <h1 style={{ 
               fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, 
-              fontSize:48, color:'#fff', lineHeight:0.95, textTransform:'uppercase',
+              fontSize:48, color: theme === 'light' ? '#000' : '#fff', lineHeight:0.95, textTransform:'uppercase',
               marginBottom:10, letterSpacing:0.5
             }}>{currentFocus.skill}</h1>
-            <p style={{ fontSize:16, color:'rgba(255,255,255,0.8)', lineHeight:1.5, maxWidth:'95%', fontWeight:400, marginBottom:20 }}>
+            <p style={{ fontSize:16, color: theme === 'light' ? '#444' : 'rgba(255,255,255,0.8)', lineHeight:1.5, maxWidth:'95%', fontWeight:400, marginBottom:20 }}>
               {currentFocus.desc}
             </p>
             <div style={{ display:'flex', alignItems:'center', gap:10 }}>
@@ -501,10 +502,10 @@ export default function Dashboard() {
           borderRadius:24,
           overflow:'hidden',
           padding: '2px', // Thin accent highlight
-          border: isBjjToday && isWorkoutToday ? '1px solid rgba(11,245,113,0.3)'
-                : isBjjToday     ? '1px solid rgba(11,245,113,0.3)'
-                : isWorkoutToday ? '1px solid rgba(240,160,32,0.3)'
-                : '1px solid rgba(255,255,255,0.14)',
+          border: isBjjToday && isWorkoutToday ? '1.5px solid var(--accent)'
+                : isBjjToday     ? '1.5px solid var(--accent)'
+                : isWorkoutToday ? '1.5px solid rgba(240,160,32,0.4)'
+                : '1px solid var(--border)',
         }}>
 
           {/* Accent bar */}
@@ -541,7 +542,7 @@ export default function Dashboard() {
             }}
           >
             <div style={{fontSize:10,letterSpacing:3,textTransform:'uppercase',fontWeight:700,marginBottom:8,
-              color: isBjjToday && !isWorkoutToday ? G : isWorkoutToday && !isBjjToday ? '#F0A020' : isBjjToday && isWorkoutToday ? G : '#444'
+              color: isBjjToday && !isWorkoutToday ? G : isWorkoutToday && !isBjjToday ? '#F0A020' : isBjjToday && isWorkoutToday ? G : 'var(--text-sec)'
             }}>Workout of the Day</div>
 
             {/* ── SCENARIO 1: REST DAY ── */}
@@ -550,13 +551,13 @@ export default function Dashboard() {
                 <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:12}}>
                   <span style={{fontSize:28}}>😴</span>
                   <div>
-                    <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:22,color:'#fff',letterSpacing:0.5}}>Rest Day</div>
-                    <div style={{fontSize:11,color:'#444',fontWeight:500}}>Recovery is training too</div>
+                    <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:22,color:'var(--text-pri)',letterSpacing:0.5}}>Rest Day</div>
+                    <div style={{fontSize:11,color:'var(--text-sec)',fontWeight:500}}>Recovery is training too</div>
                   </div>
                 </div>
-                <div style={{background:'rgba(255,255,255,0.03)',borderRadius:8,padding:'12px 14px',borderLeft:'2px solid #2a2a2a'}}>
-                  <div style={{fontSize:13,color:'#777',lineHeight:1.65,fontStyle:'italic',marginBottom:6}}>"{restQuote.quote}"</div>
-                  <div style={{fontSize:10,color:'#444',letterSpacing:1,textTransform:'uppercase',fontWeight:700}}>— {restQuote.author}</div>
+                <div style={{background:'var(--bg-total)',borderRadius:8,padding:'12px 14px',borderLeft:'2px solid var(--border)', opacity:0.8}}>
+                  <div style={{fontSize:13,color:'var(--text-sec)',lineHeight:1.65,fontStyle:'italic',marginBottom:6}}>"{restQuote.quote}"</div>
+                  <div style={{fontSize:10,color:'var(--text-sec)',letterSpacing:1,textTransform:'uppercase',fontWeight:700,opacity:0.6}}>— {restQuote.author}</div>
                 </div>
               </div>
             )}
@@ -567,14 +568,14 @@ export default function Dashboard() {
                 <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:10}}>
                   <span style={{fontSize:28}}>{bjjClassFocus.icon}</span>
                   <div>
-                    <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:20,color:'#fff',letterSpacing:0.5}}>BJJ Class Day</div>
+                    <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:20,color:'var(--text-pri)',letterSpacing:0.5}}>BJJ Class Day</div>
                     <div style={{fontSize:11,color:G,fontWeight:700,textTransform:'uppercase',letterSpacing:1}}>Focus: {bjjClassFocus.focus}</div>
                   </div>
                 </div>
-                <div style={{fontSize:13,color:'#888',lineHeight:1.6,marginBottom:10}}>{bjjClassFocus.tip}</div>
+                <div style={{fontSize:13,color:'var(--text-sec)',lineHeight:1.6,marginBottom:10,opacity:0.8}}>{bjjClassFocus.tip}</div>
                 <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
                   {todayBjjTips.warmup.slice(0,2).map((w,i) => (
-                    <div key={i} style={{fontSize:10,padding:'4px 8px',borderRadius:6,background:'rgba(11,245,113,0.08)',border:'1px solid rgba(11,245,113,0.15)',color:G,fontWeight:600}}>{w}</div>
+                    <div key={i} style={{fontSize:10,padding:'4px 8px',borderRadius:6,background:G+'11',border:`1px solid ${G}33`,color:G,fontWeight:600}}>{w}</div>
                   ))}
                 </div>
               </div>
@@ -586,7 +587,7 @@ export default function Dashboard() {
                 <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:10}}>
                   <span style={{fontSize:28}}>{workoutMeta.emoji}</span>
                   <div>
-                    <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:20,color:'#fff',letterSpacing:0.5}}>{workoutMeta.type}</div>
+                    <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:20,color:'var(--text-pri)',letterSpacing:0.5}}>{workoutMeta.type}</div>
                     <div style={{fontSize:11,color:'#F0A020',fontWeight:600}}>{todayExercises.length} exercises planned</div>
                   </div>
                 </div>
@@ -594,9 +595,9 @@ export default function Dashboard() {
                   {todayExercises.slice(0,3).map((ex,i) => (
                     <div key={i} style={{fontSize:10,padding:'4px 8px',borderRadius:6,background:'rgba(240,160,32,0.08)',border:'1px solid rgba(240,160,32,0.2)',color:'#F0A020',fontWeight:600}}>{ex.title}</div>
                   ))}
-                  {todayExercises.length > 3 && <div style={{fontSize:10,padding:'4px 8px',borderRadius:6,background:'#1A1C20',color:'#555',fontWeight:600}}>+{todayExercises.length - 3} more</div>}
+                  {todayExercises.length > 3 && <div style={{fontSize:10,padding:'4px 8px',borderRadius:6,background:'var(--bg-card)',color:'var(--text-sec)',fontWeight:600, border:'1px solid var(--border)'}}>+{todayExercises.length - 3} more</div>}
                 </div>
-                <div style={{fontSize:12,color:'#555',fontStyle:'italic',lineHeight:1.5}}>" {workoutMeta.quote} "</div>
+                <div style={{fontSize:12,color:'var(--text-sec)',fontStyle:'italic',lineHeight:1.5, opacity:0.7}}>" {workoutMeta.quote} "</div>
               </div>
             )}
 

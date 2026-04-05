@@ -15,7 +15,7 @@ function GifOverlay({ exercise, onClose }) {
     <div
       onClick={onClose}
       style={{
-        position:'fixed', inset:0, background:'rgba(0,0,0,0.92)',
+        position:'fixed', inset:0, background:'var(--overlay-bg)',
         zIndex:999, display:'flex', flexDirection:'column',
         alignItems:'center', justifyContent:'center',
         padding:24,
@@ -24,16 +24,16 @@ function GifOverlay({ exercise, onClose }) {
       <div
         onClick={e=>e.stopPropagation()}
         style={{
-          background:'#111', border:'1px solid #2A2D32',
+          background:'var(--bg-card)', border:'1px solid var(--border)',
           borderRadius:16, overflow:'hidden', width:'100%', maxWidth:380,
           animation:'fadeUp 0.25s ease both',
         }}
       >
-        <div style={{padding:'14px 16px', borderBottom:'1px solid #1A1C20', display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-          <div style={{fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:18, color:'#fff', letterSpacing:0.5}}>{exercise.title}</div>
-          <button onClick={onClose} style={{background:'none',border:'none',color:'#555',fontSize:20,cursor:'pointer',lineHeight:1}}>✕</button>
+        <div style={{padding:'14px 16px', borderBottom:'1px solid var(--border)', display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+          <div style={{fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:18, color:'var(--text-pri)', letterSpacing:0.5}}>{exercise.title}</div>
+          <button onClick={onClose} style={{background:'none',border:'none',color:'var(--text-sec)',opacity:0.6,fontSize:20,cursor:'pointer',lineHeight:1}}>✕</button>
         </div>
-        <div style={{background:'#080808', display:'flex', alignItems:'center', justifyContent:'center', minHeight:200}}>
+        <div style={{background:'var(--bg-total)', display:'flex', alignItems:'center', justifyContent:'center', minHeight:200}}>
           <img
             src={exercise.gifUrl}
             alt={exercise.title}
@@ -46,10 +46,10 @@ function GifOverlay({ exercise, onClose }) {
           </div>
         </div>
         <div style={{padding:'12px 16px'}}>
-          <div style={{fontSize:12, color:'#555', marginBottom:4}}>{exercise.meta}</div>
+          <div style={{fontSize:12, color:'var(--text-sec)', opacity:0.6, marginBottom:4}}>{exercise.meta}</div>
           <div style={{display:'flex', gap:5, flexWrap:'wrap'}}>
             {exercise.tags.map(tag=>(
-              <span key={tag} style={{fontSize:9,letterSpacing:1,textTransform:'uppercase',padding:'2px 6px',background:'#1A1C20',borderRadius:3,color:'#444',fontWeight:700}}>{tag}</span>
+              <span key={tag} style={{fontSize:9,letterSpacing:1,textTransform:'uppercase',padding:'2px 6px',background:'var(--bg-total)',border:'1px solid var(--border)',borderRadius:3,color:'var(--text-sec)',opacity:0.8,fontWeight:700}}>{tag}</span>
             ))}
           </div>
         </div>
@@ -64,20 +64,20 @@ function SetTracker({ exercise, dayIdx, exIdx, exerciseDone, toggleExercise, get
 
   return (
     <div className="liquid-glass" style={{
-      border:`1px solid ${done ? 'rgba(74,222,128,0.3)' : 'rgba(255,255,255,0.14)'}`,
+      border:`1px solid ${done ? G+'66' : 'var(--border)'}`,
       borderRadius:20, marginBottom:12, overflow:'hidden',
       opacity: done ? 0.6 : 1, transition:'all 0.3s ease',
     }}>
       {/* Exercise header */}
       <div style={{padding:'14px 16px 10px', display:'flex', gap:12, alignItems:'flex-start'}}>
-        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:24,lineHeight:1,color:'#222',minWidth:26}}>
+        <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:24,lineHeight:1,color:'var(--text-sec)',opacity:0.2,minWidth:26}}>
           {String(exIdx+1).padStart(2,'0')}
         </div>
         <div style={{flex:1}}>
-          <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:17,color:'#fff',marginBottom:2,letterSpacing:0.5,textDecoration:done?'line-through':'none'}}>
+          <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:17,color:'var(--text-pri)',marginBottom:2,letterSpacing:0.5,textDecoration:done?'line-through':'none'}}>
             {exercise.title}
           </div>
-          <div style={{fontSize:11,color:'#444',fontWeight:500}}>{exercise.meta}</div>
+          <div style={{fontSize:11,color:'var(--text-sec)',opacity:0.6,fontWeight:500}}>{exercise.meta}</div>
         </div>
         {/* Done toggle */}
         <div
@@ -97,9 +97,9 @@ function SetTracker({ exercise, dayIdx, exIdx, exerciseDone, toggleExercise, get
         <div style={{padding:'0 14px 12px'}}>
           {/* Header row */}
           <div style={{display:'grid',gridTemplateColumns:'32px 1fr 1fr',gap:8,marginBottom:6}}>
-            <div style={{fontSize:9,letterSpacing:1,textTransform:'uppercase',color:'#333',fontWeight:700,textAlign:'center'}}>SET</div>
-            <div style={{fontSize:9,letterSpacing:1,textTransform:'uppercase',color:'#333',fontWeight:700,textAlign:'center'}}>REPS</div>
-            <div style={{fontSize:9,letterSpacing:1,textTransform:'uppercase',color:'#333',fontWeight:700,textAlign:'center'}}>LBS</div>
+            <div style={{fontSize:9,letterSpacing:1,textTransform:'uppercase',color:'var(--text-sec)',opacity:0.4,fontWeight:700,textAlign:'center'}}>SET</div>
+            <div style={{fontSize:9,letterSpacing:1,textTransform:'uppercase',color:'var(--text-sec)',opacity:0.4,fontWeight:700,textAlign:'center'}}>REPS</div>
+            <div style={{fontSize:9,letterSpacing:1,textTransform:'uppercase',color:'var(--text-sec)',opacity:0.4,fontWeight:700,textAlign:'center'}}>LBS</div>
           </div>
 
           {Array.from({length: numSets}).map((_,setIdx)=>{
@@ -113,9 +113,9 @@ function SetTracker({ exercise, dayIdx, exIdx, exerciseDone, toggleExercise, get
                 {/* Set number */}
                 <div style={{
                   width:28,height:28,borderRadius:6,
-                  background:'#1A1C20',border:'1px solid #2A2D32',
+                  background:'var(--bg-total)',border:'1px solid var(--border)',
                   display:'flex',alignItems:'center',justifyContent:'center',
-                  fontSize:12,fontWeight:800,color:'#444',
+                  fontSize:12,fontWeight:800,color:'var(--text-sec)',opacity:0.6,
                   fontFamily:"'Barlow Condensed',sans-serif",
                 }}>{setIdx+1}</div>
 
@@ -126,13 +126,13 @@ function SetTracker({ exercise, dayIdx, exIdx, exerciseDone, toggleExercise, get
                   placeholder={repsPlaceholder}
                   onChange={e=>updateSetLog(dayIdx,exIdx,setIdx,'reps',e.target.value)}
                   style={{
-                    background:'#1A1C20',border:'1px solid #2A2D32',borderRadius:8,
-                    padding:'7px 10px',color:'#fff',textAlign:'center',
+                    background:'var(--bg-total)',border:'1px solid var(--border)',borderRadius:8,
+                    padding:'7px 10px',color:'var(--text-pri)',textAlign:'center',
                     fontSize:14,fontWeight:700,outline:'none',width:'100%',
                     transition:'border-color 0.15s',
                   }}
                   onFocus={e=>e.target.style.borderColor=G}
-                  onBlur={e=>e.target.style.borderColor='#2A2D32'}
+                  onBlur={e=>e.target.style.borderColor='var(--border)'}
                 />
 
                 {/* Weight input */}
@@ -142,13 +142,13 @@ function SetTracker({ exercise, dayIdx, exIdx, exerciseDone, toggleExercise, get
                   placeholder={weightPlaceholder}
                   onChange={e=>updateSetLog(dayIdx,exIdx,setIdx,'weight',e.target.value)}
                   style={{
-                    background:'#1A1C20',border:'1px solid #2A2D32',borderRadius:8,
-                    padding:'7px 10px',color:'#fff',textAlign:'center',
+                    background:'var(--bg-total)',border:'1px solid var(--border)',borderRadius:8,
+                    padding:'7px 10px',color:'var(--text-pri)',textAlign:'center',
                     fontSize:14,fontWeight:700,outline:'none',width:'100%',
                     transition:'border-color 0.15s',
                   }}
                   onFocus={e=>e.target.style.borderColor=AMBER}
-                  onBlur={e=>e.target.style.borderColor='#2A2D32'}
+                  onBlur={e=>e.target.style.borderColor='var(--border)'}
                 />
               </div>
             );
@@ -168,8 +168,8 @@ function BJJDayContent({ dayIdx }) {
         <div style={{fontSize:10,letterSpacing:2,textTransform:'uppercase',color:G,marginBottom:12,fontWeight:800}}>🥋 PRE-CLASS WARMUP</div>
         {tips.warmup.map((item,i)=>(
           <div key={i} style={{display:'flex',alignItems:'flex-start',gap:12,marginBottom:10}}>
-            <div style={{width:22,height:22,borderRadius:'50%',background:'rgba(11,245,113,0.15)',border:'1px solid rgba(11,245,113,0.3)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,color:G,fontWeight:900,flexShrink:0,marginTop:2}}>{i+1}</div>
-            <div style={{fontSize:14,color:'#fff',fontWeight:500,lineHeight:1.4}}>{item}</div>
+            <div style={{width:22,height:22,borderRadius:'50%',background:G+'22',border:`1px solid ${G}44`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,color:G,fontWeight:900,flexShrink:0,marginTop:2}}>{i+1}</div>
+            <div style={{fontSize:14,color:'var(--text-pri)',fontWeight:500,lineHeight:1.4}}>{item}</div>
           </div>
         ))}
       </div>
@@ -227,8 +227,8 @@ export default function Training() {
     <div style={{ padding:'20px 20px 80px' }}>
 
       {/* Header */}
-      <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:'#444', marginBottom:4, fontWeight:700 }}>Workout Plan</div>
-      <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:28, color:'#fff', marginBottom:14, letterSpacing:1 }}>YOUR WORKOUT PLAN</div>
+      <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:'var(--text-sec)', opacity:0.6, marginBottom:4, fontWeight:700 }}>Workout Plan</div>
+      <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:28, color:'var(--text-pri)', marginBottom:14, letterSpacing:1 }}>YOUR WORKOUT PLAN</div>
 
       {/* Weekly summary chips */}
       <div style={{display:'flex',gap:8,marginBottom:20,flexWrap:'wrap'}}>
@@ -246,19 +246,18 @@ export default function Training() {
       {/* Calendar */}
       <Calendar selectedDate={selectedDate} onSelectDate={setSelectedDate} />
 
-      {/* Selected date header */}
       <div style={{
         marginBottom:12, padding:'10px 14px', borderRadius:10,
-        background: isBjjDay && isWorkoutDay ? 'rgba(74,222,128,0.06)'
-                  : isBjjDay ? 'rgba(74,222,128,0.06)'
-                  : isWorkoutDay ? 'rgba(245,158,11,0.06)'
-                  : '#111',
-        border: `1px solid ${isBjjDay ? 'rgba(74,222,128,0.2)' : isWorkoutDay ? 'rgba(245,158,11,0.2)' : '#1f1f1f'}`,
+        background: isBjjDay && isWorkoutDay ? G+'11'
+                  : isBjjDay ? G+'11'
+                  : isWorkoutDay ? AMBER+'11'
+                  : 'var(--bg-total)',
+        border: `1px solid ${isBjjDay ? G+'33' : isWorkoutDay ? AMBER+'33' : 'var(--border)'}`,
         display:'flex', justifyContent:'space-between', alignItems:'center',
       }}>
         <div>
-          <div style={{fontSize:11,fontWeight:700,color:'#555',marginBottom:2}}>{formattedDate}</div>
-          <div style={{fontSize:13,fontWeight:700,color: isBjjDay ? G : isWorkoutDay ? AMBER : '#444'}}>
+          <div style={{fontSize:11,fontWeight:700,color:'var(--text-sec)',opacity:0.6,marginBottom:2}}>{formattedDate}</div>
+          <div style={{fontSize:13,fontWeight:700,color: isBjjDay ? G : isWorkoutDay ? AMBER : 'var(--text-sec)'}}>
             {isBjjDay && isWorkoutDay && '🥋 BJJ Class + 🏋️ Workout Day'}
             {isBjjDay && !isWorkoutDay && '🥋 BJJ Class Day'}
             {!isBjjDay && isWorkoutDay && '🏋️ Workout Day'}
@@ -297,7 +296,7 @@ export default function Training() {
               />
             </div>
           )) : (
-            <div style={{background:'#111',border:'1px solid #1f1f1f',borderRadius:12,padding:'20px',textAlign:'center',color:'#333',fontSize:13}}>
+            <div style={{background:'var(--bg-total)',border:'1px solid var(--border)',borderRadius:12,padding:'20px',textAlign:'center',color:'var(--text-sec)',opacity:0.4,fontSize:13}}>
               No exercises planned for this day.
             </div>
           )}
@@ -314,11 +313,11 @@ export default function Training() {
 
       {/* ── REST DAY ── */}
       {!isBjjDay && !isWorkoutDay && (
-        <div className="liquid-glass" style={{borderRadius:20, padding:'32px 24px', textAlign:'center', border:'1px solid rgba(255,255,255,0.14)'}}>
+        <div className="liquid-glass" style={{borderRadius:20, padding:'32px 24px', textAlign:'center', border:'1px solid var(--border)'}}>
           <div style={{fontSize:48,marginBottom:16}}>😴</div>
-          <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:24,color:'#fff',marginBottom:8, letterSpacing:1}}>REST DAY</div>
-          <div style={{fontSize:15,color:'#888',lineHeight:1.6, marginBottom:20}}>Recovery is training too. Sleep, hydrate, and let your body adapt.</div>
-          <div style={{padding:'16px',background:'rgba(255,255,255,0.03)',borderRadius:12,fontSize:13,color:G,textAlign:'left', borderLeft:`4px solid ${G}`}}>
+          <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:24,color:'var(--text-pri)',marginBottom:8, letterSpacing:1}}>REST DAY</div>
+          <div style={{fontSize:15,color:'var(--text-sec)',opacity:0.7,lineHeight:1.6, marginBottom:20}}>Recovery is training too. Sleep, hydrate, and let your body adapt.</div>
+          <div style={{padding:'16px',background:'var(--bg-total)',borderRadius:12,fontSize:13,color:G,textAlign:'left', borderLeft:`4px solid ${G}`}}>
             <span style={{fontWeight:800, letterSpacing:1, fontSize:10, display:'block', marginBottom:4}}>COACH'S TIP:</span>
             Light walk or mobility work only. Avoid anything that spikes heart rate.
           </div>

@@ -153,7 +153,7 @@ function Progress({ step }) {
       {Array.from({length:TOTAL_STEPS}).map((_,i)=>(
         <div key={i} style={{
           flex:1, height:3, borderRadius:2,
-          background: i < step ? G : i === step ? '#166534' : '#1a1a1a',
+          background: i < step ? G : i === step ? G+'44' : 'var(--border)',
           transition:'background 0.4s ease',
         }}/>
       ))}
@@ -164,17 +164,17 @@ function Progress({ step }) {
 function OptCard({ icon, title, desc, selected, onClick, large }) {
   return (
     <div onClick={onClick} style={{
-      background: selected ? 'rgba(74,222,128,0.06)' : '#111',
-      border: `1px solid ${selected ? G : '#1f1f1f'}`,
-      borderLeft: selected ? `3px solid ${G}` : '1px solid #1f1f1f',
+      background: selected ? G+'11' : 'var(--bg-total)',
+      border: `1px solid ${selected ? G : 'var(--border)'}`,
+      borderLeft: selected ? `3px solid ${G}` : '1px solid var(--border)',
       borderRadius:10, padding:'14px', cursor:'pointer',
       transition:'all 0.18s', position:'relative',
     }}>
       <div style={{
         position:'absolute', top:10, right:10,
         width:18, height:18, borderRadius:'50%',
-        background: selected ? G : '#111',
-        border: `1px solid ${selected ? G : '#333'}`,
+        background: selected ? G : 'var(--bg-total)',
+        border: `1px solid ${selected ? G : 'var(--border)'}`,
         display:'flex', alignItems:'center', justifyContent:'center',
         fontSize:10, color: selected ? '#000' : 'transparent',
         transition:'all 0.18s', fontWeight:900,
@@ -183,9 +183,9 @@ function OptCard({ icon, title, desc, selected, onClick, large }) {
       <div style={{
         fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800,
         fontSize: large ? 26 : 15, letterSpacing:0.5,
-        color:'#fff', marginBottom:3,
+        color:'var(--text-pri)', marginBottom:3,
       }}>{title}</div>
-      {desc && <div style={{fontSize:11, color:'#555', fontWeight:400, lineHeight:1.4}}>{desc}</div>}
+      {desc && <div style={{fontSize:11, color:'var(--text-sec)', opacity: 0.6, fontWeight:400, lineHeight:1.4}}>{desc}</div>}
     </div>
   );
 }
@@ -252,7 +252,7 @@ function CompBar({ label, skillKey, value, onChange }) {
             transition={{ duration: 0.18, ease: 'easeOut' }}
             style={{
               fontSize: 13,
-              color: '#666',
+              color: 'var(--text-sec)',
               fontStyle: 'italic',
               lineHeight: 1.4,
               letterSpacing: 0.3,
@@ -328,14 +328,14 @@ function CompBar({ label, skillKey, value, onChange }) {
 
 function ToggleSwitch({ value, onChange, optA, optB }) {
   return (
-    <div style={{display:'inline-flex',background:'#111',border:'1px solid #1f1f1f',borderRadius:50,padding:3}}>
+    <div style={{display:'inline-flex',background:'var(--bg-total)',border:'1px solid var(--border)',borderRadius:50,padding:3}}>
       {[optA,optB].map(opt=>{
         const active=value===opt.val;
         return (
           <div key={opt.val} onClick={()=>onChange(opt.val)} style={{
             padding:'10px 28px', borderRadius:50,
             fontSize:14, fontWeight:700,
-            color: active ? '#000' : '#555',
+            color: active ? '#000' : 'var(--text-sec)',
             background: active ? G : 'transparent',
             cursor:'pointer', transition:'all 0.22s ease', userSelect:'none',
           }}>{opt.label}</div>
@@ -347,14 +347,14 @@ function ToggleSwitch({ value, onChange, optA, optB }) {
 
 function UnitToggle({ unit, onChange }) {
   return (
-    <div style={{display:'inline-flex',background:'#111',border:'1px solid #1f1f1f',borderRadius:50,padding:3}}>
+    <div style={{display:'inline-flex',background:'var(--bg-total)',border:'1px solid var(--border)',borderRadius:50,padding:3}}>
       {['metric','imperial'].map(u=>{
         const active=unit===u;
         return (
           <div key={u} onClick={()=>onChange(u)} style={{
             padding:'6px 14px', borderRadius:50,
             fontSize:11, letterSpacing:1, textTransform:'uppercase', fontWeight:700,
-            color: active ? '#000' : '#555',
+            color: active ? '#000' : 'var(--text-sec)',
             background: active ? G : 'transparent',
             cursor:'pointer', transition:'all 0.2s', userSelect:'none',
           }}>{u}</div>
@@ -367,10 +367,10 @@ function UnitToggle({ unit, onChange }) {
 function MeasureInput({ label, value, onChange, placeholder }) {
   return (
     <div>
-      <div style={{fontSize:10,letterSpacing:2,textTransform:'uppercase',color:'#444',marginBottom:8,fontWeight:700}}>{label}</div>
+      <div style={{fontSize:10,letterSpacing:2,textTransform:'uppercase',color:'var(--text-sec)',opacity:0.6,marginBottom:8,fontWeight:700}}>{label}</div>
       <input type="number" value={value} onChange={e=>onChange(e.target.value)} placeholder={placeholder} style={{
-        width:'100%', background:'#111', border:'1px solid #1f1f1f', borderRadius:10,
-        padding:'13px 14px', color:'#fff', fontFamily:"'Barlow',sans-serif",
+        width:'100%', background:'var(--bg-total)', border:'1px solid var(--border)', borderRadius:10,
+        padding:'13px 14px', color:'var(--text-pri)', fontFamily:"'Barlow',sans-serif",
         fontSize:16, fontWeight:600, outline:'none', transition:'border-color 0.18s',
       }}
         onFocus={e=>e.target.style.borderColor=G}
@@ -385,8 +385,8 @@ const INCHES_OPTS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
 function HeightImperial({ feet, inches, onFeet, onInches }) {
   const selStyle = {
-    width:'100%', background:'#111', border:'1px solid #1f1f1f', borderRadius:10,
-    padding:'13px 14px', color:'#fff', fontFamily:"'Barlow',sans-serif",
+    width:'100%', background:'var(--bg-total)', border:'1px solid var(--border)', borderRadius:10,
+    padding:'13px 14px', color:'var(--text-pri)', fontFamily:"'Barlow',sans-serif",
     fontSize:16, fontWeight:600, outline:'none', cursor:'pointer',
     appearance:'none', WebkitAppearance:'none',
     backgroundImage:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234ade80' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")`,
@@ -395,18 +395,18 @@ function HeightImperial({ feet, inches, onFeet, onInches }) {
   };
   return (
     <div>
-      <div style={{fontSize:10,letterSpacing:2,textTransform:'uppercase',color:'#444',marginBottom:8,fontWeight:700}}>Height</div>
+      <div style={{fontSize:10,letterSpacing:2,textTransform:'uppercase',color:'var(--text-sec)',opacity:0.6,marginBottom:8,fontWeight:700}}>Height</div>
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
         <div>
           <select value={feet} onChange={e=>onFeet(e.target.value)} style={selStyle}
-            onFocus={e=>e.target.style.borderColor=G} onBlur={e=>e.target.style.borderColor='#1f1f1f'}>
+            onFocus={e=>e.target.style.borderColor=G} onBlur={e=>e.target.style.borderColor='var(--border)'}>
             <option value="" disabled>ft</option>
             {FEET_OPTS.map(f=><option key={f} value={f}>{f} ft</option>)}
           </select>
         </div>
         <div>
           <select value={inches} onChange={e=>onInches(e.target.value)} style={selStyle}
-            onFocus={e=>e.target.style.borderColor=G} onBlur={e=>e.target.style.borderColor='#1f1f1f'}>
+            onFocus={e=>e.target.style.borderColor=G} onBlur={e=>e.target.style.borderColor='var(--border)'}>
             <option value="" disabled>in</option>
             {INCHES_OPTS.map(i=><option key={i} value={i}>{i} in</option>)}
           </select>
@@ -420,22 +420,22 @@ function StepWrapper({ children, animKey }) {
   return <div key={animKey} style={{animation:'stepIn 0.3s ease both'}}>{children}</div>;
 }
 
-const lbl = { fontSize:10, letterSpacing:2, textTransform:'uppercase', color:'#444', marginBottom:10, fontWeight:700 };
-const title = () => ({ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:42, lineHeight:0.95, letterSpacing:1, color:'#fff', marginBottom:10 });
-const sub = { fontSize:14, lineHeight:1.6, color:'#666', fontWeight:400 };
+const lbl = { fontSize:10, letterSpacing:2, textTransform:'uppercase', color:'var(--text-sec)', opacity:0.6, marginBottom:10, fontWeight:700 };
+const title = () => ({ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:42, lineHeight:0.95, letterSpacing:1, color:'var(--text-pri)', marginBottom:10 });
+const sub = { fontSize:14, lineHeight:1.6, color:'var(--text-sec)', opacity:0.6, fontWeight:400 };
 
 export default function Onboarding() {
   const { belt, setBelt, styles, setStyles, goals, setGoals, freq, setFreq, comp, setComp, finishOnboarding, nickname, setNickname, scFreq, setScFreq, bjjDays, setBjjDays, workoutDays, setWorkoutDays } = useApp();
   const [step, setStep]       = useState(0);
   const [animKey, setAnimKey] = useState(0);
-  const [giPref, setGiPref]   = useState('');
+  const [giPref, setGiPref]   = useState('both');
   const [sex, setSex]         = useState('male');
   const [unit, setUnit]         = useState('imperial');
-  const [weight, setWeight]     = useState('');
+  const [weight, setWeight]     = useState('185');
   const [heightCm, setHeightCm] = useState('178');
   const [heightFt, setHeightFt] = useState('5');
   const [heightIn, setHeightIn] = useState('10');
-  const [bodyType, setBodyType] = useState('');
+  const [bodyType, setBodyType] = useState('mesomorph');
   const [customGoal, setCustomGoal] = useState('');
   const [showCustomGoal, setShowCustomGoal] = useState(false);
   const [showCustomFreq, setShowCustomFreq] = useState(false);
@@ -445,6 +445,7 @@ export default function Onboarding() {
   useEffect(() => {
     if (!freq) setFreq('2');
     if (!scFreq) setScFreq('2');
+    if (!nickname) setNickname('Champion');
   }, []);
 
   // Auto-suggest workout days based on BJJ days
@@ -478,8 +479,8 @@ export default function Onboarding() {
   const wLbl = unit==='metric' ? 'Weight (kg)' : 'Weight (lbs)';
 
   const inp = {
-    width:'100%', background:'#111', border:'1px solid #1f1f1f', borderRadius:10,
-    padding:'16px 18px', color:'#fff', fontFamily:"'Barlow Condensed',sans-serif",
+    width:'100%', background:'var(--bg-total)', border:'1px solid var(--border)', borderRadius:10,
+    padding:'16px 18px', color:'var(--text-pri)', fontFamily:"'Barlow Condensed',sans-serif",
     fontSize:28, fontWeight:800, letterSpacing:2, outline:'none', transition:'border-color 0.18s',
   };
 
@@ -494,11 +495,11 @@ export default function Onboarding() {
         <input type="text" value={nickname} onChange={e=>setNickname(e.target.value)}
           placeholder="e.g. Marcus, Cobra..." maxLength={20} style={inp}
           onFocus={e=>e.target.style.borderColor=G}
-          onBlur={e=>e.target.style.borderColor='#1f1f1f'}
+          onBlur={e=>e.target.style.borderColor='var(--border)'}
         />
         {nickname.length>0 && (
-          <div style={{marginTop:14,padding:'12px 16px',background:'rgba(74,222,128,0.06)',border:'1px solid rgba(74,222,128,0.15)',borderRadius:10,fontSize:14,color:'#666',animation:'fadeUp 0.25s ease both'}}>
-            Welcome to the mats, <span style={{color:'#fff',fontWeight:700}}>{nickname}</span>. Let's build your profile.
+          <div style={{marginTop:14,padding:'12px 16px',background:G+'11',border:`1px solid ${G}33`,borderRadius:10,fontSize:14,color:'var(--text-sec)',animation:'fadeUp 0.25s ease both'}}>
+            Welcome to the mats, <span style={{color:'var(--text-pri)',fontWeight:700}}>{nickname}</span>. Let's build your profile.
           </div>
         )}
       </div>
@@ -607,9 +608,10 @@ export default function Onboarding() {
         {GOALS.map(g=>(
           <div key={g} onClick={()=>setGoals(prev=>prev.includes(g)?prev.filter(v=>v!==g):[...prev,g])} style={{
             padding:'9px 16px', borderRadius:50,
-            border:`1px solid ${goals.includes(g)?G:'#1f1f1f'}`,
-            background:goals.includes(g)?'rgba(74,222,128,0.08)':'#111',
-            color:goals.includes(g)?'#fff':'#555',
+            border:`1px solid ${goals.includes(g)?G:'var(--border)'}`,
+            background:goals.includes(g)?G+'11':'var(--bg-total)',
+            color:goals.includes(g)?'var(--text-pri)':'var(--text-sec)',
+            opacity: goals.includes(g) ? 1 : 0.6,
             fontSize:13, fontWeight:600, cursor:'pointer', transition:'all 0.18s',
           }}>{g}</div>
         ))}
@@ -618,9 +620,10 @@ export default function Onboarding() {
           onClick={()=>setShowCustomGoal(v=>!v)}
           style={{
             padding:'9px 16px', borderRadius:50,
-            border:`1px solid ${showCustomGoal?G:'#1f1f1f'}`,
-            background:showCustomGoal?'rgba(74,222,128,0.08)':'#111',
-            color:showCustomGoal?'#fff':'#555',
+            border:`1px solid ${showCustomGoal?G:'var(--border)'}`,
+            background:showCustomGoal?G+'11':'var(--bg-total)',
+            color:showCustomGoal?'var(--text-pri)':'var(--text-sec)',
+            opacity: showCustomGoal ? 1 : 0.6,
             fontSize:13, fontWeight:600, cursor:'pointer', transition:'all 0.18s',
           }}
         >✏️ Other</div>
@@ -639,8 +642,8 @@ export default function Onboarding() {
             }}
             placeholder="Describe your goal..."
             style={{
-              width:'100%',background:'#111',border:`1px solid ${G}`,borderRadius:10,
-              padding:'13px 16px',color:'#fff',fontFamily:"'Barlow',sans-serif",
+              width:'100%',background:'var(--bg-total)',border:`1px solid ${G}`,borderRadius:10,
+              padding:'13px 16px',color:'var(--text-pri)',fontFamily:"'Barlow',sans-serif",
               fontSize:15,fontWeight:600,outline:'none',
             }}
           />
@@ -664,9 +667,9 @@ export default function Onboarding() {
             {[1,2,3,4,5,6,7].map(n => (
               <div key={n} onClick={()=>setFreq(String(n))} style={{
                 flex:1, height:44, display:'flex', alignItems:'center', justifyContent:'center',
-                borderRadius:10, background: freq === String(n) ? G : '#111',
-                border: `1px solid ${freq === String(n) ? G : '#1f1f1f'}`,
-                color: freq === String(n) ? '#000' : '#fff',
+                borderRadius:10, background: freq === String(n) ? G : 'var(--bg-total)',
+                border: `1px solid ${freq === String(n) ? G : 'var(--border)'}`,
+                color: freq === String(n) ? '#000' : 'var(--text-pri)',
                 fontSize:16, fontWeight:800, cursor:'pointer', transition:'all 0.18s'
               }}>{n}</div>
             ))}
@@ -697,9 +700,9 @@ export default function Onboarding() {
             {[1,2,3,4,5,6,7].map(n => (
               <div key={n} onClick={()=>setScFreq(String(n))} style={{
                 flex:1, height:44, display:'flex', alignItems:'center', justifyContent:'center',
-                borderRadius:10, background: scFreq === String(n) ? G : '#111',
-                border: `1px solid ${scFreq === String(n) ? G : '#1f1f1f'}`,
-                color: scFreq === String(n) ? '#000' : '#fff',
+                borderRadius:10, background: scFreq === String(n) ? G : 'var(--bg-total)',
+                border: `1px solid ${scFreq === String(n) ? G : 'var(--border)'}`,
+                color: scFreq === String(n) ? '#000' : 'var(--text-pri)',
                 fontSize:16, fontWeight:800, cursor:'pointer', transition:'all 0.18s'
               }}>{n}</div>
             ))}
@@ -724,9 +727,10 @@ export default function Onboarding() {
             return (
               <div key={d} onClick={()=>setBjjDays(prev=>prev.includes(i)?prev.filter(x=>x!==i):[...prev,i].sort())} style={{
                 padding:'10px 14px', borderRadius:8, cursor:'pointer',
-                border:`1px solid ${active?'#4ade80':'#1f1f1f'}`,
-                background:active?'rgba(74,222,128,0.1)':'#111',
-                color:active?'#4ade80':'#555',
+                border:`1px solid ${active?'#4ade80':'var(--border)'}`,
+                background:active?G+'11':'var(--bg-total)',
+                color:active?'#4ade80':'var(--text-sec)',
+                opacity: active ? 1 : 0.6,
                 fontSize:13, fontWeight:700, transition:'all 0.18s',
                 minWidth:48, textAlign:'center',
               }}>{d}</div>
@@ -749,9 +753,10 @@ export default function Onboarding() {
                 setWorkoutDays(prev=>prev.includes(i)?prev.filter(x=>x!==i):[...prev,i].sort());
               }} style={{
                 padding:'10px 14px', borderRadius:8, cursor:'pointer',
-                border:`1px solid ${active?'#f59e0b':'#1f1f1f'}`,
-                background:active?'rgba(245,158,11,0.1)':'#111',
-                color:active?'#f59e0b':'#555',
+                border:`1px solid ${active?'#f59e0b':'var(--border)'}`,
+                background:active?AMBER+'11':'var(--bg-total)',
+                color:active?'#f59e0b':'var(--text-sec)',
+                opacity: active ? 1 : 0.6,
                 fontSize:13, fontWeight:700, transition:'all 0.18s',
                 minWidth:48, textAlign:'center',
                 position:'relative',
@@ -765,7 +770,7 @@ export default function Onboarding() {
           })}
         </div>
         {workoutDays.some(d=>bjjDays.includes(d)) && (
-          <div style={{marginTop:10,fontSize:12,color:'#555',fontStyle:'italic'}}>
+          <div style={{marginTop:10,fontSize:12,color:'var(--text-sec)',opacity:0.6,fontStyle:'italic'}}>
             💡 Days with both BJJ and a workout are marked with a green dot – bold choice.
           </div>
         )}
@@ -787,7 +792,7 @@ export default function Onboarding() {
   ];
 
   return (
-    <div style={{height:'100dvh',display:'flex',flexDirection:'column',background:'#000',maxWidth:430,margin:'0 auto',overflow:'hidden', userSelect: 'none'}}>
+    <div style={{height:'100dvh',display:'flex',flexDirection:'column',background:'var(--bg-page)',maxWidth:430,margin:'0 auto',overflow:'hidden', userSelect: 'none'}}>
       {/* Global Shader Definitions */}
       <svg style={{ position: 'absolute', width: 0, height: 0 }}>
         <defs>
