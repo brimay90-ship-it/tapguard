@@ -246,8 +246,33 @@ const BELTS = ['white', 'blue', 'purple', 'brown', 'black'];
 const BELT_COLORS = { white: '#ddd', blue: '#3498db', purple: '#9b59b6', brown: '#8B4513', black: '#555' };
 const GI_PREFS = [{ val: 'gi', label: 'Gi' }, { val: 'nogi', label: 'No-Gi' }, { val: 'both', label: 'Both' }];
 
+const BODY_TYPES = ['Lanky', 'Athletic', 'Stocky', 'Heavy'];
+const SEXES = ['Male', 'Female', 'Other'];
+const STYLE_OPTIONS = [
+  { id: 'standing', label: 'Standing / Wrestling' },
+  { id: 'closed-guard', label: 'Closed Guard' },
+  { id: 'open-guard', label: 'Open Guard' },
+  { id: 'half-guard', label: 'Half Guard' },
+  { id: 'passing', label: 'Passing / Pressure' },
+  { id: 'back-control', label: 'Back Control' },
+  { id: 'leg-lock', label: 'Leg Locks' },
+];
+
 function SettingsScreen() {
-  const { nickname, setNickname, belt, setBelt, giPref, setGiPref, weight, setWeight, height, setHeight } = useApp();
+  const { 
+    nickname, setNickname, 
+    belt, setBelt, 
+    giPref, setGiPref, 
+    weight, setWeight, 
+    height, setHeight,
+    sex, setSex,
+    bodyType, setBodyType,
+    styles, setStyles
+  } = useApp();
+
+  const toggleStyle = (id) => {
+    setStyles(prev => prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]);
+  };
 
   return (
     <div style={{ flex: 1, overflowY: 'auto', padding: '16px 20px 60px', WebkitOverflowScrolling: 'touch' }}>
@@ -295,8 +320,24 @@ function SettingsScreen() {
         </div>
       </Section>
 
-      {/* Physical */}
-      <Section label="Physical Stats">
+      {/* Physical Stats */}
+      <Section label="Physical Profile">
+        <div style={{ display: 'flex', gap: 10, marginBottom: 12 }}>
+          <div style={{ flex: 1 }}>
+            <div style={sublabel}>Gender</div>
+            <select value={sex} onChange={e => setSex(e.target.value)} style={fieldStyle}>
+              <option value="">Select...</option>
+              {SEXES.map(s => <option key={s} value={s.toLowerCase()}>{s}</option>)}
+            </select>
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={sublabel}>Body Type</div>
+            <select value={bodyType} onChange={e => setBodyType(e.target.value)} style={fieldStyle}>
+              <option value="">Select...</option>
+              {BODY_TYPES.map(bt => <option key={bt} value={bt.toLowerCase()}>{bt}</option>)}
+            </select>
+          </div>
+        </div>
         <div style={{ display: 'flex', gap: 10 }}>
           <div style={{ flex: 1 }}>
             <div style={sublabel}>Weight (kg)</div>
@@ -310,6 +351,51 @@ function SettingsScreen() {
           </div>
         </div>
       </Section>
+
+      {/* BJJ Style Profile */}
+      <Section label="BJJ Style Profile">
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+          {STYLE_OPTIONS.map(s => {
+            const active = styles.includes(s.id);
+            return (
+              <button key={s.id} onClick={() => toggleStyle(s.id)} style={{
+                padding: '8px 14px', borderRadius: 20,
+                border: `1px solid ${active ? G : '#222'}`,
+                background: active ? G + '18' : 'transparent',
+                color: active ? G : '#444',
+                fontSize: 11, fontWeight: 600, cursor: 'pointer',
+                fontFamily: "'DM Sans', sans-serif", transition: 'all 0.15s',
+              }}>
+                {active ? '✓ ' : '+ '}{s.label}
+              </button>
+            );
+          })}
+        </div>
+      </Section>
+
+      {/* Preferences */}
+      <Section label="App Preferences">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ fontSize: 13, color: '#f0f0f0', fontFamily: "'DM Sans', sans-serif" }}>Units</div>
+            <div style={{ display: 'flex', background: '#111', borderRadius: 8, padding: 3, border: '1px solid #222' }}>
+              {['Metric', 'Imperial'].map(u => (
+                <div key={u} style={{
+                  padding: '4px 12px', fontSize: 11, borderRadius: 6, fontWeight: 700,
+                  background: u === 'Metric' ? '#222' : 'transparent',
+                  color: u === 'Metric' ? '#f0f0f0' : '#444',
+                  fontFamily: "'DM Sans', sans-serif", cursor: 'pointer',
+                }}>{u}</div>
+              ))}
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ fontSize: 13, color: '#f0f0f0', fontFamily: "'DM Sans', sans-serif" }}>Appearance</div>
+            <div style={{ fontSize: 11, color: '#444', fontFamily: "'DM Sans', sans-serif", fontWeight: 700 }}>DARK MODE (Active)</div>
+          </div>
+        </div>
+      </Section>
+
     </div>
   );
 }
@@ -367,7 +453,7 @@ export default function HamburgerMenu() {
       id: 'settings',
       icon: '⚙',
       label: 'User Settings',
-      sub: 'Belt, name, physical stats',
+      sub: 'Profile, game styles & preferences',
       action: () => setScreen('settings'),
     },
     {
