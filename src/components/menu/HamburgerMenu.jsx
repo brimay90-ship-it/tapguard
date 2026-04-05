@@ -267,7 +267,8 @@ function SettingsScreen() {
     height, setHeight,
     sex, setSex,
     bodyType, setBodyType,
-    styles, setStyles
+    styles, setStyles,
+    theme, setTheme
   } = useApp();
 
   const toggleStyle = (id) => {

@@ -364,7 +364,7 @@ function getWorkoutMeta(exercises) {
 }
 
 export default function Dashboard() {
-  const { comp, belt, beltColor, setActiveTab, styles, nickname, lowestComp, bjjDays, workoutDays } = useApp();
+  const { comp, belt, beltColor, setActiveTab, styles, nickname, lowestComp, bjjDays, workoutDays, theme } = useApp();
 
   // Seed focusIndex from the user's weakest comp area
   const seedIndex = COMP_TO_FOCUS_IDX[lowestComp] ?? 0;
