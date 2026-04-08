@@ -3,6 +3,7 @@ import { useApp } from '../../context/AppContext';
 import { motion, AnimatePresence, useSpring, useMotionValue, useTransform, useVelocity } from 'framer-motion';
 
 const G = '#4ade80';
+const AMBER = '#f59e0b';
 
 const LEVELS = [
   { val:'beginner',     title:'Beginner',     desc:'Under 1 year – still learning to fall properly',    icon:'🌱' },
