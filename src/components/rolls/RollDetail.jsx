@@ -17,7 +17,7 @@ export default function RollDetail({ session, onBack }) {
 
   const overlay = (
     <div className="overlay-enter" style={{
-      position: 'fixed', inset: 0, background: 'var(--overlay-bg)',
+      position: 'fixed', inset: 0, background: 'var(--bg-page)',
       overflowY: 'auto', padding: '20px 20px 80px', zIndex: 9999,
     }}>
       <button onClick={onBack} style={{
