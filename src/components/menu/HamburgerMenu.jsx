@@ -172,8 +172,8 @@ function TerminologyScreen({ onBack }) {
         <div style={{ position: 'relative' }}>
           <span style={{
             position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)',
-            fontSize: 14, color: '#444', pointerEvents: 'none'
-          }}>⌕</span>
+            fontSize: 16, color: '#444', pointerEvents: 'none'
+          }}>🔍</span>
           <input
             value={q}
             onChange={e => setQ(e.target.value)}
@@ -247,7 +247,7 @@ const BELT_COLORS = { white: '#ddd', blue: '#3498db', purple: '#9b59b6', brown: 
 const GI_PREFS = [{ val: 'gi', label: 'Gi' }, { val: 'nogi', label: 'No-Gi' }, { val: 'both', label: 'Both' }];
 
 const BODY_TYPES = ['Lanky', 'Athletic', 'Stocky', 'Heavy'];
-const SEXES = ['Male', 'Female', 'Other'];
+const SEXES = ['Male', 'Female'];
 const STYLE_OPTIONS = [
   { id: 'standing', label: 'Standing / Wrestling' },
   { id: 'closed-guard', label: 'Closed Guard' },
@@ -473,14 +473,14 @@ export default function HamburgerMenu() {
   const MENU_ITEMS = [
     {
       id: 'settings',
-      icon: '⚙',
+      icon: '⚙️',
       label: 'User Settings',
       sub: 'Profile, game styles & preferences',
       action: () => setScreen('settings'),
     },
     {
       id: 'terminology',
-      icon: '📖',
+      icon: '📚',
       label: 'BJJ Terminology',
       sub: `${TERMS.length}+ terms with search`,
       action: () => setScreen('terminology'),
@@ -525,13 +525,13 @@ export default function HamburgerMenu() {
             <button onClick={() => setScreen(null)} style={{
               background: 'var(--bg-card)', border: 'none', borderRadius: '50%',
               width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: 'var(--text-sec)', cursor: 'pointer', fontSize: 16, flexShrink: 0,
+              color: 'var(--text-sec)', cursor: 'pointer', fontSize: 18, flexShrink: 0,
             }}>←</button>
           ) : (
             <button onClick={close} style={{
               background: 'var(--bg-card)', border: 'none', borderRadius: '50%',
               width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: 'var(--text-sec)', cursor: 'pointer', fontSize: 18, flexShrink: 0,
+              color: 'var(--text-sec)', cursor: 'pointer', fontSize: 22, flexShrink: 0,
             }}>✕</button>
           )}
           <div style={{
@@ -570,7 +570,7 @@ export default function HamburgerMenu() {
                       {item.sub}
                     </div>
                   </div>
-                  <span style={{ color: 'var(--border)', fontSize: 16 }}>›</span>
+                  <span style={{ color: 'var(--border)', fontSize: 18 }}>›</span>
                 </button>
               ))}
 
@@ -586,7 +586,7 @@ export default function HamburgerMenu() {
                   onMouseEnter={e => e.currentTarget.style.background = '#220808'}
                   onMouseLeave={e => e.currentTarget.style.background = '#1a0505'}
                 >
-                  <span style={{ fontSize: 16 }}>⏎</span>
+                  <span style={{ fontSize: 18 }}>↺</span>
                   Reset & Logout
                 </button>
               </div>

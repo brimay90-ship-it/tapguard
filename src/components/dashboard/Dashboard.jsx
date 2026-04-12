@@ -508,14 +508,7 @@ export default function Dashboard() {
                 : '1px solid var(--border)',
         }}>
 
-          {/* Accent bar */}
-          <div style={{
-            height:3,
-            background: isBjjToday && isWorkoutToday ? 'linear-gradient(to right,#0BF571,#F0A020)'
-                      : isBjjToday     ? '#0BF571'
-                      : isWorkoutToday ? '#F0A020'
-                      : '#2A2D32',
-          }}/>
+          
 
           <div
             role="button"

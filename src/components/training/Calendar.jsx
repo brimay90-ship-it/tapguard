@@ -40,15 +40,25 @@ export default function Calendar({ selectedDate, onSelectDate }) {
     <div className="liquid-glass" style={{borderRadius:20,overflow:'hidden',marginBottom:20}}>
 
       {/* Header */}
-      <div style={{padding:'14px 16px 10px',borderBottom:'1px solid var(--border)'}}>
+      <div style={{padding:'14px 16px 10px'}}>
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:10}}>
-          <div style={{display:'flex',alignItems:'center',gap:10}}>
-            <button onClick={()=>setOffset(o=>o-1)} style={{background:'none',border:'none',color:'var(--text-sec)',opacity:0.6,fontSize:16,cursor:'pointer',padding:'2px 6px',borderRadius:4,transition:'color 0.15s'}}
-              onMouseEnter={e=>e.currentTarget.style.color='var(--text-pri)'} onMouseLeave={e=>e.currentTarget.style.color='var(--text-sec)'}>‹</button>
-            <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:17,color:'var(--text-pri)',letterSpacing:0.5,minWidth:160,textAlign:'center'}}>{navLabel}</span>
-            <button onClick={()=>setOffset(o=>o+1)} style={{background:'none',border:'none',color:'var(--text-sec)',opacity:0.6,fontSize:16,cursor:'pointer',padding:'2px 6px',borderRadius:4,transition:'color 0.15s'}}
-              onMouseEnter={e=>e.currentTarget.style.color='var(--text-pri)'} onMouseLeave={e=>e.currentTarget.style.color='var(--text-sec)'}>›</button>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:10}}>
+        <div style={{display:'flex',alignItems:'center',gap:10}}>
+          <button onClick={()=>setOffset(o=>o-1)} style={{background:'none',border:'none',color:'var(--text-sec)',opacity:0.6,fontSize:16,cursor:'pointer',padding:'2px 6px',borderRadius:4,transition:'color 0.15s'}}
+            onMouseEnter={e=>e.currentTarget.style.color='var(--text-pri)'} onMouseLeave={e=>e.currentTarget.style.color='var(--text-sec)'}>‹</button>
+          <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:17,color:'var(--text-pri)',letterSpacing:0.5,minWidth:160,textAlign:'center'}}>{navLabel}</span>
+          <button onClick={()=>setOffset(o=>o+1)} style={{background:'none',border:'none',color:'var(--text-sec)',opacity:0.6,fontSize:16,cursor:'pointer',padding:'2px 6px',borderRadius:4,transition:'color 0.15s'}}
+            onMouseEnter={e=>e.currentTarget.style.color='var(--text-pri)'} onMouseLeave={e=>e.currentTarget.style.color='var(--text-sec)'}>›</button>
+        </div>
+        <div style={{display:'flex',gap:10}}>
+          <div style={{display:'flex',alignItems:'center',gap:4,fontSize:10,color:'var(--text-sec)',opacity:0.6,fontWeight:600}}>
+            <span style={{width:6,height:6,borderRadius:'50%',background:G,display:'inline-block'}}/>BJJ
           </div>
+          <div style={{display:'flex',alignItems:'center',gap:4,fontSize:10,color:'var(--text-sec)',opacity:0.6,fontWeight:600}}>
+            <span style={{width:6,height:6,borderRadius:'50%',background:AMBER,display:'inline-block'}}/>WKT
+          </div>
+        </div>
+      </div>
           {/* Legend */}
           <div style={{display:'flex',gap:10}}>
             <div style={{display:'flex',alignItems:'center',gap:4,fontSize:10,color:'var(--text-sec)',opacity:0.6,fontWeight:600}}>
