@@ -596,7 +596,7 @@ export default function HamburgerMenu() {
                 textAlign: 'center', marginTop: 28,
                 fontSize: 10, color: '#222', letterSpacing: '0.1em',
                 fontFamily: "'DM Sans', sans-serif",
-              }}>TAPGUARD v1.0</div>
+              }}>GROUNDWORK v1.0</div>
             </div>
           )}
 
