@@ -153,7 +153,7 @@ function FocusOverlay({ focus, onClose }) {
         <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:G, fontWeight:700 }}>This Week's Focus</div>
       </div>
       <div style={{ padding:'24px 20px 0' }}>
-        <h1 style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:40, color:'#fff', lineHeight:0.95, marginBottom:20, letterSpacing:1 }}>{focus.skill}</h1>
+        <h1 style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:40, color: 'var(--text-pri)', lineHeight:0.95, marginBottom:20, letterSpacing:1 }}>{focus.skill}</h1>
 
         {/* Video player */}
         {videos.length > 0 && (
@@ -238,7 +238,7 @@ function RankOverlay({ currentScore, target, onClose }) {
       </div>
 
       <div style={{ padding:'24px 20px', position:'relative' }}>
-        <h1 style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:44, color:'#fff', lineHeight:0.95, marginBottom:10, letterSpacing:1 }}>MAT HIERARCHY</h1>
+        <h1 style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:44, color: 'var(--text-pri)', lineHeight:0.95, marginBottom:10, letterSpacing:1 }}>MAT HIERARCHY</h1>
         <p style={{ fontSize:14, color:'#555', marginBottom:32, fontWeight:400, lineHeight:1.5 }}>Unlock unique titles by shifting your skill map and evolving your game.</p>
 
         <div style={{ display:'flex', gap:20, position:'relative' }}>
@@ -613,7 +613,7 @@ export default function Dashboard() {
                 <div style={{marginBottom:14}}>
                   <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:7}}>
                     <span style={{fontSize:20}}>{bjjClassFocus.icon}</span>
-                    <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:17,color:'#fff'}}>
+                    <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:17,color: 'var(--text-pri)'}}>
                       Focus: {bjjClassFocus.focus}
                     </div>
                   </div>
@@ -667,7 +667,7 @@ export default function Dashboard() {
                 <div style={{ fontSize: 10, letterSpacing: 2, textTransform: 'uppercase', color: '#555', fontWeight: 800, marginBottom: 3 }}>
                   Start workout
                 </div>
-                <div style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 900, fontSize: 16, color: '#fff', letterSpacing: 0.6 }}>
+                <div style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 900, fontSize: 16, color: 'var(--text-pri)', letterSpacing: 0.6 }}>
                   View full plan
                 </div>
               </div>
@@ -694,7 +694,7 @@ export default function Dashboard() {
           <div style={{ width:1, height:60, background:'rgba(255,255,255,0.08)', flexShrink:0 }}/>
           <div style={{ flex:1 }}>
             <div style={{ fontSize:10, letterSpacing:2, textTransform:'uppercase', color:'#555', marginBottom:8, fontWeight:800 }}>YOUR RANK</div>
-            <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:24, color:'#fff', lineHeight:1.1, marginBottom:8, letterSpacing:0.5 }}>{title || 'Trainee'} {icon}</div>
+            <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:24, color: 'var(--text-pri)', lineHeight:1.1, marginBottom:8, letterSpacing:0.5 }}>{title || 'Trainee'} {icon}</div>
             <div style={{ fontSize:13, color:'#aaa', fontWeight:400, lineHeight:1.5, fontStyle:'italic', marginBottom: spec ? 12 : 0 }}>{tagline}</div>
             
             {/* Style Specialization Badge */}
@@ -716,7 +716,7 @@ export default function Dashboard() {
                 <span style={{ fontSize:16 }}>{spec.icon}</span>
                 <div>
                   <div style={{ fontSize:8, fontWeight:900, color:G, letterSpacing:1.5, textTransform:'uppercase', lineHeight:1 }}>Style Specialist</div>
-                  <div style={{ fontSize:12, fontWeight:700, color:'#fff' }}>{spec.title}</div>
+                  <div style={{ fontSize:12, fontWeight:700, color: 'var(--text-pri)' }}>{spec.title}</div>
                 </div>
               </div>
             )}
@@ -748,7 +748,7 @@ export default function Dashboard() {
               onMouseLeave={e=>e.currentTarget.style.borderColor='rgba(255,255,255,0.14)'}
             >
               <div style={{fontSize:22,marginBottom:12}}>{card.icon}</div>
-              <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:18,letterSpacing:0.5,color:'#fff',marginBottom:4}}>{card.label}</div>
+              <div style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:900,fontSize:18,letterSpacing:0.5,color: 'var(--text-pri)',marginBottom:4}}>{card.label}</div>
               <div style={{fontSize:12,color:G,fontWeight:600,letterSpacing:0.5}}>{card.sub}</div>
             </div>
           ))}

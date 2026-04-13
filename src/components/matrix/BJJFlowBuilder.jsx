@@ -1099,7 +1099,7 @@ function DiamondCanvas({ focusId, fromId, fromAngle, path, adj, byId, store, onN
                   {ghostLayout.map((g) => (
                     <line key={`gl-${g.spId}-${g.gtCode}`}
                       x1={SC + g.sx} y1={SC + g.sy} x2={SC + g.px} y2={SC + g.py}
-                      stroke="#1c1c1c" strokeWidth="1" strokeDasharray="4 5" strokeOpacity="0.6"
+                      stroke="var(--border)" strokeWidth="1" strokeDasharray="4 5" strokeOpacity="0.6"
                     />
                   ))}
                 </g>
@@ -1115,12 +1115,12 @@ function DiamondCanvas({ focusId, fromId, fromAngle, path, adj, byId, store, onN
                     onClick={e => { e.stopPropagation(); if (!dragRef.current.didDrag) handleNavigate(gt.id, g.ga); }}>
                     <div style={{
                       width: GW, padding: "6px 9px", boxSizing: "border-box",
-                      background: "#0c0c0c", border: "1px solid #1c1c1c", borderRadius: 8,
+                      background: 'var(--bg-card)', border: `1px solid var(--border)`, borderRadius: 8,
                       opacity: slideOut ? 0 : 1, overflow: "hidden", transition: "opacity 0.25s"
                     }}>
                       <div style={{
                         fontFamily: "'Barlow Condensed',sans-serif", fontSize: 11, fontWeight: 700,
-                        color: "#d8d8d8", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"
+                        color: 'var(--text-pri)', whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"
                       }}>{gt.name}</div>
                       <div style={{
                         fontSize: 8, color: gc, fontWeight: 700, textTransform: "uppercase",
@@ -1150,15 +1150,15 @@ function DiamondCanvas({ focusId, fromId, fromAngle, path, adj, byId, store, onN
               <div style={{
                 width: SW, boxSizing: "border-box",
                 opacity: op, transition: "opacity 0.25s",
-                background: inPath ? `${nbCol}1a` : isFrom ? "#141414" : "#111",
-                border: `1.5px solid ${inPath ? nbCol : isFrom ? "#333" : "#272727"}`,
+                background: inPath ? `${nbCol}1a` : isFrom ? 'var(--bg-card)' : 'var(--bg-card)',
+                border: `1.5px solid ${inPath ? nbCol : isFrom ? 'var(--border)' : 'var(--border)'}`,
                 borderRadius: 12, padding: "10px 12px",
                 boxShadow: inPath ? `0 0 0 2px ${nbCol}28,0 6px 24px #000b` : "0 4px 18px #000a",
                 position: "relative", overflow: "hidden",
               }}>
                 <div style={{
                   fontFamily: "'Barlow Condensed',sans-serif", fontSize: 14, fontWeight: 700,
-                  color: inPath ? "#f5f5f5" : "#d8d8d8", lineHeight: 1.2, marginBottom: 3,
+                  color: 'var(--text-pri)', lineHeight: 1.2, marginBottom: 3,
                   whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
                 }}>{nb.name}</div>
                 <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
@@ -1186,7 +1186,7 @@ function DiamondCanvas({ focusId, fromId, fromAngle, path, adj, byId, store, onN
         {extraN > 0 && (
           <NodeAt dx={0} dy={D_R + 48} z={3} delay={240}>
             <div style={{ textAlign: "center", opacity: slideOut ? 0 : 1, transition: "opacity 0.25s" }}>
-              <span style={{ fontSize: 11, color: "#555", fontFamily: "'DM Sans',sans-serif" }}>
+              <span style={{ fontSize: 11, color: 'var(--text-sec)', fontFamily: "'DM Sans',sans-serif" }}>
                 +{extraN} more · tap Details to see all
               </span>
             </div>
@@ -1202,21 +1202,21 @@ function DiamondCanvas({ focusId, fromId, fromAngle, path, adj, byId, store, onN
             pointerEvents: "none"
           }} />
           <div style={{
-            width: CW, background: "#161616", border: `2px solid ${col}`,
+            width: CW, background: 'var(--bg-card)', border: `2px solid ${col}`,
             borderRadius: 16, overflow: "hidden",
             boxShadow: `0 0 0 4px ${col}12,0 8px 40px #000e`,
           }}>
             <div style={{ padding: "12px 14px 12px" }}>
               <div style={{
                 fontFamily: "'Barlow Condensed',sans-serif",
-                fontSize: 20, fontWeight: 700, color: "#f8f8f8", lineHeight: 1.15, marginBottom: 5
+                fontSize: 20, fontWeight: 700, color: 'var(--text-pri)', lineHeight: 1.15, marginBottom: 5
               }}>{tech.name}</div>
               <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
                 <span style={{ fontSize: 10, color: col, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em" }}>
                   {tech.category}
                 </span>
-                <span style={{ width: 3, height: 3, borderRadius: "50%", background: "#2a2a2a", flexShrink: 0 }} />
-                <span style={{ fontSize: 10, color: "#3a3a3a" }}>{tech.skill_level}</span>
+                <span style={{ width: 3, height: 3, borderRadius: "50%", background: 'var(--border)', flexShrink: 0 }} />
+                <span style={{ fontSize: 10, color: 'var(--text-sec)' }}>{tech.skill_level}</span>
                 {(store.techs?.[focusId]?.proficiency || 0) > 0 && (
                   <span style={{
                     marginLeft: "auto", fontSize: 11, fontWeight: 800,
@@ -1225,11 +1225,11 @@ function DiamondCanvas({ focusId, fromId, fromAngle, path, adj, byId, store, onN
                   }}>{store.techs[focusId].proficiency}/10</span>
                 )}
               </div>
-              <div style={{ fontSize: 11, color: "#666", marginBottom: 12, fontFamily: "'DM Sans',sans-serif" }}>
+              <div style={{ fontSize: 11, color: 'var(--text-sec)', marginBottom: 12, fontFamily: "'DM Sans',sans-serif" }}>
                 {allNbrs.length} link{allNbrs.length !== 1 && 's'}
               </div>
               {(store.techs?.[focusId]?.proficiency || 0) > 0 && (
-                <div style={{ height: 3, background: "#1a1a1a", borderRadius: 2, overflow: "hidden", marginBottom: 10 }}>
+                <div style={{ height: 3, background: 'var(--border)', borderRadius: 2, overflow: "hidden", marginBottom: 10 }}>
                   <div style={{
                     height: "100%", width: `${(store.techs[focusId].proficiency || 0) * 10}%`,
                     background: col, opacity: 0.6, borderRadius: 2
@@ -1244,8 +1244,8 @@ function DiamondCanvas({ focusId, fromId, fromAngle, path, adj, byId, store, onN
                 }}>Info ›</div>
                 <div onClick={(e) => { e.stopPropagation(); if (onTogglePath) onTogglePath(focusId); }}
                   style={{
-                  width: 32, borderRadius: 8, background: path.includes(focusId) ? col : "#1e1e1e",
-                  color: path.includes(focusId) ? "#000" : "#666", fontSize: 16,
+                  width: 32, borderRadius: 8, background: path.includes(focusId) ? col : 'var(--bg-card)',
+                  color: path.includes(focusId) ? 'var(--bg-card)' : 'var(--text-sec)', fontSize: 16,
                   display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0,
                   transition: "background 0.2s, color 0.2s"
                 }}>
@@ -1267,9 +1267,9 @@ function DiamondCanvas({ focusId, fromId, fromAngle, path, adj, byId, store, onN
         <button onClick={() => { panOffsetRef.current = { x: 0, y: 0 }; setPanOffset({ x: 0, y: 0 }); }}
           style={{
             position: "absolute", bottom: 14, left: "50%", transform: "translateX(-50%)",
-            zIndex: 20, background: "#161616", border: "1px solid #2a2a2a",
+            zIndex: 20, background: 'var(--bg-card)', border: `1px solid var(--border)`,
             borderRadius: 20, padding: "6px 16px", cursor: "pointer",
-            fontSize: 11, color: "#888", fontFamily: "'DM Sans',sans-serif", fontWeight: 600,
+            fontSize: 11, color: 'var(--text-sec)', fontFamily: "'DM Sans',sans-serif", fontWeight: 600,
             boxShadow: "0 4px 16px rgba(0,0,0,0.5)",
             display: "flex", alignItems: "center", gap: 6,
           }}>
@@ -1293,9 +1293,9 @@ function TooltipHint({ text }) {
         onMouseLeave={() => setVisible(false)}
         style={{
           width: 22, height: 22, borderRadius: "50%",
-          background: "#161616", border: "1px solid #252525",
+          background: 'var(--bg-card)', border: "1px solid #252525",
           display: "flex", alignItems: "center", justifyContent: "center",
-          fontSize: 11, color: "#444", cursor: "pointer",
+          fontSize: 11, color: 'var(--text-sec)', cursor: "pointer",
           fontFamily: "'DM Sans',sans-serif", fontWeight: 700,
           flexShrink: 0, userSelect: "none",
         }}
@@ -1303,17 +1303,17 @@ function TooltipHint({ text }) {
       {visible && (
         <div style={{
           position: "absolute", bottom: "calc(100% + 8px)", right: 0,
-          background: "#1a1a1a", border: "1px solid #2a2a2a",
+          background: 'var(--border)', border: `1px solid var(--border)`,
           borderRadius: 10, padding: "8px 12px",
-          fontSize: 11, color: "#666", fontFamily: "'DM Sans',sans-serif",
+          fontSize: 11, color: 'var(--text-sec)', fontFamily: "'DM Sans',sans-serif",
           whiteSpace: "nowrap", pointerEvents: "none", zIndex: 50,
           boxShadow: "0 4px 16px rgba(0,0,0,0.5)",
         }}>
           {text}
           <div style={{
             position: "absolute", bottom: -5, right: 8,
-            width: 8, height: 8, background: "#1a1a1a",
-            border: "1px solid #2a2a2a", borderTop: "none", borderLeft: "none",
+            width: 8, height: 8, background: 'var(--border)',
+            border: `1px solid var(--border)`, borderTop: "none", borderLeft: "none",
             transform: "rotate(45deg)",
           }} />
         </div>
@@ -1336,8 +1336,8 @@ function PathBuilder({ path, byId, focusId, onTap, onRemove, onAddFocus, focusIn
 
   return (
     <div style={{
-      background: "#0d0d0d",
-      borderTop: `1px solid ${isEmpty ? "#161616" : "#1e1e1e"}`,
+      background: "var(--bg-card)",
+      borderTop: `1px solid var(--border)`,
       flexShrink: 0,
     }}>
       {isEmpty ? (
@@ -1351,7 +1351,7 @@ function PathBuilder({ path, byId, focusId, onTap, onRemove, onAddFocus, focusIn
       ) : (
         <div>
           {/* Progress bar */}
-          <div style={{ height: 2, background: "#141414" }}>
+          <div style={{ height: 2, background: 'var(--bg-card)' }}>
             <div style={{
               height: "100%",
               width: `${Math.min(path.length * 14, 100)}%`,
@@ -1366,7 +1366,7 @@ function PathBuilder({ path, byId, focusId, onTap, onRemove, onAddFocus, focusIn
             padding: "6px 16px 0",
             display: "flex", alignItems: "center", justifyContent: "space-between",
           }}>
-            <span style={{ fontSize: 10, color: "#444", fontFamily: "'DM Sans',sans-serif" }}>
+            <span style={{ fontSize: 10, color: 'var(--text-sec)', fontFamily: "'DM Sans',sans-serif" }}>
               {path.length} technique{path.length !== 1 ? "s" : ""} in flow
             </span>
             {path.length >= 3 && (
@@ -1396,8 +1396,8 @@ function PathBuilder({ path, byId, focusId, onTap, onRemove, onAddFocus, focusIn
                       display: "flex", alignItems: "center", gap: 5,
                       minHeight: 36, padding: "0 10px 0 8px",
                       borderRadius: 20,
-                      background: isFocus ? col + "1e" : "#141414",
-                      border: `1px solid ${isFocus ? col + "55" : "#222"}`,
+                      background: isFocus ? col + "1e" : 'var(--bg-card)',
+                      border: `1px solid ${isFocus ? col + "55" : 'var(--border)'}`,
                       cursor: "pointer", whiteSpace: "nowrap",
                       transition: "all 0.15s",
                       WebkitTapHighlightColor: "transparent",
@@ -1406,10 +1406,10 @@ function PathBuilder({ path, byId, focusId, onTap, onRemove, onAddFocus, focusIn
                     {/* Step number badge */}
                     <div style={{
                       width: 18, height: 18, borderRadius: "50%", flexShrink: 0,
-                      background: isFocus ? col : "#222",
+                      background: isFocus ? col : 'var(--border)',
                       display: "flex", alignItems: "center", justifyContent: "center",
                       fontSize: 9, fontWeight: 700,
-                      color: isFocus ? "#fff" : "#555",
+                      color: isFocus ? "#fff" : 'var(--text-sec)',
                       fontFamily: "'Barlow Condensed',sans-serif",
                     }}>{i + 1}</div>
                     <span style={{
@@ -1442,7 +1442,7 @@ function PathBuilder({ path, byId, focusId, onTap, onRemove, onAddFocus, focusIn
             {/* Add current focus to path inline */}
             {focusId && !focusInPath && (
               <div style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
-                <div style={{ width: 16, textAlign: "center", fontSize: 10, color: "#2a2a2a", flexShrink: 0 }}>→</div>
+                <div style={{ width: 16, textAlign: "center", fontSize: 10, color: 'var(--border)', flexShrink: 0 }}>→</div>
                 <div
                   onClick={onAddFocus}
                   style={{
@@ -1523,7 +1523,7 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
             }}>{tech.category}</div>
             <div style={{
               fontFamily: "'Barlow Condensed',sans-serif",
-              fontSize: 22, fontWeight: 700, color: "#f5f5f5", lineHeight: 1.1
+              fontSize: 22, fontWeight: 700, color: 'var(--text-pri)', lineHeight: 1.1
             }}>{tech.name}</div>
             {tech.aka?.length > 0 && (
               <div style={{ fontSize: 11, color: "#777", marginTop: 3 }}>aka {tech.aka.slice(0, 2).join(", ")}</div>
@@ -1533,9 +1533,9 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
           <div style={{ display: "flex", gap: 8, alignItems: "flex-start", flexShrink: 0 }}>
             <button onClick={() => { inPath ? onRemoveFromPath(tech.id) : onAddToPath(tech.id); haptic(8); }} style={{
               minHeight: 40, padding: "0 16px", borderRadius: 20,
-              border: `1.5px solid ${inPath ? "#2a2a2a" : col}`,
-              background: inPath ? "#141414" : `${col}18`,
-              color: inPath ? "#444" : col,
+              border: `1.5px solid ${inPath ? 'var(--border)' : col}`,
+              background: inPath ? 'var(--bg-card)' : `${col}18`,
+              color: inPath ? 'var(--text-sec)' : col,
               cursor: "pointer", fontWeight: 700, fontSize: 12,
               fontFamily: "'DM Sans',sans-serif", flexShrink: 0, whiteSpace: "nowrap",
             }}>{inPath ? "✓ In Flow" : "+ Add to Flow"}</button>
@@ -1557,7 +1557,7 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
             <button key={t} onClick={() => setTab(t)} style={{
               flex: 1, minHeight: 44, fontSize: 11, border: "none", background: "transparent",
               cursor: "pointer", fontFamily: "'DM Sans',sans-serif",
-              color: tab === t ? "#f0f0f0" : "#666",
+              color: tab === t ? 'var(--text-pri)' : 'var(--text-sec)',
               borderBottom: tab === t ? `2px solid ${col}` : "2px solid transparent",
               fontWeight: tab === t ? 600 : 400,
               position: "relative",
@@ -1606,7 +1606,7 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
                 {tech.common_setups.map((s, i) => (
                   <div key={i} style={{
                     fontSize: 13, color: "#ccc", padding: "6px 0",
-                    borderBottom: "1px solid #222", lineHeight: 1.55
+                    borderBottom: `1px solid var(--border)`, lineHeight: 1.55
                   }}>• {s}</div>
                 ))}
               </div>
@@ -1689,7 +1689,7 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
             <button onClick={() => { rate(tech.id, prof, status, notes); haptic(12); onClose(); }} style={{
               width: "100%", minHeight: 46, borderRadius: 12, border: "none",
               background: `linear-gradient(135deg,${col},${col}bb)`,
-              color: "#fff", fontWeight: 700, fontSize: 15, cursor: "pointer",
+              color: 'var(--text-pri)', fontWeight: 700, fontSize: 15, cursor: "pointer",
               fontFamily: "'Barlow Condensed',sans-serif", letterSpacing: "0.04em",
             }}>Save to Arsenal</button>
           </div>
@@ -1726,8 +1726,8 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
                     {!inP && (
                       <button onClick={() => onAddToPath(nb.id)} style={{
                         fontSize: 11, padding: "5px 10px", borderRadius: 16,
-                        border: "1px solid #222", background: "transparent",
-                        color: "#555", cursor: "pointer", fontFamily: "'DM Sans',sans-serif",
+                        border: `1px solid var(--border)`, background: "transparent",
+                        color: 'var(--text-sec)', cursor: "pointer", fontFamily: "'DM Sans',sans-serif",
                       }}>+ Flow</button>
                     )}
                   </div>
@@ -1745,7 +1745,7 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
                 gap: 12, padding: "40px 20px", textAlign: "center",
               }}>
                 <div style={{ fontSize: 32, opacity: 0.2 }}>ðŸŽ¬</div>
-                <div style={{ fontSize: 13, color: "#333", fontFamily: "'DM Sans',sans-serif", lineHeight: 1.6 }}>
+                <div style={{ fontSize: 13, color: 'var(--border)', fontFamily: "'DM Sans',sans-serif", lineHeight: 1.6 }}>
                   No videos indexed yet for this technique.
                 </div>
                 <a
@@ -1774,7 +1774,7 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
                     <div style={{
                       width: "100%", aspectRatio: "16/9",
                       borderRadius: 12, overflow: "hidden",
-                      background: "#0a0a0a", border: "1px solid #222",
+                      background: 'var(--bg-page)', border: `1px solid var(--border)`,
                     }}>
                       <iframe
                         width="100%" height="100%"
@@ -1793,7 +1793,7 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
                   target="_blank" rel="noopener noreferrer"
                   style={{
                     display: "block", textAlign: "center",
-                    fontSize: 12, color: "#444", padding: "10px",
+                    fontSize: 12, color: 'var(--text-sec)', padding: "10px",
                     textDecoration: "none", fontFamily: "'DM Sans',sans-serif",
                   }}
                 >
@@ -1820,7 +1820,7 @@ function Library({ onSelect, onBack }) {
   }), [q, cat]);
 
   return (
-    <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, background: "#0a0a0a", zIndex: 400, display: "flex", flexDirection: "column" }}>
+    <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, background: 'var(--bg-page)', zIndex: 400, display: "flex", flexDirection: "column" }}>
       <div style={{ padding: "24px 14px 0", background: "#0d0d0d", borderBottom: "1px solid #191919", flexShrink: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
           <button onClick={onBack} style={{
@@ -1828,15 +1828,15 @@ function Library({ onSelect, onBack }) {
             width: 44, height: 44, borderRadius: "50%", cursor: "pointer", fontSize: 20,
             display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0
           }}>←</button>
-          <span style={{ fontFamily: "'Barlow Condensed',sans-serif", fontSize: 20, fontWeight: 700, color: "#f0f0f0" }}>
+          <span style={{ fontFamily: "'Barlow Condensed',sans-serif", fontSize: 20, fontWeight: 700, color: 'var(--text-pri)' }}>
             Techniques
           </span>
-          <span style={{ marginLeft: "auto", fontSize: 11, color: "#444" }}>{filtered.length}</span>
+          <span style={{ marginLeft: "auto", fontSize: 11, color: 'var(--text-sec)' }}>{filtered.length}</span>
         </div>
         <input value={q} onChange={e => setQ(e.target.value)} placeholder="Search techniques..."
           style={{
             width: "100%", boxSizing: "border-box", padding: "10px 14px",
-            background: "#141414", border: "1px solid #1e1e1e", borderRadius: 10,
+            background: 'var(--bg-card)', border: "1px solid #1e1e1e", borderRadius: 10,
             color: "#e0e0e0", fontSize: 14, marginBottom: 10
           }}
         />
@@ -1849,9 +1849,9 @@ function Library({ onSelect, onBack }) {
             return (
               <button key={c} onClick={() => setCat(c)} style={{
                 minHeight: 36, padding: "0 13px", borderRadius: 20,
-                border: `1px solid ${active ? col : "#1e1e1e"}`,
+                border: `1px solid ${active ? col : 'var(--bg-card)'}`,
                 background: active ? col + "1e" : "transparent",
-                color: active ? col : "#3a3a3a", cursor: "pointer",
+                color: active ? col : 'var(--text-sec)', cursor: "pointer",
                 whiteSpace: "nowrap", flexShrink: 0, fontFamily: "'DM Sans',sans-serif", fontSize: 12,
               }}>{c === "All" ? "All" : c.split(" ")[0]}</button>
             );
@@ -1865,7 +1865,7 @@ function Library({ onSelect, onBack }) {
             <div key={t.id} onClick={() => { haptic(6); onSelect(t.id); onBack(); }}
               style={{
                 display: "flex", alignItems: "center", gap: 10, padding: "12px 12px",
-                marginBottom: 5, borderRadius: 12, background: "#111", border: "1px solid #181818",
+                marginBottom: 5, borderRadius: 12, background: 'var(--bg-card)', border: "1px solid #181818",
                 cursor: "pointer", WebkitTapHighlightColor: "transparent", minHeight: 56
               }}>
               <div style={{ width: 3, height: 40, borderRadius: 2, background: col, flexShrink: 0 }} />
@@ -1875,9 +1875,9 @@ function Library({ onSelect, onBack }) {
                   fontFamily: "'Barlow Condensed',sans-serif",
                   whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"
                 }}>{t.name}</div>
-                <div style={{ fontSize: 11, color: "#444", marginTop: 1 }}>{t.subcategory} · {t.skill_level}</div>
+                <div style={{ fontSize: 11, color: 'var(--text-sec)', marginTop: 1 }}>{t.subcategory} · {t.skill_level}</div>
               </div>
-              <span style={{ fontSize: 14, color: "#222", flexShrink: 0 }}>›</span>
+              <span style={{ fontSize: 14, color: 'var(--border)', flexShrink: 0 }}>›</span>
             </div>
           );
         })}
@@ -1901,7 +1901,7 @@ function Arsenal({ byId, onBack, onLoadFlow, onNavigate, embedded = false }) {
   const needsWork = saved.filter(([, v]) => v.proficiency > 0 && v.proficiency < 4).length;
 
   return (
-    <div style={{ ...(embedded ? { flex: 1, overflow: "hidden" } : { position: "absolute", inset: 0, zIndex: 400 }), background: "#0a0a0a", display: "flex", flexDirection: "column" }}>
+    <div style={{ ...(embedded ? { flex: 1, overflow: "hidden" } : { position: "absolute", inset: 0, zIndex: 400 }), background: 'var(--bg-page)', display: "flex", flexDirection: "column" }}>
       <div style={{
         padding: embedded ? "12px 16px 12px" : "24px 16px 12px", background: "#0d0d0d",
         borderBottom: "1px solid #191919", flexShrink: 0
@@ -1913,7 +1913,7 @@ function Arsenal({ byId, onBack, onLoadFlow, onNavigate, embedded = false }) {
               width: 44, height: 44, borderRadius: "50%", cursor: "pointer", fontSize: 20,
               display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0
             }}>←</button>
-            <span style={{ fontFamily: "'Barlow Condensed',sans-serif", fontSize: 22, fontWeight: 700, color: "#f0f0f0" }}>
+            <span style={{ fontFamily: "'Barlow Condensed',sans-serif", fontSize: 22, fontWeight: 700, color: 'var(--text-pri)' }}>
               Arsenal
             </span>
           </div>
@@ -1928,9 +1928,9 @@ function Arsenal({ byId, onBack, onLoadFlow, onNavigate, embedded = false }) {
             padding: "48px 24px", gap: 10, height: "100%",
           }}>
             <div style={{ fontSize: 32, opacity: 0.15 }}>⛓</div>
-            <div style={{ fontSize: 14, color: "#333", fontFamily: "'DM Sans',sans-serif", textAlign: "center", lineHeight: 1.6 }}>
+            <div style={{ fontSize: 14, color: 'var(--border)', fontFamily: "'DM Sans',sans-serif", textAlign: "center", lineHeight: 1.6 }}>
               No saved flows yet.<br />
-              <span style={{ color: "#555" }}>Build a flow on the Techniques tab and tap Save ↗</span>
+              <span style={{ color: 'var(--text-sec)' }}>Build a flow on the Techniques tab and tap Save ↗</span>
             </div>
           </div>
         ) : (
@@ -1938,7 +1938,7 @@ function Arsenal({ byId, onBack, onLoadFlow, onNavigate, embedded = false }) {
             const p = f.path || [];
             return (
               <div key={f.id} style={{
-                background: "#111", borderRadius: 14,
+                background: 'var(--bg-card)', borderRadius: 14,
                 padding: "14px", marginBottom: 10, border: "1px solid #191919"
               }}>
                 <div style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 10 }}>
@@ -1947,7 +1947,7 @@ function Arsenal({ byId, onBack, onLoadFlow, onNavigate, embedded = false }) {
                       fontSize: 16, fontWeight: 700, color: "#e0e0e0",
                       fontFamily: "'Barlow Condensed',sans-serif"
                     }}>{f.name}</div>
-                    <div style={{ fontSize: 11, color: "#444", marginTop: 1 }}>
+                    <div style={{ fontSize: 11, color: 'var(--text-sec)', marginTop: 1 }}>
                       {p.length} technique{p.length !== 1 ? "s" : ""} · {new Date(f.createdAt).toLocaleDateString()}
                     </div>
                   </div>
@@ -1960,7 +1960,7 @@ function Arsenal({ byId, onBack, onLoadFlow, onNavigate, embedded = false }) {
                   <button onClick={() => delFlow(f.id)} style={{
                     minHeight: 36, padding: "0 12px", borderRadius: 20,
                     border: "1px solid #1e1e1e", background: "transparent",
-                    color: "#333", cursor: "pointer", fontSize: 14, flexShrink: 0
+                    color: 'var(--border)', cursor: "pointer", fontSize: 14, flexShrink: 0
                   }}>✕</button>
                 </div>
                 {/* Chain preview */}
@@ -1986,7 +1986,7 @@ function Arsenal({ byId, onBack, onLoadFlow, onNavigate, embedded = false }) {
                             overflow: "hidden", textOverflow: "ellipsis"
                           }}>{t.name.split(" ")[0]}</span>
                         </div>
-                        {i < p.length - 1 && <span style={{ color: "#333", fontSize: 10, padding: "0 3px", marginBottom: 10 }}>›</span>}
+                        {i < p.length - 1 && <span style={{ color: 'var(--border)', fontSize: 10, padding: "0 3px", marginBottom: 10 }}>›</span>}
                       </div>
                     );
                   })}
@@ -2011,18 +2011,18 @@ function SaveModal({ path, byId, onSave, onClose }) {
     }}
       onClick={onClose}>
       <div onClick={e => e.stopPropagation()} style={{
-        background: "#141414", borderRadius: "22px 22px 0 0",
-        border: "1px solid #222", padding: "24px 20px",
+        background: 'var(--bg-card)', borderRadius: "22px 22px 0 0",
+        border: `1px solid var(--border)`, padding: "24px 20px",
         width: "100%", maxWidth: 430, boxSizing: "border-box",
         paddingBottom: `max(28px, env(safe-area-inset-bottom, 28px))`,
       }}>
         <div style={{
           fontFamily: "'Barlow Condensed',sans-serif",
-          fontSize: 24, fontWeight: 700, color: "#f0f0f0", marginBottom: 4
+          fontSize: 24, fontWeight: 700, color: 'var(--text-pri)', marginBottom: 4
         }}>
           Save Flow
         </div>
-        <div style={{ fontSize: 13, color: "#444", marginBottom: 16, fontFamily: "'DM Sans',sans-serif" }}>
+        <div style={{ fontSize: 13, color: 'var(--text-sec)', marginBottom: 16, fontFamily: "'DM Sans',sans-serif" }}>
           {path.length} technique{path.length !== 1 ? "s" : ""} · {path.map(id => byId[id]?.name || "").filter(Boolean).slice(0, 2).join(" → ")}
           {path.length > 2 ? ` → +${path.length - 2} more` : ""}
         </div>
@@ -2030,8 +2030,8 @@ function SaveModal({ path, byId, onSave, onClose }) {
           onKeyDown={e => e.key === "Enter" && name.trim() && onSave(name.trim())}
           style={{
             width: "100%", boxSizing: "border-box", padding: "13px 14px",
-            background: "#0d0d0d", border: "1px solid #222", borderRadius: 12,
-            color: "#f0f0f0", fontSize: 16, marginBottom: 14,
+            background: "#0d0d0d", border: `1px solid var(--border)`, borderRadius: 12,
+            color: 'var(--text-pri)', fontSize: 16, marginBottom: 14,
             fontFamily: "'Barlow Condensed',sans-serif"
           }}
         />
@@ -2044,8 +2044,8 @@ function SaveModal({ path, byId, onSave, onClose }) {
           }}>Save Playbook ✓</button>
           <button onClick={onClose} style={{
             minHeight: 50, padding: "0 20px", borderRadius: 14,
-            border: "1px solid #222", background: "transparent",
-            color: "#555", fontSize: 14, cursor: "pointer",
+            border: `1px solid var(--border)`, background: "transparent",
+            color: 'var(--text-sec)', fontSize: 14, cursor: "pointer",
           }}>Cancel</button>
         </div>
       </div>
@@ -2078,17 +2078,17 @@ function Onboarding({ belt, byId, onSelect, onSearch }) {
   const isWhite = belt === "White";
   return (
     <div style={{
-      position: "absolute", inset: 0, background: "#0a0a0a",
+      position: "absolute", inset: 0, background: 'var(--bg-page)',
       display: "flex", flexDirection: "column", zIndex: 500, padding: "24px 20px 0",
       paddingBottom: "max(16px, env(safe-area-inset-bottom, 16px))"
     }}>
       <div style={{
         fontFamily: "'Barlow Condensed',sans-serif",
-        fontSize: 26, fontWeight: 700, color: "#f0f0f0", marginBottom: 4
+        fontSize: 26, fontWeight: 700, color: 'var(--text-pri)', marginBottom: 4
       }}>
         Where do you want to start?
       </div>
-      <div style={{ fontSize: 13, color: "#444", marginBottom: 20, fontFamily: "'DM Sans',sans-serif", lineHeight: 1.5 }}>
+      <div style={{ fontSize: 13, color: 'var(--text-sec)', marginBottom: 20, fontFamily: "'DM Sans',sans-serif", lineHeight: 1.5 }}>
         Pick a starting point and explore where it might lead.
       </div>
 
@@ -2096,11 +2096,14 @@ function Onboarding({ belt, byId, onSelect, onSearch }) {
       <div style={{ marginBottom: 24, flexShrink: 0 }}>
         <div onClick={onSearch} style={{
           display: "flex", alignItems: "center", padding: "14px 18px",
-          background: "#111", border: "1px solid #222", borderRadius: 16,
+          background: 'var(--bg-card)', border: `1px solid var(--border)`, borderRadius: 16,
           cursor: "pointer", boxShadow: "0 4px 20px rgba(0,0,0,0.3)"
         }}>
-          <span style={{ fontSize: 18, marginRight: 12, opacity: 0.6 }}>ðŸ”</span>
-          <span style={{ fontSize: 14, color: "#888", fontFamily: "'DM Sans',sans-serif", fontWeight: 500 }}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke='var(--text-sec)' strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: 12, flexShrink: 0 }}>
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <span style={{ fontSize: 14, color: 'var(--text-sec)', fontFamily: "'DM Sans',sans-serif", fontWeight: 500 }}>
             Search all 163 techniques...
           </span>
         </div>
@@ -2111,10 +2114,10 @@ function Onboarding({ belt, byId, onSelect, onSearch }) {
 
         {/* Core Fundamentals Group */}
         <div>
-          <div style={{ fontSize: 12, fontWeight: 700, color: "#888", marginBottom: 10, textTransform: "uppercase", letterSpacing: 1 }}>Fundamental Positions</div>
+          <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-pri)', marginBottom: 10, textTransform: "uppercase", letterSpacing: 1 }}>Fundamental Positions</div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
             {STARTERS.map(s => {
-              const col = CAT[s.cat] || "#888";
+              const col = CAT[s.cat] || 'var(--text-sec)';
               return (
                 <button key={s.id} onClick={() => { haptic(8); onSelect(s.id); }} style={{
                   padding: "12px 12px", borderRadius: 12,
@@ -2124,10 +2127,10 @@ function Onboarding({ belt, byId, onSelect, onSearch }) {
                   display: "flex", flexDirection: "column",
                 }}>
                   <div style={{
-                    fontSize: 14, fontWeight: 700, color: "#f0f0f0",
+                    fontSize: 14, fontWeight: 700, color: 'var(--text-pri)',
                     fontFamily: "'Barlow Condensed',sans-serif", marginBottom: 2
                   }}>{s.label}</div>
-                  <div style={{ fontSize: 10, color: "#666", fontFamily: "'DM Sans',sans-serif", lineHeight: 1.2, flex: 1 }}>{s.desc}</div>
+                  <div style={{ fontSize: 10, color: 'var(--text-sec)', fontFamily: "'DM Sans',sans-serif", lineHeight: 1.2, flex: 1 }}>{s.desc}</div>
                   <div style={{
                     fontSize: 9, color: col, fontWeight: 700, textTransform: "uppercase",
                     letterSpacing: "0.06em", marginTop: 6
@@ -2140,10 +2143,10 @@ function Onboarding({ belt, byId, onSelect, onSearch }) {
 
         {/* High Success Plays Group */}
         <div>
-          <div style={{ fontSize: 12, fontWeight: 700, color: "#888", marginBottom: 10, textTransform: "uppercase", letterSpacing: 1 }}>High-Percentage For Beginners</div>
+          <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-pri)', marginBottom: 10, textTransform: "uppercase", letterSpacing: 1 }}>High-Percentage For Beginners</div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
             {RECOMMENDED_WHITE.map(s => {
-              const col = CAT[s.cat] || "#888";
+              const col = CAT[s.cat] || 'var(--text-sec)';
               return (
                 <button key={s.id} onClick={() => { haptic(8); onSelect(s.id); }} style={{
                   padding: "12px 12px", borderRadius: 12,
@@ -2153,10 +2156,10 @@ function Onboarding({ belt, byId, onSelect, onSearch }) {
                   display: "flex", flexDirection: "column",
                 }}>
                   <div style={{
-                    fontSize: 14, fontWeight: 700, color: "#f0f0f0",
+                    fontSize: 14, fontWeight: 700, color: 'var(--text-pri)',
                     fontFamily: "'Barlow Condensed',sans-serif", marginBottom: 2
                   }}>{s.label}</div>
-                  <div style={{ fontSize: 10, color: "#666", fontFamily: "'DM Sans',sans-serif", lineHeight: 1.2, flex: 1 }}>{s.desc}</div>
+                  <div style={{ fontSize: 10, color: 'var(--text-sec)', fontFamily: "'DM Sans',sans-serif", lineHeight: 1.2, flex: 1 }}>{s.desc}</div>
                   <div style={{
                     fontSize: 9, color: col, fontWeight: 700, textTransform: "uppercase",
                     letterSpacing: "0.06em", marginTop: 6
@@ -2179,11 +2182,11 @@ function BeltPicker({ onSelect }) {
     { b: "Blue", c: "#3b82f6" },
     { b: "Purple", c: "#8b5cf6" },
     { b: "Brown", c: "#92400e" },
-    { b: "Black", c: "#888" },
+    { b: "Black", c: 'var(--text-sec)' },
   ];
   return (
     <div style={{
-      position: "absolute", inset: 0, background: "#0a0a0a", zIndex: 500,
+      position: "absolute", inset: 0, background: 'var(--bg-page)', zIndex: 500,
       display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
       padding: "32px 28px"
     }}>
@@ -2191,16 +2194,16 @@ function BeltPicker({ onSelect }) {
         width: 40, height: 40, borderRadius: 10, marginBottom: 20,
         background: "linear-gradient(135deg,#22c55e,#16a34a)",
         display: "flex", alignItems: "center", justifyContent: "center",
-        fontSize: 20, fontWeight: 900, color: "#fff", fontFamily: "'Barlow Condensed',sans-serif"
+        fontSize: 20, fontWeight: 900, color: 'var(--text-pri)', fontFamily: "'Barlow Condensed',sans-serif"
       }}>T</div>
       <div style={{
         fontFamily: "'Barlow Condensed',sans-serif",
-        fontSize: 28, fontWeight: 700, color: "#f0f0f0", marginBottom: 6, textAlign: "center"
+        fontSize: 28, fontWeight: 700, color: 'var(--text-pri)', marginBottom: 6, textAlign: "center"
       }}>
         What's your belt?
       </div>
       <div style={{
-        fontSize: 13, color: "#444", marginBottom: 32, textAlign: "center",
+        fontSize: 13, color: 'var(--text-sec)', marginBottom: 32, textAlign: "center",
         fontFamily: "'DM Sans',sans-serif"
       }}>
         We'll personalise your starting view
@@ -2279,7 +2282,7 @@ function App() {
 
   return (
     <div style={{
-      width: "100%", height: "100%", background: "#0a0a0a",
+      width: "100%", height: "100%", background: 'var(--bg-page)',
       display: "flex", flexDirection: "column", overflow: "hidden",
       fontFamily: "'DM Sans',sans-serif",
       maxWidth: 430, margin: "0 auto", position: "relative",
@@ -2306,24 +2309,24 @@ function App() {
       {/* Top bar */}
       <div style={{
         display: "flex", alignItems: "center", padding: "11px 14px",
-        background: "#0d0d0d", borderBottom: "1px solid #161616",
+        background: "var(--bg-card)", borderBottom: "1px solid var(--border)",
         flexShrink: 0, gap: 8, zIndex: 10,
       }}>
         <div style={{
           width: 30, height: 30, borderRadius: 7, flexShrink: 0,
           background: "linear-gradient(135deg,#22c55e,#16a34a)",
           display: "flex", alignItems: "center", justifyContent: "center",
-          fontSize: 14, fontWeight: 900, color: "#fff", fontFamily: "'Barlow Condensed',sans-serif",
+          fontSize: 14, fontWeight: 900, color: '#fff', fontFamily: "'Barlow Condensed',sans-serif",
         }}>T</div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{
-            fontSize: 12, fontWeight: 700, color: "#f0f0f0",
+            fontSize: 12, fontWeight: 700, color: "var(--text-pri)",
             fontFamily: "'Barlow Condensed',sans-serif", letterSpacing: "0.05em",
             lineHeight: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"
           }}>
             {flowTitle}
           </div>
-          <div style={{ fontSize: 8, color: "#2a2a2a", letterSpacing: "0.12em", lineHeight: 1.4 }}>
+          <div style={{ fontSize: 8, color: 'var(--text-sec)', letterSpacing: "0.12em", lineHeight: 1.4 }}>
             {focusId ? `THE PLAYBOOK · ${path.length} MOVE${path.length !== 1 ? "S" : ""}` : "THE PLAYBOOK"}
           </div>
         </div>
@@ -2340,9 +2343,9 @@ function App() {
             {focusId && (
               <button onClick={() => focusInPath ? removeFromPath(focusId) : addToPath(focusId)} style={{
                 minHeight: 34, padding: "0 11px", borderRadius: 20,
-                border: `1.5px solid ${focusInPath ? "#2a2a2a" : catColor(byId[focusId]) + "66"}`,
+                border: `1.5px solid ${focusInPath ? 'var(--border)' : catColor(byId[focusId]) + "66"}`,
                 background: focusInPath ? "transparent" : `${catColor(byId[focusId])}16`,
-                color: focusInPath ? "#3a3a3a" : catColor(byId[focusId]),
+                color: focusInPath ? 'var(--text-sec)' : catColor(byId[focusId]),
                 fontSize: 11, cursor: "pointer", fontFamily: "'DM Sans',sans-serif",
                 fontWeight: 700, whiteSpace: "nowrap", transition: "all 0.18s",
               }}>
@@ -2353,8 +2356,8 @@ function App() {
             {(focusId || path.length > 0) && (
               <button onClick={clear} style={{
                 minHeight: 34, width: 34, borderRadius: 20, flexShrink: 0,
-                border: "1px solid #222", background: "transparent",
-                color: "#444", fontSize: 14, cursor: "pointer", display: "flex",
+                border: `1px solid var(--border)`, background: "transparent",
+                color: 'var(--text-sec)', fontSize: 14, cursor: "pointer", display: "flex",
                 alignItems: "center", justifyContent: "center",
               }}>✕</button>
             )}
@@ -2373,14 +2376,14 @@ function App() {
       {/* Matrix tab bar */}
       <div style={{
         display: "flex", flexShrink: 0,
-        background: "#0d0d0d", borderBottom: "1px solid #161616",
+        background: "var(--bg-card)", borderBottom: "1px solid var(--border)",
         padding: "0 14px",
       }}>
         {[["techniques", "Techniques"], ["arsenal", "Arsenal"]].map(([tab, label]) => (
           <button key={tab} onClick={() => setMatrixTab(tab)} style={{
             flex: 1, minHeight: 38, border: "none", background: "transparent",
             cursor: "pointer", fontFamily: "'DM Sans',sans-serif", fontSize: 12, fontWeight: 600,
-            color: matrixTab === tab ? "#f0f0f0" : "#555",
+            color: matrixTab === tab ? "var(--text-pri)" : 'var(--text-sec)',
             borderBottom: matrixTab === tab ? "2px solid #22c55e" : "2px solid transparent",
             transition: "color 0.15s",
           }}>{label}{tab === "arsenal" && (store.flows || []).length > 0 && (
@@ -2412,10 +2415,10 @@ function App() {
                 alignItems: "center", justifyContent: "center", gap: 16, padding: "32px"
               }}>
                 <div style={{
-                  fontSize: 13, color: "#2a2a2a", textAlign: "center",
+                  fontSize: 13, color: 'var(--border)', textAlign: "center",
                   fontFamily: "'DM Sans',sans-serif", lineHeight: 1.6
                 }}>
-                  Tap <span style={{ color: "#555" }}>＋ Technique</span> to pick a move<br />and start exploring connections
+                  Tap <span style={{ color: 'var(--text-sec)' }}>＋ Technique</span> to pick a move<br />and start exploring connections
                 </div>
               </div>
             ) : null}

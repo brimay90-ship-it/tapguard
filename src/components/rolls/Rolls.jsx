@@ -436,7 +436,7 @@ export default function Rolls() {
               <video ref={viewfinderRef} autoPlay muted playsInline style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
               <div style={{ position:'absolute', top:10, left:10, display:'flex', alignItems:'center', gap:6, background:'rgba(0,0,0,0.7)', borderRadius:6, padding:'4px 10px' }}>
                 <span style={{ width:8, height:8, borderRadius:'50%', background:RED, display:'inline-block', animation:'pulse 1s ease infinite' }} />
-                <span style={{ fontSize:11, letterSpacing:2, textTransform:'uppercase', color:'#fff', fontWeight:700 }}>REC</span>
+                <span style={{ fontSize:11, letterSpacing:2, textTransform:'uppercase', color: 'var(--text-pri)', fontWeight:700 }}>REC</span>
               </div>
               <div style={{ position:'absolute', top:10, right:10, background:'rgba(0,0,0,0.7)', borderRadius:6, padding:'4px 10px', fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:20, color:G, letterSpacing:2 }}>{fmt(recSeconds)}</div>
             </div>
@@ -445,7 +445,7 @@ export default function Rolls() {
                 <div style={{ fontSize:11, letterSpacing:2, textTransform:'uppercase', color:'#444', fontWeight:700 }}>Rounds</div>
                 <div style={{ display:'flex', alignItems:'center', gap:12 }}>
                   <button onClick={() => setRounds(r => Math.max(1, r - 1))} style={{ width:32, height:32, borderRadius:'50%', background:'#111', border:'1px solid #2A2D32', color:'#fff', fontSize:18, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>−</button>
-                  <span style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:28, color:'#fff', minWidth:24, textAlign:'center' }}>{rounds}</span>
+                  <span style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:28, color: 'var(--text-pri)', minWidth:24, textAlign:'center' }}>{rounds}</span>
                   <button onClick={() => setRounds(r => r + 1)} style={{ width:32, height:32, borderRadius:'50%', background:'#111', border:'1px solid #2A2D32', color:'#fff', fontSize:18, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>+</button>
                 </div>
               </div>

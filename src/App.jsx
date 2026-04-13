@@ -69,31 +69,6 @@ const NAV = [
   },
 ];
 
-// ── GroundWork mark ───────────────────────────────────────────────────────────────
-function GroundWorkMark({ size = 32, glow = false }) {
-  return (
-    <div style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
-      {glow && (
-        <div style={{
-          position: 'absolute', inset: 0, borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(11,245,113,0.3) 0%, transparent 70%)',
-          transform: 'scale(1.4)',
-        }} />
-      )}
-      <svg width={size} height={size} viewBox="0 0 64 64" fill="none">
-        <path d="M60 32L46 56.4H18L4 32L18 7.6H46L60 32Z" fill="#0BF571" />
-        <line x1="4"  y1="32"  x2="60" y2="32"  stroke="rgba(0,0,0,0.22)" strokeWidth="2.2" />
-        <line x1="18" y1="7.6" x2="46" y2="56.4" stroke="rgba(0,0,0,0.22)" strokeWidth="2.2" />
-        <line x1="46" y1="7.6" x2="18" y2="56.4" stroke="rgba(0,0,0,0.22)" strokeWidth="2.2" />
-        <circle cx="32" cy="32" r="3.5" fill="rgba(0,0,0,0.22)" />
-        {glow && (
-          <path d="M60 32L46 56.4H18L4 32L18 7.6H46L60 32Z" fill="none" stroke="#0BF571" strokeWidth="0.5" opacity="0.4" />
-        )}
-      </svg>
-    </div>
-  );
-}
-
 // ── Wordmark (Reactive) ──────────────────────────────────────────────────────
 function Wordmark({ size = 20 }) {
   return (
@@ -109,37 +84,54 @@ function Wordmark({ size = 20 }) {
 
 // ── Splash screen ─────────────────────────────────────────────────────────────
 function Splash({ onDone }) {
-  useEffect(() => { const id = setTimeout(onDone, 2400); return () => clearTimeout(id); }, [onDone]);
+  const [fade, setFade] = useState(false);
+
+  useEffect(() => { 
+    // Start fading out after 2.8 seconds
+    const fadeTimer = setTimeout(() => setFade(true), 2800); 
+    // Unmount completely after the 0.5s fade finishes (3.3 seconds total)
+    const doneTimer = setTimeout(onDone, 3300); 
+    return () => { clearTimeout(fadeTimer); clearTimeout(doneTimer); }; 
+  }, [onDone]);
 
   return (
     <div style={{
-      position: 'fixed', inset: 0, background: '#080808',
+      position: 'fixed', inset: 0, background: '#000',
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
-      zIndex: 999,
+      zIndex: 9999,
+      opacity: fade ? 0 : 1, transition: 'opacity 0.5s ease-out'
     }}>
+      {/* Background Video */}
+      <video 
+        src="/Splash.mp4" 
+        autoPlay 
+        muted 
+        playsInline 
+        loop
+        style={{ position: 'absolute', inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }}
+      />
+      
+      {/* Dark overlay for contrast */}
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1 }} />
+
       {/* Glow backdrop */}
       <div style={{
         position: 'absolute', width: 200, height: 200, borderRadius: '50%',
         background: 'radial-gradient(circle, rgba(11,245,113,0.12) 0%, transparent 70%)',
+        zIndex: 2,
       }} />
 
       {/* Logo */}
-      <div style={{ animation: 'logoScale 0.6s ease forwards', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
-        <GroundWorkMark size={72} glow />
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-            <span style={{ color: 'var(--accent)', fontWeight: 800, fontSize: 38, letterSpacing: '-0.04em', lineHeight: 1 }}>GROUND</span>
-            <span style={{ color: '#FFFFFF', fontWeight: 800, fontSize: 38, letterSpacing: '-0.04em', lineHeight: 1 }}>WORK</span>
-          <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10, letterSpacing: '0.22em', fontWeight: 500, fontFamily: "'Syne', sans-serif" }}>
-            BJJ COMPANION
-          </div>
-        </div>
+      <div style={{ animation: 'logoScale 0.6s ease forwards', display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 2 }}>
+        <Wordmark size={38} />
       </div>
 
       {/* Loading bar */}
       <div style={{
         position: 'absolute', bottom: 56,
-        width: 100, height: 2, background: 'var(--bg-card)', borderRadius: 2, overflow: 'hidden',
+        width: 100, height: 2, background: 'rgba(255,255,255,0.2)', borderRadius: 2, overflow: 'hidden',
+        zIndex: 2,
       }}>
         <div style={{
           height: '100%', background: 'var(--accent)', borderRadius: 2,
@@ -183,7 +175,6 @@ function MainApp() {
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pointerEvents: 'auto' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <GroundWorkMark size={30} />
             <Wordmark size={18} />
           </div>
           {/* Hamburger menu */}

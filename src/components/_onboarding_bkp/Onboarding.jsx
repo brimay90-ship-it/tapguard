@@ -84,7 +84,7 @@ function OptCard({ icon, title, desc, selected, onClick, large }) {
       <div style={{
         fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800,
         fontSize: large ? 26 : 15, letterSpacing:0.5,
-        color:'#fff', marginBottom:3,
+        color: 'var(--text-pri)', marginBottom:3,
       }}>{title}</div>
       {desc && <div style={{fontSize:11, color:'#555', fontWeight:400, lineHeight:1.4}}>{desc}</div>}
     </div>
@@ -155,7 +155,7 @@ function MeasureInput({ label, value, onChange, placeholder }) {
       <div style={{fontSize:10,letterSpacing:2,textTransform:'uppercase',color:'#444',marginBottom:8,fontWeight:700}}>{label}</div>
       <input type="number" value={value} onChange={e=>onChange(e.target.value)} placeholder={placeholder} style={{
         width:'100%', background:'#111', border:'1px solid #1f1f1f', borderRadius:10,
-        padding:'13px 14px', color:'#fff', fontFamily:"'Barlow',sans-serif",
+        padding:'13px 14px', color: 'var(--text-pri)', fontFamily:"'Barlow',sans-serif",
         fontSize:16, fontWeight:600, outline:'none', transition:'border-color 0.18s',
       }}
         onFocus={e=>e.target.style.borderColor=G}
@@ -172,7 +172,7 @@ const INCHES_OPTS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 function HeightImperial({ feet, inches, onFeet, onInches }) {
   const selStyle = {
     width:'100%', background:'#111', border:'1px solid #1f1f1f', borderRadius:10,
-    padding:'13px 14px', color:'#fff', fontFamily:"'Barlow',sans-serif",
+    padding:'13px 14px', color: 'var(--text-pri)', fontFamily:"'Barlow',sans-serif",
     fontSize:16, fontWeight:600, outline:'none', cursor:'pointer',
     appearance:'none', WebkitAppearance:'none',
     backgroundImage:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234ade80' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")`,
@@ -207,7 +207,7 @@ function StepWrapper({ children, animKey }) {
 }
 
 const lbl = { fontSize:10, letterSpacing:2, textTransform:'uppercase', color:'#444', marginBottom:10, fontWeight:700 };
-const title = (t) => ({ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:42, lineHeight:0.95, letterSpacing:1, color:'#fff', marginBottom:10 });
+const title = (t) => ({ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:42, lineHeight:0.95, letterSpacing:1, color: 'var(--text-pri)', marginBottom:10 });
 const sub = { fontSize:14, lineHeight:1.6, color:'#666', fontWeight:400 };
 
 export default function Onboarding() {
@@ -233,7 +233,7 @@ export default function Onboarding() {
 
   const inp = {
     width:'100%', background:'#111', border:'1px solid #1f1f1f', borderRadius:10,
-    padding:'16px 18px', color:'#fff', fontFamily:"'Barlow Condensed',sans-serif",
+    padding:'16px 18px', color: 'var(--text-pri)', fontFamily:"'Barlow Condensed',sans-serif",
     fontSize:28, fontWeight:800, letterSpacing:2, outline:'none', transition:'border-color 0.18s',
   };
 
@@ -251,7 +251,7 @@ export default function Onboarding() {
         />
         {nickname.length>0 && (
           <div style={{marginTop:14,padding:'12px 16px',background:'rgba(74,222,128,0.06)',border:'1px solid rgba(74,222,128,0.15)',borderRadius:10,fontSize:14,color:'#666',animation:'fadeUp 0.25s ease both'}}>
-            Welcome to the mats, <span style={{color:'#fff',fontWeight:700}}>{nickname}</span>. Let's build your profile.
+            Welcome to the mats, <span style={{color: 'var(--text-pri)',fontWeight:700}}>{nickname}</span>. Let's build your profile.
           </div>
         )}
       </div>
