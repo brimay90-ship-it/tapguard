@@ -595,8 +595,11 @@ export default function HamburgerMenu() {
               <div style={{
                 textAlign: 'center', marginTop: 28,
                 fontSize: 10, color: '#222', letterSpacing: '0.1em',
-                fontFamily: "'DM Sans', sans-serif",
-              }}>GROUNDWORK v1.0</div>
+                fontFamily: "'Syne', sans-serif", fontWeight: 700,
+              }}>
+                <div style={{ color: 'var(--accent)' }}>GROUND</div>
+                <div>WORK</div>
+              </div>
             </div>
           )}
 

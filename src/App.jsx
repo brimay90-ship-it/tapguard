@@ -98,11 +98,9 @@ function GroundWorkMark({ size = 32, glow = false }) {
 function Wordmark({ size = 20 }) {
   return (
     <div style={{ fontFamily: "'Syne', sans-serif", lineHeight: 1 }}>
-      <div style={{ display: 'flex', alignItems: 'baseline' }}>
-        <span style={{ color: 'var(--accent)', fontWeight: 800, fontSize: size, letterSpacing: '-0.04em' }}>GROUND</span>
-        <span style={{ color: 'var(--text-pri)', fontWeight: 800, fontSize: size, letterSpacing: '-0.04em' }}>WORK</span>
-      </div>
-      <div style={{ color: 'var(--text-sec)', opacity: 0.3, fontSize: size * 0.28, letterSpacing: '0.22em', fontWeight: 500, marginTop: 1 }}>
+      <span style={{ color: 'var(--accent)', fontWeight: 800, fontSize: size, letterSpacing: '-0.04em', display: 'block' }}>GROUND</span>
+      <span style={{ color: 'var(--text-pri)', fontWeight: 800, fontSize: size, letterSpacing: '-0.04em', display: 'block' }}>WORK</span>
+      <div style={{ color: 'var(--text-sec)', opacity: 0.3, fontSize: size * 0.28, letterSpacing: '0.22em', fontWeight: 500, marginTop: 2 }}>
         BJJ TECHNIQUE & CONDITIONING
       </div>
     </div>
@@ -129,11 +127,9 @@ function Splash({ onDone }) {
       {/* Logo */}
       <div style={{ animation: 'logoScale 0.6s ease forwards', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
         <GroundWorkMark size={72} glow />
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-          <div style={{ fontFamily: "'Syne', sans-serif", display: 'flex', alignItems: 'baseline' }}>
-            <span style={{ color: 'var(--accent)', fontWeight: 800, fontSize: 38, letterSpacing: '-0.04em' }}>GROUND</span>
-            <span style={{ color: '#FFFFFF', fontWeight: 800, fontSize: 38, letterSpacing: '-0.04em' }}>WORK</span>
-          </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+            <span style={{ color: 'var(--accent)', fontWeight: 800, fontSize: 38, letterSpacing: '-0.04em', lineHeight: 1 }}>GROUND</span>
+            <span style={{ color: '#FFFFFF', fontWeight: 800, fontSize: 38, letterSpacing: '-0.04em', lineHeight: 1 }}>WORK</span>
           <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10, letterSpacing: '0.22em', fontWeight: 500, fontFamily: "'Syne', sans-serif" }}>
             BJJ COMPANION
           </div>
@@ -187,7 +183,7 @@ function MainApp() {
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pointerEvents: 'auto' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <HexMark size={30} />
+            <GroundWorkMark size={30} />
             <Wordmark size={18} />
           </div>
           {/* Hamburger menu */}

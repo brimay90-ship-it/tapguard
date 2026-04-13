@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useEffect, createContext, useContext } from "react";
+import { useState, useMemo, useRef, useEffect, useCallback, createContext, useContext } from "react";
 import { createPortal } from "react-dom";
 
 // ─── Color system (Reactive) ──────────────────────────────────────────────────
@@ -905,15 +905,25 @@ function NodeAt({ dx, dy, z, delay, noFade, onClick, children }) {
 const OPP_ANGLE = { 315: 135, 45: 225, 135: 315, 225: 45 };
 
 // ─── Diamond Canvas ───────────────────────────────────────────────────────────
-function DiamondCanvas({ focusId, fromId, fromAngle, path, adj, byId, store, onNavigate, onOpenDetail }) {
-  // Camera-pan animation:
-  // We translate the entire canvas by (-dx, -dy) when a spoke is clicked.
-  // This perfectly moves the clicked spoke to the screen center, and the old center to the opposite spoke position.
-  // Remounting then happens with a 0 transform, making the transition completely seamless!
-  const [slideOut, setSlideOut] = useState(null); // { x, y, id }
+// Dead-zone: below this distance, pointer-up counts as a tap not a drag
+const DRAG_DEAD = 8;
+
+function DiamondCanvas({ focusId, fromId, fromAngle, path, adj, byId, store, onNavigate, onOpenDetail, onTogglePath }) {
+  const [slideOut, setSlideOut] = useState(null);
+
+  // ── Free-pan state ──
+  const panOffsetRef = useRef({ x: 0, y: 0 });
+  const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
+  const dragRef = useRef({ active: false, startX: 0, startY: 0, dx: 0, dy: 0, pointerId: null, didDrag: false });
+  const [liveDrag, setLiveDrag] = useState({ x: 0, y: 0 });
+  const containerRef = useRef(null);
 
   const handleNavigate = (nbId, angle) => {
     if (slideOut) return;
+    // Reset pan before navigating
+    panOffsetRef.current = { x: 0, y: 0 };
+    setPanOffset({ x: 0, y: 0 });
+    setLiveDrag({ x: 0, y: 0 });
     const p = dXY(angle, D_R);
     setSlideOut({ x: p.x, y: p.y, id: nbId });
     setTimeout(() => onNavigate(nbId, angle), 350);
@@ -925,7 +935,6 @@ function DiamondCanvas({ focusId, fromId, fromAngle, path, adj, byId, store, onN
   const col = catColor(tech);
   const allNbrs = (adj[focusId] || []).map(id => byId[id]).filter(Boolean);
 
-  // ── Spoke slot assignment: pin previous center opposite to where we came from
   const fromNode = fromId ? byId[fromId] : null;
   const fromSlotIdx = fromAngle != null ? D4.indexOf(OPP_ANGLE[fromAngle]) : -1;
   const slots = [null, null, null, null];
@@ -938,285 +947,340 @@ function DiamondCanvas({ focusId, fromId, fromAngle, path, adj, byId, store, onN
   const spokes = slots.filter(Boolean);
   const extraN = allNbrs.length - spokes.length;
 
-  // Use a fixed 800x800 coordinate space for the SVG lines, centered on the exact `.div` center
-  // to prevent mobile viewport vh/vw misalignment issues.
-  const SC = 400; // SVG Center
+  const SC = 600;
+  const SVG_SIZE = 1200;
 
-  // Pan transform:
-  // Move the canvas in the opposite direction of the click.
-  const panX = slideOut ? -slideOut.x : 0;
-  const panY = slideOut ? -slideOut.y : 0;
+  // ── Pointer handlers ──
+  const onPointerDown = useCallback((e) => {
+    if (slideOut || dragRef.current.active) return;
+    dragRef.current = {
+      active: true, startX: e.clientX, startY: e.clientY,
+      dx: 0, dy: 0, pointerId: e.pointerId, didDrag: false,
+    };
+  }, [slideOut]);
+
+  const onPointerMove = useCallback((e) => {
+    const d = dragRef.current;
+    if (!d.active || d.pointerId !== e.pointerId) return;
+    const dx = e.clientX - d.startX;
+    const dy = e.clientY - d.startY;
+    d.dx = dx; d.dy = dy;
+    if (Math.sqrt(dx * dx + dy * dy) > DRAG_DEAD) d.didDrag = true;
+    if (!d.didDrag) return;
+    e.preventDefault();
+    setLiveDrag({ x: dx, y: dy });
+  }, []);
+
+  const onPointerUp = useCallback((e) => {
+    const d = dragRef.current;
+    if (!d.active || d.pointerId !== e.pointerId) return;
+    d.active = false;
+    const wasDrag = d.didDrag;
+    d.didDrag = false;
+    if (!wasDrag) { setLiveDrag({ x: 0, y: 0 }); return; }
+    // Commit pan — canvas stays where user left it
+    const nx = panOffsetRef.current.x + d.dx;
+    const ny = panOffsetRef.current.y + d.dy;
+    panOffsetRef.current = { x: nx, y: ny };
+    setPanOffset({ x: nx, y: ny });
+    setLiveDrag({ x: 0, y: 0 });
+  }, []);
+
+  const onPointerCancel = useCallback((e) => {
+    const d = dragRef.current;
+    if (d.pointerId === e.pointerId) {
+      d.active = false; d.didDrag = false;
+      setLiveDrag({ x: 0, y: 0 });
+    }
+  }, []);
+
+  const totalPanX = slideOut ? -slideOut.x : panOffset.x + liveDrag.x;
+  const totalPanY = slideOut ? -slideOut.y : panOffset.y + liveDrag.y;
 
   return (
-    <div style={{
-      position: "absolute", inset: 0, overflow: "hidden", touchAction: "none",
-      transition: slideOut ? "transform 0.35s cubic-bezier(0.25,0.8,0.25,1)" : "none",
-      transform: `translate(${panX}px, ${panY}px)`,
-    }}>
-
-      {/* Dot grid */}
-      <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }}>
-        <defs><pattern id="dg7" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
-          <circle cx="1" cy="1" r="0.8" fill="#181818" />
-        </pattern></defs>
-        <rect width="100%" height="100%" fill="url(#dg7)" />
-      </svg>
-
-      {/* Lines */}
-      <svg style={{
-        position: "absolute", left: "50%", top: "50%",
-        width: 800, height: 800, transform: "translate(-50%, -50%)",
-        pointerEvents: "none", zIndex: 1,
-        opacity: slideOut ? 0 : 1, transition: "opacity 0.25s"
+    <div ref={containerRef}
+      onPointerDown={onPointerDown} onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp} onPointerCancel={onPointerCancel}
+      style={{ position: "absolute", inset: 0, overflow: "hidden", touchAction: "none" }}
+    >
+      {/* Inner pannable world */}
+      <div style={{
+        position: "absolute", left: 0, top: 0, right: 0, bottom: 0,
+        transition: slideOut ? "transform 0.35s cubic-bezier(0.25,0.8,0.25,1)" : "none",
+        transform: `translate(${totalPanX}px, ${totalPanY}px)`,
       }}>
-        <defs>
-          <radialGradient id="rfade7" cx="50%" cy="50%" r="50%">
-            <stop offset="25%" stopColor="#fff" stopOpacity="1" />
-            <stop offset="100%" stopColor="#fff" stopOpacity="0" />
-          </radialGradient>
-          <mask id="rmask7"><rect width="800" height="800" fill="url(#rfade7)" /></mask>
-        </defs>
-        <g mask="url(#rmask7)">
-          <circle cx={SC} cy={SC} r="54" fill="none" stroke={col} strokeWidth="1" strokeOpacity="0.18" />
-          <circle cx={SC} cy={SC} r="36" fill="none" stroke={col} strokeWidth="0.5" strokeOpacity="0.08" />
-          {spokes.length === 4 && (() => {
-            const pts = D4.map(a => { const { x, y } = dXY(a, D_R); return `${SC + x},${SC + y}`; }).join(" ");
-            return <polygon points={pts} fill="none" stroke="#1d1d1d" strokeWidth="1" strokeDasharray="6 6" />;
-          })()}
-          {slots.map((nb, i) => {
-            if (!nb) return null;
-            const { x, y } = dXY(D4[i], D_R);
-            const ip = path.includes(nb.id);
-            return (
-              <line key={`cl-${nb.id}`}
-                x1={SC} y1={SC} x2={SC + x} y2={SC + y}
-                stroke={ip ? catColor(nb) : "#282828"}
-                strokeWidth={ip ? 2.5 : 1.5}
-                strokeDasharray={ip ? "none" : "8 5"}
-                strokeOpacity={ip ? 0.9 : 1}
-              />
-            );
-          })}
-          {slots.map((nb, i) => {
-            if (!nb) return null;
-            const { x: sx, y: sy } = dXY(D4[i], D_R);
-            return (GDIRS[D4[i]] || []).map((ga, gi) => {
-              const { x: gx, y: gy } = dXY(ga, D_GR);
-              return (
-                <line key={`gl-${nb.id}-${gi}`}
-                  x1={SC + sx} y1={SC + sy} x2={SC + sx + gx} y2={SC + sy + gy}
-                  stroke="#1c1c1c" strokeWidth="1" strokeDasharray="4 5" strokeOpacity="0.6"
-                />
-              );
-            });
-          })}
-        </g>
-      </svg>
 
-      {/* Ghost cards */}
-      {(() => {
-        const usedPos = new Set();
-        const drawnIds = new Set();
-        usedPos.add("0,0");
-        // extra connections hint is around (0, 198), so block the bottom grid node
-        // which would land at (0, 212) due to geometry spacing
-        usedPos.add("0,210");
+        {/* Dot grid — tiles infinitely */}
+        <div style={{
+          position: "absolute", inset: "-200%",
+          backgroundImage: "radial-gradient(circle, #181818 0.8px, transparent 0.8px)",
+          backgroundSize: "24px 24px",
+          pointerEvents: "none",
+        }} />
 
-        slots.forEach((s, i) => {
-          if (s) {
-            const p = dXY(D4[i], D_R);
-            usedPos.add(`${Math.round(p.x / 10) * 10},${Math.round(p.y / 10) * 10}`);
-            drawnIds.add(s.id);
-          }
-        });
-
-        return slots.map((nb, i) => {
-          if (!nb) return null;
-          const { x: sx, y: sy } = dXY(D4[i], D_R);
-          const availGhosts = (adj[nb.id] || []).filter(gid => gid !== focusId && !drawnIds.has(gid));
-          let ghostIndex = 0;
-
-          return (GDIRS[D4[i]] || []).map((ga) => {
-            if (ghostIndex >= Math.min(3, availGhosts.length)) return null;
-
-            const { x: gx, y: gy } = dXY(ga, D_GR);
-            // Quantize by 10px to absolutely prevent floating point precision discrepancies
-            const px = Math.round((sx + gx) / 10) * 10;
-            const py = Math.round((sy + gy) / 10) * 10;
-            const posKey = `${px},${py}`;
-
-            if (usedPos.has(posKey)) return null;
-
-            const gtCode = availGhosts[ghostIndex++];
-            if (!gtCode) return null;
-
-            usedPos.add(posKey);
-            drawnIds.add(gtCode);
-
-            const gt = byId[gtCode];
-            if (!gt) return null;
-
-            const gc = catColor(gt);
-            return (
-              <NodeAt key={`g-${nb.id}-${gtCode}`} dx={px} dy={py} z={2} delay={i * 40 + ghostIndex * 20 + 180}
-                onClick={e => { e.stopPropagation(); handleNavigate(gt.id, ga); }}>
-                <div style={{
-                  width: GW, padding: "6px 9px", boxSizing: "border-box",
-                  background: "#0c0c0c", border: "1px solid #1c1c1c", borderRadius: 8,
-                  opacity: slideOut ? 0 : 0.28, overflow: "hidden", transition: "opacity 0.25s"
-                }}>
-                  <div style={{
-                    fontFamily: "'Barlow Condensed',sans-serif", fontSize: 11, fontWeight: 700,
-                    color: "#999", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"
-                  }}>{gt.name}</div>
-                  <div style={{
-                    fontSize: 8, color: gc, fontWeight: 700, textTransform: "uppercase",
-                    letterSpacing: "0.05em", marginTop: 1
-                  }}>{gt.subcategory}</div>
-                </div>
-              </NodeAt>
-            );
+        {/* Pre-compute ghost layout for lines and cards */}
+        {(() => {
+          const ghostLayout = [];
+          const usedPos = new Set();
+          const drawnIds = new Set();
+          usedPos.add("0,0");
+          usedPos.add("0,210");
+          slots.forEach((s, i) => {
+            if (s) {
+              const p = dXY(D4[i], D_R);
+              usedPos.add(`${Math.round(p.x / 10) * 10},${Math.round(p.y / 10) * 10}`);
+              drawnIds.add(s.id);
+            }
           });
-        });
-      })()}
+          slots.forEach((nb, i) => {
+            if (!nb) return;
+            const { x: sx, y: sy } = dXY(D4[i], D_R);
+            const availGhosts = (adj[nb.id] || []).filter(gid => gid !== focusId && !drawnIds.has(gid));
+            availGhosts.forEach(gtCode => {
+              let found = false;
+              let ring = 1;
+              while (!found && ring < 12) {
+                for (let d = 0; d < 3; d++) {
+                  const ga = GDIRS[D4[i]][d];
+                  const { x: gx, y: gy } = dXY(ga, D_GR * ring);
+                  const px = Math.round((sx + gx) / 10) * 10;
+                  const py = Math.round((sy + gy) / 10) * 10;
+                  const posKey = `${px},${py}`;
+                  if (!usedPos.has(posKey)) {
+                    usedPos.add(posKey);
+                    drawnIds.add(gtCode);
+                    ghostLayout.push({ spIndex: i, spId: nb.id, gtCode, ga, px, py, sx, sy });
+                    found = true;
+                    break;
+                  }
+                }
+                if (!found) ring++;
+              }
+            });
+          });
 
-      {/* Spoke cards */}
-      {slots.map((nb, i) => {
-        if (!nb) return null;
-        const { x, y } = dXY(D4[i], D_R);
-        const nbCol = catColor(nb);
-        const inPath = path.includes(nb.id);
-        const isFrom = nb.id === fromId;
-        const prof = store.techs?.[nb.id]?.proficiency || 0;
-        const isClicked = slideOut && slideOut.id === nb.id;
-        const op = (slideOut && !isClicked) ? 0 : 1;
+          return (
+            <>
+              {/* SVG lines */}
+              <svg style={{
+                position: "absolute", left: "50%", top: "50%",
+                width: SVG_SIZE, height: SVG_SIZE, transform: "translate(-50%, -50%)",
+                pointerEvents: "none", zIndex: 1,
+                opacity: slideOut ? 0 : 1, transition: "opacity 0.25s"
+              }}>
+                <defs>
+                  <radialGradient id="rfade7" cx="50%" cy="50%" r="50%">
+                    <stop offset="30%" stopColor="#fff" stopOpacity="1" />
+                    <stop offset="100%" stopColor="#fff" stopOpacity="0" />
+                  </radialGradient>
+                  <mask id="rmask7"><rect width={SVG_SIZE} height={SVG_SIZE} fill="url(#rfade7)" /></mask>
+                </defs>
+                <g mask="url(#rmask7)">
+                  <circle cx={SC} cy={SC} r="54" fill="none" stroke={col} strokeWidth="1" strokeOpacity="0.18" />
+                  <circle cx={SC} cy={SC} r="36" fill="none" stroke={col} strokeWidth="0.5" strokeOpacity="0.08" />
+                  {spokes.length === 4 && (() => {
+                    const pts = D4.map(a => { const { x, y } = dXY(a, D_R); return `${SC + x},${SC + y}`; }).join(" ");
+                    return <polygon points={pts} fill="none" stroke="#1d1d1d" strokeWidth="1" strokeDasharray="6 6" />;
+                  })()}
+                  {slots.map((nb, i) => {
+                    if (!nb) return null;
+                    const { x, y } = dXY(D4[i], D_R);
+                    const ip = path.includes(nb.id);
+                    return (
+                      <line key={`cl-${nb.id}`}
+                        x1={SC} y1={SC} x2={SC + x} y2={SC + y}
+                        stroke={ip ? catColor(nb) : "#282828"}
+                        strokeWidth={ip ? 2.5 : 1.5}
+                        strokeDasharray={ip ? "none" : "8 5"}
+                        strokeOpacity={ip ? 0.9 : 1}
+                      />
+                    );
+                  })}
+                  {ghostLayout.map((g) => (
+                    <line key={`gl-${g.spId}-${g.gtCode}`}
+                      x1={SC + g.sx} y1={SC + g.sy} x2={SC + g.px} y2={SC + g.py}
+                      stroke="#1c1c1c" strokeWidth="1" strokeDasharray="4 5" strokeOpacity="0.6"
+                    />
+                  ))}
+                </g>
+              </svg>
 
-        return (
-          <NodeAt key={`s-${nb.id}`} dx={x} dy={y} z={5} delay={i * 45} noFade={isFrom}
-            onClick={slideOut ? null : (e => { e.stopPropagation(); handleNavigate(nb.id, D4[i]); })}>
-            <div style={{
-              width: SW, boxSizing: "border-box",
-              opacity: op, transition: "opacity 0.25s",
-              background: inPath ? `${nbCol}1a` : isFrom ? "#141414" : "#111",
-              border: `1.5px solid ${inPath ? nbCol : isFrom ? "#333" : "#272727"}`,
-              borderRadius: 12, padding: "10px 12px",
-              boxShadow: inPath ? `0 0 0 2px ${nbCol}28,0 6px 24px #000b` : "0 4px 18px #000a",
-              position: "relative", overflow: "hidden",
-            }}>
-              {inPath && <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: nbCol }} />}
-              {isFrom && !inPath && (
+              {/* Ghost cards */}
+              {ghostLayout.map((g, gi) => {
+                const gt = byId[g.gtCode];
+                if (!gt) return null;
+                const gc = catColor(gt);
+                return (
+                  <NodeAt key={`g-${g.spId}-${g.gtCode}`} dx={g.px} dy={g.py} z={2} delay={g.spIndex * 40 + gi * 20 + 180}
+                    onClick={e => { e.stopPropagation(); if (!dragRef.current.didDrag) handleNavigate(gt.id, g.ga); }}>
+                    <div style={{
+                      width: GW, padding: "6px 9px", boxSizing: "border-box",
+                      background: "#0c0c0c", border: "1px solid #1c1c1c", borderRadius: 8,
+                      opacity: slideOut ? 0 : 1, overflow: "hidden", transition: "opacity 0.25s"
+                    }}>
+                      <div style={{
+                        fontFamily: "'Barlow Condensed',sans-serif", fontSize: 11, fontWeight: 700,
+                        color: "#d8d8d8", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"
+                      }}>{gt.name}</div>
+                      <div style={{
+                        fontSize: 8, color: gc, fontWeight: 700, textTransform: "uppercase",
+                        letterSpacing: "0.05em", marginTop: 1
+                      }}>{gt.subcategory}</div>
+                    </div>
+                  </NodeAt>
+                );
+              })}
+            </>
+          );
+        })()}
+
+        {/* Spoke cards */}
+        {slots.map((nb, i) => {
+          if (!nb) return null;
+          const { x, y } = dXY(D4[i], D_R);
+          const nbCol = catColor(nb);
+          const inPath = path.includes(nb.id);
+          const isFrom = nb.id === fromId;
+          const prof = store.techs?.[nb.id]?.proficiency || 0;
+          const isClicked = slideOut && slideOut.id === nb.id;
+          const op = (slideOut && !isClicked) ? 0 : 1;
+          return (
+            <NodeAt key={`s-${nb.id}`} dx={x} dy={y} z={5} delay={i * 45} noFade={isFrom}
+              onClick={slideOut ? null : (e => { e.stopPropagation(); if (!dragRef.current.didDrag) handleNavigate(nb.id, D4[i]); })}>
+              <div style={{
+                width: SW, boxSizing: "border-box",
+                opacity: op, transition: "opacity 0.25s",
+                background: inPath ? `${nbCol}1a` : isFrom ? "#141414" : "#111",
+                border: `1.5px solid ${inPath ? nbCol : isFrom ? "#333" : "#272727"}`,
+                borderRadius: 12, padding: "10px 12px",
+                boxShadow: inPath ? `0 0 0 2px ${nbCol}28,0 6px 24px #000b` : "0 4px 18px #000a",
+                position: "relative", overflow: "hidden",
+              }}>
                 <div style={{
-                  position: "absolute", top: 0, left: 0, right: 0, height: 2,
-                  background: "linear-gradient(90deg,#333,#222)"
-                }} />
-              )}
-              <div style={{
-                fontFamily: "'Barlow Condensed',sans-serif",
-                fontSize: 14, fontWeight: 700,
-                color: inPath ? "#f5f5f5" : "#d8d8d8",
-                lineHeight: 1.2, marginBottom: 3,
-                whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
-              }}>{nb.name}</div>
-              <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
-                <span style={{
-                  fontSize: 9, color: nbCol, fontWeight: 700,
-                  textTransform: "uppercase", letterSpacing: "0.06em",
-                  overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 86,
-                }}>{nb.subcategory}</span>
-                {prof > 0 && (
+                  fontFamily: "'Barlow Condensed',sans-serif", fontSize: 14, fontWeight: 700,
+                  color: inPath ? "#f5f5f5" : "#d8d8d8", lineHeight: 1.2, marginBottom: 3,
+                  whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+                }}>{nb.name}</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
                   <span style={{
-                    marginLeft: "auto", fontSize: 10, fontWeight: 800,
-                    color: profColor(prof), fontFamily: "'Barlow Condensed',sans-serif", flexShrink: 0
-                  }}>{prof}</span>
-                )}
+                    fontSize: 9, color: nbCol, fontWeight: 700, textTransform: "uppercase",
+                    letterSpacing: "0.06em", overflow: "hidden", textOverflow: "ellipsis",
+                    whiteSpace: "nowrap", maxWidth: 86,
+                  }}>{nb.subcategory}</span>
+                  {prof > 0 && (
+                    <span style={{
+                      marginLeft: "auto", fontSize: 10, fontWeight: 800,
+                      color: profColor(prof), fontFamily: "'Barlow Condensed',sans-serif", flexShrink: 0
+                    }}>{prof}</span>
+                  )}
+                </div>
+                <div style={{
+                  position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)",
+                  fontSize: 10, color: nbCol, opacity: isFrom ? 0.2 : 0.4, pointerEvents: "none",
+                }}>{isFrom ? "‹" : "›"}</div>
               </div>
-              <div style={{
-                position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)",
-                fontSize: 10, color: nbCol, opacity: isFrom ? 0.2 : 0.4, pointerEvents: "none",
-              }}>{isFrom ? "‹" : "›"}</div>
+            </NodeAt>
+          );
+        })}
+
+        {extraN > 0 && (
+          <NodeAt dx={0} dy={D_R + 48} z={3} delay={240}>
+            <div style={{ textAlign: "center", opacity: slideOut ? 0 : 1, transition: "opacity 0.25s" }}>
+              <span style={{ fontSize: 11, color: "#555", fontFamily: "'DM Sans',sans-serif" }}>
+                +{extraN} more · tap Details to see all
+              </span>
             </div>
           </NodeAt>
-        );
-      })}
+        )}
 
-      {extraN > 0 && (
-        <NodeAt dx={0} dy={D_R + 48} z={3} delay={240}>
-          <div style={{ textAlign: "center", opacity: slideOut ? 0 : 1, transition: "opacity 0.25s" }}>
-            <span style={{ fontSize: 11, color: "#555", fontFamily: "'DM Sans',sans-serif" }}>
-              +{extraN} more · tap Details to see all
-            </span>
+        {/* Center card */}
+        <NodeAt dx={0} dy={0} z={10} delay={0} noFade={fromId != null}
+          onClick={slideOut ? null : () => { if (!dragRef.current.didDrag) onOpenDetail(focusId); }}>
+          <div style={{
+            position: "absolute", inset: -14, borderRadius: 26,
+            border: `1.5px solid ${col}`, animation: "cPulse 2.8s ease-out infinite",
+            pointerEvents: "none"
+          }} />
+          <div style={{
+            width: CW, background: "#161616", border: `2px solid ${col}`,
+            borderRadius: 16, overflow: "hidden",
+            boxShadow: `0 0 0 4px ${col}12,0 8px 40px #000e`,
+          }}>
+            <div style={{ padding: "12px 14px 12px" }}>
+              <div style={{
+                fontFamily: "'Barlow Condensed',sans-serif",
+                fontSize: 20, fontWeight: 700, color: "#f8f8f8", lineHeight: 1.15, marginBottom: 5
+              }}>{tech.name}</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
+                <span style={{ fontSize: 10, color: col, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                  {tech.category}
+                </span>
+                <span style={{ width: 3, height: 3, borderRadius: "50%", background: "#2a2a2a", flexShrink: 0 }} />
+                <span style={{ fontSize: 10, color: "#3a3a3a" }}>{tech.skill_level}</span>
+                {(store.techs?.[focusId]?.proficiency || 0) > 0 && (
+                  <span style={{
+                    marginLeft: "auto", fontSize: 11, fontWeight: 800,
+                    color: profColor(store.techs[focusId].proficiency),
+                    fontFamily: "'Barlow Condensed',sans-serif"
+                  }}>{store.techs[focusId].proficiency}/10</span>
+                )}
+              </div>
+              <div style={{ fontSize: 11, color: "#666", marginBottom: 12, fontFamily: "'DM Sans',sans-serif" }}>
+                {allNbrs.length} link{allNbrs.length !== 1 && 's'}
+              </div>
+              {(store.techs?.[focusId]?.proficiency || 0) > 0 && (
+                <div style={{ height: 3, background: "#1a1a1a", borderRadius: 2, overflow: "hidden", marginBottom: 10 }}>
+                  <div style={{
+                    height: "100%", width: `${(store.techs[focusId].proficiency || 0) * 10}%`,
+                    background: col, opacity: 0.6, borderRadius: 2
+                  }} />
+                </div>
+              )}
+              <div style={{ display: "flex", gap: 6, alignItems: "stretch" }}>
+                <div style={{
+                  flex: 1, textAlign: "center", padding: "8px 0", borderRadius: 8,
+                  background: `${col}22`, fontSize: 11, fontWeight: 700, color: col,
+                  fontFamily: "'DM Sans',sans-serif"
+                }}>Info ›</div>
+                <div onClick={(e) => { e.stopPropagation(); if (onTogglePath) onTogglePath(focusId); }}
+                  style={{
+                  width: 32, borderRadius: 8, background: path.includes(focusId) ? col : "#1e1e1e",
+                  color: path.includes(focusId) ? "#000" : "#666", fontSize: 16,
+                  display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0,
+                  transition: "background 0.2s, color 0.2s"
+                }}>
+                  {path.includes(focusId) ? "✓" : "＋"}
+                </div>
+              </div>
+            </div>
           </div>
         </NodeAt>
+
+        <style>{`
+          @keyframes nFade  { from{opacity:0} to{opacity:1} }
+          @keyframes cPulse { 0%{opacity:.18;transform:scale(1)} 60%{opacity:0;transform:scale(1.18)} 100%{opacity:0} }
+        `}</style>
+      </div>
+
+      {/* Re-center button */}
+      {(Math.abs(panOffset.x) > 30 || Math.abs(panOffset.y) > 30) && !slideOut && (
+        <button onClick={() => { panOffsetRef.current = { x: 0, y: 0 }; setPanOffset({ x: 0, y: 0 }); }}
+          style={{
+            position: "absolute", bottom: 14, left: "50%", transform: "translateX(-50%)",
+            zIndex: 20, background: "#161616", border: "1px solid #2a2a2a",
+            borderRadius: 20, padding: "6px 16px", cursor: "pointer",
+            fontSize: 11, color: "#888", fontFamily: "'DM Sans',sans-serif", fontWeight: 600,
+            boxShadow: "0 4px 16px rgba(0,0,0,0.5)",
+            display: "flex", alignItems: "center", gap: 6,
+          }}>
+          <span style={{ fontSize: 14 }}>◎</span> Re-center
+        </button>
       )}
-
-      <NodeAt dx={0} dy={0} z={10} delay={0} noFade={fromId != null} onClick={slideOut ? null : () => onOpenDetail(focusId)}>
-        <div style={{
-          position: "absolute", inset: -14, borderRadius: 26,
-          border: `1.5px solid ${col}`,
-          animation: "cPulse 2.8s ease-out infinite",
-          pointerEvents: "none"
-        }} />
-        <div style={{
-          width: CW, background: "#161616", border: `2px solid ${col}`,
-          borderRadius: 16, overflow: "hidden",
-          boxShadow: `0 0 0 4px ${col}12,0 8px 40px #000e`,
-        }}>
-          <div style={{ height: 3, background: col }} />
-          <div style={{ padding: "12px 14px 12px" }}>
-            <div style={{
-              fontFamily: "'Barlow Condensed',sans-serif",
-              fontSize: 20, fontWeight: 700, color: "#f8f8f8", lineHeight: 1.15, marginBottom: 5
-            }}>
-              {tech.name}
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
-              <span style={{ fontSize: 10, color: col, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                {tech.category}
-              </span>
-              <span style={{ width: 3, height: 3, borderRadius: "50%", background: "#2a2a2a", flexShrink: 0 }} />
-              <span style={{ fontSize: 10, color: "#3a3a3a" }}>{tech.skill_level}</span>
-              {(store.techs?.[focusId]?.proficiency || 0) > 0 && (
-                <span style={{
-                  marginLeft: "auto", fontSize: 11, fontWeight: 800,
-                  color: profColor(store.techs[focusId].proficiency),
-                  fontFamily: "'Barlow Condensed',sans-serif"
-                }}>
-                  {store.techs[focusId].proficiency}/10
-                </span>
-              )}
-            </div>
-            {(store.techs?.[focusId]?.proficiency || 0) > 0 && (
-              <div style={{ height: 3, background: "#1a1a1a", borderRadius: 2, overflow: "hidden", marginBottom: 9 }}>
-                <div style={{
-                  height: "100%", width: `${(store.techs[focusId].proficiency || 0) * 10}%`,
-                  background: col, opacity: 0.6, borderRadius: 2
-                }} />
-              </div>
-            )}
-            <div style={{ display: "flex", gap: 6 }}>
-              <div style={{
-                flex: 1, textAlign: "center", padding: "8px 0", borderRadius: 8,
-                background: `${col}22`, fontSize: 11, fontWeight: 700, color: col,
-                fontFamily: "'DM Sans',sans-serif"
-              }}>Info ›</div>
-              <div style={{
-                padding: "8px 10px", borderRadius: 8, background: "#1e1e1e",
-                color: "#444", fontSize: 11, fontFamily: "'DM Sans',sans-serif", whiteSpace: "nowrap"
-              }}>
-                {allNbrs.length} links
-              </div>
-            </div>
-          </div>
-        </div>
-      </NodeAt>
-
-      <style>{`
-        @keyframes nFade  { from{opacity:0} to{opacity:1} }
-        @keyframes cPulse { 0%{opacity:.18;transform:scale(1)} 60%{opacity:0;transform:scale(1.18)} 100%{opacity:0} }
-      `}</style>
     </div>
   );
 }
+
+
 
 // ─── Tooltip Hint ─────────────────────────────────────────────────────────────
 function TooltipHint({ text }) {
@@ -1465,15 +1529,23 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
               <div style={{ fontSize: 11, color: "#777", marginTop: 3 }}>aka {tech.aka.slice(0, 2).join(", ")}</div>
             )}
           </div>
-          {/* Add/remove from path — primary action */}
-          <button onClick={() => { inPath ? onRemoveFromPath(tech.id) : onAddToPath(tech.id); haptic(8); }} style={{
-            minHeight: 44, padding: "0 16px", borderRadius: 22,
-            border: `1.5px solid ${inPath ? "#2a2a2a" : col}`,
-            background: inPath ? "#141414" : `${col}18`,
-            color: inPath ? "#444" : col,
-            cursor: "pointer", fontWeight: 700, fontSize: 12,
-            fontFamily: "'DM Sans',sans-serif", flexShrink: 0, whiteSpace: "nowrap",
-          }}>{inPath ? "✓ In Flow" : "+ Add to Flow"}</button>
+          {/* Actions: Add/remove from path and Close */}
+          <div style={{ display: "flex", gap: 8, alignItems: "flex-start", flexShrink: 0 }}>
+            <button onClick={() => { inPath ? onRemoveFromPath(tech.id) : onAddToPath(tech.id); haptic(8); }} style={{
+              minHeight: 40, padding: "0 16px", borderRadius: 20,
+              border: `1.5px solid ${inPath ? "#2a2a2a" : col}`,
+              background: inPath ? "#141414" : `${col}18`,
+              color: inPath ? "#444" : col,
+              cursor: "pointer", fontWeight: 700, fontSize: 12,
+              fontFamily: "'DM Sans',sans-serif", flexShrink: 0, whiteSpace: "nowrap",
+            }}>{inPath ? "✓ In Flow" : "+ Add to Flow"}</button>
+            <button onClick={onClose} style={{
+              width: 40, height: 40, borderRadius: 20,
+              background: "transparent", border: "1px solid #262626", color: "#777",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 16, cursor: "pointer", flexShrink: 0
+            }}>✕</button>
+          </div>
         </div>
       </div>
 
@@ -1672,7 +1744,7 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
                 display: "flex", flexDirection: "column", alignItems: "center",
                 gap: 12, padding: "40px 20px", textAlign: "center",
               }}>
-                <div style={{ fontSize: 32, opacity: 0.2 }}>🎬</div>
+                <div style={{ fontSize: 32, opacity: 0.2 }}>ðŸŽ¬</div>
                 <div style={{ fontSize: 13, color: "#333", fontFamily: "'DM Sans',sans-serif", lineHeight: 1.6 }}>
                   No videos indexed yet for this technique.
                 </div>
@@ -1755,7 +1827,7 @@ function Library({ onSelect, onBack }) {
             background: "#181818", border: "none", color: "#999",
             width: 44, height: 44, borderRadius: "50%", cursor: "pointer", fontSize: 20,
             display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0
-          }}>←</button>
+          }}>←</button>
           <span style={{ fontFamily: "'Barlow Condensed',sans-serif", fontSize: 20, fontWeight: 700, color: "#f0f0f0" }}>
             Techniques
           </span>
@@ -1840,7 +1912,7 @@ function Arsenal({ byId, onBack, onLoadFlow, onNavigate, embedded = false }) {
               background: "#181818", border: "none", color: "#999",
               width: 44, height: 44, borderRadius: "50%", cursor: "pointer", fontSize: 20,
               display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0
-            }}>←</button>
+            }}>←</button>
             <span style={{ fontFamily: "'Barlow Condensed',sans-serif", fontSize: 22, fontWeight: 700, color: "#f0f0f0" }}>
               Arsenal
             </span>
@@ -2027,7 +2099,7 @@ function Onboarding({ belt, byId, onSelect, onSearch }) {
           background: "#111", border: "1px solid #222", borderRadius: 16,
           cursor: "pointer", boxShadow: "0 4px 20px rgba(0,0,0,0.3)"
         }}>
-          <span style={{ fontSize: 18, marginRight: 12, opacity: 0.6 }}>🔍</span>
+          <span style={{ fontSize: 18, marginRight: 12, opacity: 0.6 }}>ðŸ”</span>
           <span style={{ fontSize: 14, color: "#888", fontFamily: "'DM Sans',sans-serif", fontWeight: 500 }}>
             Search all 163 techniques...
           </span>
@@ -2332,6 +2404,7 @@ function App() {
                 path={path} adj={adj} byId={byId} store={store}
                 onNavigate={navigateTo}
                 onOpenDetail={id => setDetailId(id)}
+                onTogglePath={id => path.includes(id) ? removeFromPath(id) : addToPath(id)}
               />
             ) : started ? (
               <div style={{

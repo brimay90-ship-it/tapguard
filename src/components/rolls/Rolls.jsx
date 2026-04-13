@@ -275,6 +275,7 @@ export default function Rolls() {
   const [savedDur,     setSavedDur]    = useState(0);
   const [mediaSource,  setMediaSource] = useState(null);
   const [camError,     setCamError]    = useState('');
+  const [showMenu,     setShowMenu]    = useState(false);
 
   const timerRef      = useRef(null);
   const mediaRef      = useRef(null);
@@ -362,8 +363,39 @@ export default function Rolls() {
       <input ref={fileInputRef} type="file" accept="video/mp4,video/quicktime,video/webm,.mp4,.mov,.webm" onChange={handleFileImport} style={{ display:'none' }} />
 
       <div style={{ padding:'20px 20px 20px' }}>
-        <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:'var(--text-sec)', opacity:0.6, marginBottom:6, fontWeight:700 }}>Session History</div>
-        <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:30, color:'var(--text-pri)', marginBottom:20, letterSpacing:1 }}>ROLL ANALYSIS</div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+          <div>
+            <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:30, color:'var(--text-pri)', letterSpacing:1 }}>ROLL ANALYSIS</div>
+          </div>
+          <div style={{ position: 'relative' }}>
+            <button 
+              onClick={() => setShowMenu(!showMenu)} 
+              style={{ width:44, height:44, borderRadius:'50%', background:G, border:'none', color:'#000', fontSize:28, fontFamily:'sans-serif', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', boxShadow:`0 4px 12px ${G}44`, transition:'transform 0.2s', paddingBottom: 2 }}
+              onMouseDown={e => e.currentTarget.style.transform='scale(0.95)'}
+              onMouseUp={e => e.currentTarget.style.transform='scale(1)'}
+            >+</button>
+            {showMenu && (
+              <>
+                <div style={{ position:'fixed', inset:0, zIndex:9 }} onClick={() => setShowMenu(false)} />
+                <div style={{ position:'absolute', top:52, right:0, width:190, background:'var(--bg-card)', border:`1px solid ${G}44`, borderRadius:14, padding:6, zIndex:10, boxShadow:`0 8px 24px rgba(0,0,0,0.8)`, animation: 'fadeUp 0.15s ease both' }}>
+                  <div onClick={() => { setPhase('picking'); setShowMenu(false); }} style={{ padding:'12px 14px', fontSize:14, fontWeight:700, cursor:'pointer', display:'flex', alignItems:'center', gap:12, transition:'all 0.2s', borderRadius:10, color:'var(--text-pri)' }} onMouseEnter={e => { e.currentTarget.style.background='var(--glass-bg)'; e.currentTarget.style.transform='translateX(4px)'; }} onMouseLeave={e => { e.currentTarget.style.background='transparent'; e.currentTarget.style.transform='translateX(0)'; }}>
+                    <span style={{ color:G, fontSize:18 }}>⏺</span> Record Session
+                  </div>
+                  <div onClick={() => { fileInputRef.current.click(); setShowMenu(false); }} style={{ padding:'12px 14px', fontSize:14, fontWeight:700, cursor:'pointer', display:'flex', alignItems:'center', gap:12, transition:'all 0.2s', borderRadius:10, color:'var(--text-pri)' }} onMouseEnter={e => { e.currentTarget.style.background='var(--glass-bg)'; e.currentTarget.style.transform='translateX(4px)'; }} onMouseLeave={e => { e.currentTarget.style.background='transparent'; e.currentTarget.style.transform='translateX(0)'; }}>
+                    <span style={{ color:AMBER, fontSize:18 }}>📂</span> Import Video
+                  </div>
+                  <div onClick={() => { setPhase('youtube'); setShowMenu(false); }} style={{ padding:'12px 14px', fontSize:14, fontWeight:700, cursor:'pointer', display:'flex', alignItems:'center', gap:12, transition:'all 0.2s', borderRadius:10, color:'var(--text-pri)' }} onMouseEnter={e => { e.currentTarget.style.background='var(--glass-bg)'; e.currentTarget.style.transform='translateX(4px)'; }} onMouseLeave={e => { e.currentTarget.style.background='transparent'; e.currentTarget.style.transform='translateX(0)'; }}>
+                    <span style={{ color:BLUE, fontSize:18 }}>▶</span> YouTube Link
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+
+        <div style={{ fontSize:14, letterSpacing:2, textTransform:'uppercase', color:'var(--text-sec)', fontWeight:800, marginBottom:16, borderBottom:'1px solid var(--border)', paddingBottom:8 }}>Roll log</div>
+
+        {camError && <div style={{ fontSize:11, color:AMBER, marginBottom:16, padding:'8px 12px', background:'rgba(245,158,11,0.06)', border:'1px solid rgba(245,158,11,0.15)', borderRadius:8 }}>⚠ {camError}</div>}
 
         {sessions.map(session => (
           <div key={session.id} onClick={() => setSelected(session)} className="liquid-glass" style={{
@@ -395,50 +427,7 @@ export default function Rolls() {
           </div>
         ))}
 
-        {/* ── IDLE: three entry points ── */}
-        {phase === 'idle' && (
-          <div style={{ marginTop:8 }}>
-            {camError && <div style={{ fontSize:11, color:AMBER, marginBottom:10, padding:'8px 12px', background:'rgba(245,158,11,0.06)', border:'1px solid rgba(245,158,11,0.15)', borderRadius:8 }}>⚠ {camError}</div>}
-
-            <div onClick={() => setPhase('picking')} className="liquid-glass-pill" style={{ 
-              width:'100%', borderRadius:24, padding:'20px', cursor:'pointer', 
-              display:'flex', alignItems:'center', gap:16, 
-              transition:'all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28)', marginBottom:12,
-              border:`1px solid ${G}66`,
-              background: G+'11'
-            }}
-              onMouseEnter={e => e.currentTarget.style.background = G+'22'}
-              onMouseLeave={e => e.currentTarget.style.background = G+'11'}
-            >
-              <div style={{ width:48, height:48, borderRadius:'50%', background:G+'33', border:`1px solid ${G}66`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:20, flexShrink:0 }}>⏺</div>
-              <div>
-                <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:19, color:G, letterSpacing:1 }}>RECORD SESSION</div>
-                <div style={{ fontSize:12, color:'var(--text-sec)', opacity:0.6, marginTop:2, fontWeight:500 }}>High-fidelity video analysis enabled.</div>
-              </div>
-              <span style={{ marginLeft:'auto', color:G, fontSize:22 }}>›</span>
-            </div>
-
-            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
-              <div onClick={() => fileInputRef.current.click()} style={{ background:'var(--bg-total)', border:'1px solid var(--border)', borderRadius:12, padding:'14px 16px', cursor:'pointer', transition:'border-color 0.18s' }}
-                onMouseEnter={e => e.currentTarget.style.borderColor = AMBER}
-                onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
-              >
-                <div style={{ fontSize:22, marginBottom:8 }}>📂</div>
-                <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:15, color:'var(--text-pri)', letterSpacing:0.5, marginBottom:3 }}>IMPORT VIDEO</div>
-                <div style={{ fontSize:11, color:'var(--text-sec)', opacity:0.6 }}>mp4 · mov · webm</div>
-              </div>
-
-              <div onClick={() => setPhase('youtube')} style={{ background:'var(--bg-total)', border:'1px solid var(--border)', borderRadius:12, padding:'14px 16px', cursor:'pointer', transition:'border-color 0.18s' }}
-                onMouseEnter={e => e.currentTarget.style.borderColor = BLUE}
-                onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
-              >
-                <div style={{ fontSize:22, marginBottom:8 }}>▶</div>
-                <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:15, color:'var(--text-pri)', letterSpacing:0.5, marginBottom:3 }}>YOUTUBE LINK</div>
-                <div style={{ fontSize:11, color:'var(--text-sec)', opacity:0.6 }}>Paste any YT URL</div>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Idle state moved to dropdown */}
 
         {/* ── RECORDING: live viewfinder ── */}
         {phase === 'recording' && (
