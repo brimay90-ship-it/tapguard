@@ -1016,7 +1016,7 @@ function DiamondCanvas({ focusId, fromId, fromAngle, path, adj, byId, store, onN
           backgroundImage: "radial-gradient(circle, var(--text-pri) 0.8px, transparent 0.8px)",
           backgroundSize: "24px 24px",
           pointerEvents: "none",
-          opacity: 0.25,
+          opacity: 0.1,
         }} />
 
         {/* Pre-compute ghost layout for lines and cards */}
