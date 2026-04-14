@@ -1013,9 +1013,10 @@ function DiamondCanvas({ focusId, fromId, fromAngle, path, adj, byId, store, onN
         {/* Dot grid — tiles infinitely */}
         <div style={{
           position: "absolute", inset: "-200%",
-          backgroundImage: "radial-gradient(circle, #181818 0.8px, transparent 0.8px)",
+          backgroundImage: "radial-gradient(circle, var(--text-pri) 0.8px, transparent 0.8px)",
           backgroundSize: "24px 24px",
           pointerEvents: "none",
+          opacity: 0.25,
         }} />
 
         {/* Pre-compute ghost layout for lines and cards */}
