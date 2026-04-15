@@ -1,43 +1,44 @@
 export const weekPlan = [
-  [ // Mon
-    { title: 'Kettlebell Swing', meta: '4 × 15 reps', tags: ['Strength', 'Power'], sets: 4, reps: 15, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/kettlebell-swing.gif' },
-    { title: 'Pull-Ups', meta: '4 × max reps', tags: ['Strength', 'Grip'], sets: 4, reps: 8, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/11/pull-up.gif' },
-    { title: 'Plank Hold', meta: '3 × 45 sec', tags: ['Core'], sets: 3, reps: null, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/plank.gif' },
-    { title: 'Face Pull', meta: '3 × 15 reps', tags: ['Injury Prevention'], sets: 3, reps: 15, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/03/face-pull.gif' },
+  [ // Mon - Push & Core
+    { title: 'Kettlebell Push Press', meta: '4 × 8 reps', tags: ['Strength', 'Power'], sets: 4, reps: 8, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/kettlebell-clean-and-press.gif', bjjEdge: 'Builds shoulder stability essential for maintaining strong upper-body frames from the bottom and posting safely.' },
+    { title: 'Turkish Get-Up', meta: '3 × 3 each side', tags: ['Mobility', 'Core'], sets: 3, reps: 3, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/turkish-get-up.gif', bjjEdge: 'The ultimate technical stand-up under load. Connects your core directly to the floor for secure base sweeps.' },
+    { title: 'Deficit Push-Ups', meta: '3 × 15 reps', tags: ['Strength'], sets: 3, reps: 15, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/push-up.gif', bjjEdge: 'Develops deep chest stretch strength for violently pushing opponents away in tight half-guard scrambles.' },
+    { title: 'Plank Hold', meta: '3 × 45 sec', tags: ['Core'], sets: 3, reps: null, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/plank.gif', bjjEdge: 'Solidifies core rigidity required to absorb immense pressure when stuck in bottom side control.' },
   ],
-  [ // Tue
-    { title: 'Deadlift', meta: '4 × 5 @ 75% 1RM', tags: ['Strength'], sets: 4, reps: 5, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/barbell-deadlift.gif' },
-    { title: 'Single-Leg RDL', meta: '3 × 8 each leg', tags: ['Strength', 'Balance'], sets: 3, reps: 8, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/single-leg-rdl.gif' },
-    { title: 'TRX Row', meta: '3 × 12 reps', tags: ['Strength'], sets: 3, reps: 12, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/04/trx-row.gif' },
-    { title: 'L-Sit Hold', meta: '3 × 20 sec', tags: ['Core'], sets: 3, reps: null, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/06/l-sit.gif' },
+  [ // Tue - Pull
+    { title: 'Heavy Barbell Row', meta: '4 × 6 reps', tags: ['Strength', 'Grip'], sets: 4, reps: 6, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/barbell-row.gif', bjjEdge: 'Directly mimics breaking an opponent\'s posture and initiating heavy collar/sleeve drags in closed guard.' },
+    { title: 'Weighted Pull-Ups', meta: '4 × max reps', tags: ['Strength'], sets: 4, reps: 6, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/11/pull-up.gif', bjjEdge: 'Raw pulling power. Translates to finishing deep back chokes and controlling the upper body clinch from standing.' },
+    { title: 'Face Pulls', meta: '3 × 15 reps', tags: ['Injury Prevention'], sets: 3, reps: 15, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/03/face-pull.gif', bjjEdge: 'Reduces rounding in the shoulders, protecting the rotator cuff from kimura and omoplata attacks.' },
+    { title: 'Farmer Carry', meta: '3 × 40m', tags: ['Grip', 'Core'], sets: 3, reps: null, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/08/farmers-carry.gif', bjjEdge: 'Forges unbreakable lapel grips. Allows you to squeeze defensive grips until the buzzer sounds without burning out.' },
   ],
-  [ // Wed
-    { title: 'Front Squat', meta: '4 × 5 reps', tags: ['Strength', 'Power'], sets: 4, reps: 5, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/front-squat.gif' },
-    { title: 'Neck Bridges', meta: '2 × 30 sec', tags: ['BJJ-Specific'], sets: 2, reps: null, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/08/wrestler-bridge.gif' },
-    { title: 'Jump Rope', meta: '5 × 2 min rounds', tags: ['Cardio', 'Footwork'], sets: 5, reps: null, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/03/jump-rope.gif' },
-    { title: 'Sprawl Circuits', meta: '3 × 10 sprawls', tags: ['BJJ-Specific'], sets: 3, reps: 10, gifUrl: 'https://media.giphy.com/media/3o7TKMt1VVNkHV2PaE/giphy.gif' },
+  [ // Wed - Legs (Push-Pull Combo)
+    { title: 'Front Squat (Leg Push)', meta: '4 × 5 reps', tags: ['Strength', 'Power'], sets: 4, reps: 5, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/front-squat.gif', bjjEdge: 'Builds explosive knee-extension power for finishing single-leg takedowns and guard recovery.' },
+    { title: 'Romanian Deadlift (Leg Pull)', meta: '4 × 8 reps', tags: ['Strength', 'Posterior'], sets: 4, reps: 8, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/barbell-deadlift.gif', bjjEdge: 'Hamstring strength stabilizes knees against leg locks and gives your leg hooks immense sweeping power.' },
+    { title: 'Bulgarian Split Squat', meta: '3 × 8 each leg', tags: ['Strength', 'Balance'], sets: 3, reps: 8, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/dumbbell-bulgarian-split-squat.gif', bjjEdge: 'Eliminates side-to-side imbalances, perfecting your base when passing open guard or wrestling up safely.' },
+    { title: 'Sprawl Circuits', meta: '4 × 10 sprawls', tags: ['BJJ-Specific'], sets: 4, reps: 10, gifUrl: 'https://media.giphy.com/media/3o7TKMt1VVNkHV2PaE/giphy.gif', bjjEdge: 'The ultimate takedown defense reflex. Trains fast-twitch hip drops to stop double legs in their tracks.' },
   ],
-  [ // Thu
-    { title: 'Kettlebell Clean & Press', meta: '4 × 8 each side', tags: ['Strength', 'Power'], sets: 4, reps: 8, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/kettlebell-clean-and-press.gif' },
-    { title: 'Chin-Ups', meta: '4 × max reps', tags: ['Strength', 'Grip'], sets: 4, reps: 6, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/11/chin-up.gif' },
-    { title: 'Ab Wheel Rollout', meta: '3 × 10 reps', tags: ['Core'], sets: 3, reps: 10, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/09/ab-wheel-rollout.gif' },
-    { title: 'Hip Flexor Stretch', meta: '3 × 45 sec each', tags: ['Flexibility'], sets: 3, reps: null, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/kneeling-hip-flexor-stretch.gif' },
+  [ // Thu - Rotational Core & Mobility
+    { title: 'Dumbbell Snatch', meta: '4 × 6 each side', tags: ['Power', 'Core'], sets: 4, reps: 6, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/dumbbell-snatch.gif', bjjEdge: 'Develops full-body explosive chain for violent sweeps (like the hip bump) and rapid bridging.' },
+    { title: 'Pallof Press', meta: '3 × 12 each side', tags: ['Core', 'Anti-Rotation'], sets: 3, reps: 12, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/07/pallof-press.gif', bjjEdge: 'Anti-rotational core strength prevents opponents from twisting your spine out of alignment during heavy stack passes.' },
+    { title: 'Ab Wheel Rollout', meta: '3 × 10 reps', tags: ['Core'], sets: 3, reps: 10, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/09/ab-wheel-rollout.gif', bjjEdge: 'Trains you to extend your body fully without losing core tension—vital for sprawling out of a deep shot and defending guard.' },
+    { title: 'Neck Bridges', meta: '2 × 30 sec', tags: ['BJJ-Specific', 'Injury Prevention'], sets: 2, reps: null, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/08/wrestler-bridge.gif', bjjEdge: 'Your neck is your final frame. A thicker, stronger neck makes you harder to blood choke or neck crank.' },
   ],
-  [ // Fri
-    { title: 'Barbell Row', meta: '4 × 8 reps', tags: ['Strength'], sets: 4, reps: 8, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/barbell-row.gif' },
-    { title: 'Bulgarian Split Squat', meta: '3 × 10 each leg', tags: ['Strength', 'Balance'], sets: 3, reps: 10, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/dumbbell-bulgarian-split-squat.gif' },
-    { title: 'Farmer Carry', meta: '3 × 40m', tags: ['Grip', 'Strength'], sets: 3, reps: null, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/08/farmers-carry.gif' },
-    { title: 'Pallof Press', meta: '3 × 12 each side', tags: ['Core'], sets: 3, reps: 12, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/07/pallof-press.gif' },
+  [ // Fri - Varied Pull & Grip
+    { title: 'Deficit Deadlift', meta: '4 × 5 reps', tags: ['Strength', 'Power'], sets: 4, reps: 5, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/barbell-deadlift.gif', bjjEdge: 'Strengthens your lower back from compromised positions, helping you survive being stacked and folded while attacking guard.' },
+    { title: 'Chin-Ups', meta: '3 × max reps', tags: ['Strength', 'Grip'], sets: 3, reps: 8, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/11/chin-up.gif', bjjEdge: 'Maximum biceps recruitment helps tighten chokes like the Rear Naked Choke and Darce against resisting opponents.' },
+    { title: 'Dumbbell Rows', meta: '3 × 10 each side', tags: ['Strength'], sets: 3, reps: 10, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/04/trx-row.gif', bjjEdge: 'Isolates the lats for heavy unilateral snap-downs and arm drags on the mat without rotating the torso.' },
+    { title: 'Hanging Leg Raises', meta: '3 × 15 reps', tags: ['Core'], sets: 3, reps: 15, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/06/l-sit.gif', bjjEdge: 'Develops hip flexor endurance to swiftly recover guard and pummel your legs when someone tries to knee slice pass.' },
   ],
-  [ // Sat
-    { title: 'Deadlift', meta: '3 × 3 @ 80% 1RM', tags: ['Strength'], sets: 3, reps: 3, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/barbell-deadlift.gif' },
-    { title: 'Dips', meta: '4 × max reps', tags: ['Strength'], sets: 4, reps: 10, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/chest-dip.gif' },
-    { title: 'Dragon Flag', meta: '3 × 6 reps', tags: ['Core'], sets: 3, reps: 6, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/06/dragon-flag.gif' },
+  [ // Sat - Power Legs & Bodyweight (Push/Pull Combo)
+    { title: 'Zercher Squat (Leg Push)', meta: '4 × 6 reps', tags: ['Core', 'Legs'], sets: 4, reps: 6, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/front-squat.gif', bjjEdge: 'Simulates lifting an opponent’s dead weight from bottom. Builds brutal core stability and quad drive.' },
+    { title: 'Kettlebell Swing (Leg Pull)', meta: '4 × 15 reps', tags: ['Power', 'Hips'], sets: 4, reps: 15, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/kettlebell-swing.gif', bjjEdge: 'Hip hinge velocity translates directly to the mats. Enhances explosive bridging power for side control and mount escapes.' },
+    { title: 'Barbell Dips', meta: '4 × max reps', tags: ['Strength'], sets: 4, reps: 10, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/chest-dip.gif', bjjEdge: 'Massive triceps and chest power for maintaining stiff-arms and framing away heavy top pressure when pinned.' },
+    { title: 'Nordic Hamstring Curls', meta: '3 × 5 reps', tags: ['Injury Prevention'], sets: 3, reps: 5, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/single-leg-rdl.gif', bjjEdge: 'Bulletproofs the knees behind the joint. A non-negotiable foundational exercise for surviving and defending leg locks.' },
   ],
-  [ // Sun
-    { title: 'Goblet Squat', meta: '3 × 12 reps', tags: ['Strength', 'Mobility'], sets: 3, reps: 12, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/goblet-squat.gif' },
-    { title: 'Push-Ups', meta: '3 × 20 reps', tags: ['Strength'], sets: 3, reps: 20, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/push-up.gif' },
-    { title: 'Plank w/ Hip Tap', meta: '3 × 45 sec', tags: ['Core'], sets: 3, reps: null, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/plank-hip-dips.gif' },
+  [ // Sun - Active Recovery
+    { title: 'Goblet Squat', meta: '3 × 12 reps', tags: ['Strength', 'Mobility'], sets: 3, reps: 12, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/goblet-squat.gif', bjjEdge: 'Opens the hips and keeps you mobile—vital for retaining an open, impassable sweeping guard.' },
+    { title: 'Push-Ups', meta: '3 × 20 reps', tags: ['Strength'], sets: 3, reps: 20, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/push-up.gif', bjjEdge: 'Gently flushes blood into the chest and shoulders for active recovery to prep for Monday\'s hard sparring sessions.' },
+    { title: 'Plank w/ Hip Tap', meta: '3 × 45 sec', tags: ['Core'], sets: 3, reps: null, gifUrl: 'https://www.inspireusafoundation.org/wp-content/uploads/2022/01/plank-hip-dips.gif', bjjEdge: 'Trains you to hold shoulders completely still while rotating the hips—essential for defending torreando passes.' },
   ],
 ];
 

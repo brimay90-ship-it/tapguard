@@ -47,11 +47,17 @@ function GifOverlay({ exercise, onClose }) {
         </div>
         <div style={{padding:'12px 16px'}}>
           <div style={{fontSize:12, color:'var(--text-sec)', opacity:0.6, marginBottom:4}}>{exercise.meta}</div>
-          <div style={{display:'flex', gap:5, flexWrap:'wrap'}}>
+          <div style={{display:'flex', gap:5, flexWrap:'wrap', marginBottom: exercise.bjjEdge ? 12 : 0}}>
             {exercise.tags.map(tag=>(
               <span key={tag} style={{fontSize:9,letterSpacing:1,textTransform:'uppercase',padding:'2px 6px',background:'var(--bg-total)',border:'1px solid var(--border)',borderRadius:3,color:'var(--text-sec)',opacity:0.8,fontWeight:700}}>{tag}</span>
             ))}
           </div>
+          {exercise.bjjEdge && (
+             <div style={{fontSize:13, color:G, opacity:0.9, fontWeight:600, padding:'10px 12px', background:G+'11', borderLeft:`3px solid ${G}`, borderRadius:'0 6px 6px 0', lineHeight:1.4}}>
+               <span style={{display:'block', fontSize:10, textTransform:'uppercase', letterSpacing:1, marginBottom:4, fontWeight:900, color:G}}>BJJ Edge</span>
+               {exercise.bjjEdge}
+             </div>
+          )}
         </div>
       </div>
     </div>
@@ -78,6 +84,11 @@ function SetTracker({ exercise, dayIdx, exIdx, exerciseDone, toggleExercise, get
             {exercise.title}
           </div>
           <div style={{fontSize:11,color:'var(--text-sec)',opacity:0.6,fontWeight:500}}>{exercise.meta}</div>
+          {exercise.bjjEdge && (
+            <div style={{fontSize:10,color:G,opacity:0.9,fontWeight:600,marginTop:6,fontStyle:'italic', lineHeight:1.3}}>
+              ↳ {exercise.bjjEdge}
+            </div>
+          )}
         </div>
         {/* Done toggle */}
         <div
