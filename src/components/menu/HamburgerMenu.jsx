@@ -545,7 +545,7 @@ export default function HamburgerMenu() {
         {/* Drawer content */}
         <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
           {!screen && (
-            <div style={{ flex: 1, overflowY: 'auto', padding: '8px 0 20px' }}>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto', padding: '8px 0 20px' }}>
               {MENU_ITEMS.map(item => (
                 <button key={item.id} onClick={item.action} style={{
                   width: '100%', display: 'flex', alignItems: 'center', gap: 14,
@@ -593,12 +593,9 @@ export default function HamburgerMenu() {
 
               {/* App version */}
               <div style={{
-                textAlign: 'center', marginTop: 28,
-                fontSize: 10, color: '#222', letterSpacing: '0.1em',
-                fontFamily: "'Syne', sans-serif", fontWeight: 700,
+                display: 'flex', justifyContent: 'center', marginTop: 'auto', paddingTop: 40, paddingBottom: 10,
               }}>
-                <div style={{ color: 'var(--accent)' }}>GROUND</div>
-                <div>WORK</div>
+                <img src="/horizontal.svg" alt="GroundWork" style={{ height: 20, width: 'auto', opacity: 0.8 }} />
               </div>
             </div>
           )}
