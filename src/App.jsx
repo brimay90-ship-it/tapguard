@@ -124,7 +124,7 @@ function Splash({ onDone }) {
 
       {/* Logo */}
       <div style={{ animation: 'logoScale 0.6s ease forwards', display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 2 }}>
-        <img src="/stacked.svg" alt="GroundWork" style={{ width: 220, height: 'auto' }} />
+        <img src="/stacked (2).svg" alt="GroundWork" style={{ width: 220, height: 'auto' }} />
       </div>
 
       {/* Loading bar */}
@@ -175,7 +175,7 @@ function MainApp() {
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pointerEvents: 'auto' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <img src="/icon.svg" alt="GroundWork" style={{ height: 28, width: 'auto' }} />
+            <img src="/icon (2).svg" alt="GroundWork" style={{ height: 28, width: 'auto' }} />
           </div>
           {/* Hamburger menu */}
           <HamburgerMenu />
