@@ -241,16 +241,25 @@ export default function Training() {
       <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:'var(--text-sec)', opacity:0.6, marginBottom:4, fontWeight:700 }}>Workout Plan</div>
       <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:28, color:'var(--text-pri)', marginBottom:14, letterSpacing:1 }}>YOUR WORKOUT PLAN</div>
 
-      {/* Weekly summary chips */}
-      <div style={{display:'flex',gap:8,marginBottom:20,flexWrap:'wrap'}}>
-        <div className="liquid-glass" style={{padding:'10px 18px',borderRadius:20,border:'1px solid rgba(11,245,113,0.3)',fontSize:11,fontWeight:800,color:G, letterSpacing:1}}>
-          🥋 {remainingBjj}× BJJ / WEEK
+      {/* Weekly summary card */}
+      <div className="liquid-glass" style={{
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        padding: '16px 24px', borderRadius: 20, border: '1px solid var(--border)', 
+        marginBottom: 20
+      }}>
+        <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap: 4}}>
+           <div style={{fontSize:20, marginBottom:2}}>🥋</div>
+           <div style={{fontSize:11,fontWeight:800,color:G, letterSpacing:0.5}}>{remainingBjj} BJJ</div>
         </div>
-        <div className="liquid-glass" style={{padding:'10px 18px',borderRadius:20,border:'1px solid rgba(240,160,32,0.3)',fontSize:11,fontWeight:800,color:AMBER, letterSpacing:1}}>
-          🏋️ {remainingWorkout}× LIFT / WEEK
+        <div style={{width: 1, height: 32, background: 'var(--border)'}} />
+        <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap: 4}}>
+           <div style={{fontSize:20, marginBottom:2}}>🏋️</div>
+           <div style={{fontSize:11,fontWeight:800,color:AMBER, letterSpacing:0.5}}>{remainingWorkout} LIFTS</div>
         </div>
-        <div className="liquid-glass" style={{padding:'10px 18px',borderRadius:20,border:'1px solid rgba(255,255,255,0.14)',fontSize:11,fontWeight:800,color:'#555', letterSpacing:1}}>
-          😴 {restDays} REST DAYS
+        <div style={{width: 1, height: 32, background: 'var(--border)'}} />
+        <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap: 4}}>
+           <div style={{fontSize:20, marginBottom:2}}>😴</div>
+           <div style={{fontSize:11,fontWeight:800,color:'var(--text-sec)', letterSpacing:0.5}}>{restDays} REST</div>
         </div>
       </div>
 

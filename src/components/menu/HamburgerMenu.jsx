@@ -595,7 +595,7 @@ export default function HamburgerMenu() {
               <div style={{
                 display: 'flex', justifyContent: 'center', marginTop: 'auto', paddingTop: 40, paddingBottom: 10,
               }}>
-                <img src="/horizontal (2).svg" alt="GroundWork" style={{ height: 20, width: 'auto', opacity: 0.8 }} />
+                <img src="/horizontal.svg" alt="GroundWork" style={{ height: 40, width: 'auto', opacity: 0.8 }} />
               </div>
             </div>
           )}

@@ -9,32 +9,53 @@ const MONTH_NAMES = ['January','February','March','April','May','June','July','A
 export default function Calendar({ selectedDate, onSelectDate }) {
   const { bjjDays, workoutDays } = useApp();
   const [offset, setOffset] = useState(0);
+  const [view, setView] = useState('week');
 
   const today = new Date();
 
-  const getMonthData = () => {
-    const d = new Date(today.getFullYear(), today.getMonth() + offset, 1);
-    const year  = d.getFullYear();
-    const month = d.getMonth();
-    const firstDay = new Date(year, month, 1).getDay();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    return { year, month, firstDay, daysInMonth };
+  const getReferenceDate = () => {
+    if (view === 'month') {
+      return new Date(today.getFullYear(), today.getMonth() + offset, 1);
+    } else {
+      const d = new Date(today);
+      d.setDate(d.getDate() + offset * 7);
+      return d;
+    }
+  };
+
+  const refDate = getReferenceDate();
+  const year = refDate.getFullYear();
+  const month = refDate.getMonth();
+  const navLabel = `${MONTH_NAMES[month]} ${year}`;
+
+  const getRenderDays = () => {
+    if (view === 'week') {
+      const d = new Date(refDate);
+      d.setDate(d.getDate() - d.getDay()); // go to Sunday
+      const days = [];
+      for(let i = 0; i < 7; i++) {
+        days.push(new Date(d));
+        d.setDate(d.getDate() + 1);
+      }
+      return days;
+    } else {
+      const days = [];
+      const firstDayDate = new Date(year, month, 1);
+      const firstDayDOW = firstDayDate.getDay();
+      for(let i = 0; i < firstDayDOW; i++) {
+        days.push(null);
+      }
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      for(let i = 1; i <= daysInMonth; i++) {
+        days.push(new Date(year, month, i));
+      }
+      return days;
+    }
   };
 
   const dowToIdx = (dow) => (dow + 6) % 7;
   const idxBjj     = (idx) => bjjDays.includes(idx);
   const idxWorkout = (idx) => workoutDays.includes(idx);
-
-  const { year, month, firstDay, daysInMonth } = getMonthData();
-
-  const navLabel = `${MONTH_NAMES[month]} ${year}`;
-
-  const isSelected = (dayNum) => {
-    if (!selectedDate) return false;
-    return selectedDate.getDate() === dayNum &&
-           selectedDate.getMonth() === month &&
-           selectedDate.getFullYear() === year;
-  };
 
   return (
     <div className="liquid-glass" style={{borderRadius:20,overflow:'hidden',marginBottom:20}}>
@@ -42,31 +63,18 @@ export default function Calendar({ selectedDate, onSelectDate }) {
       {/* Header */}
       <div style={{padding:'14px 16px 10px'}}>
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:10}}>
-      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:10}}>
-        <div style={{display:'flex',alignItems:'center',gap:10}}>
-          <button onClick={()=>setOffset(o=>o-1)} style={{background:'none',border:'none',color:'var(--text-sec)',opacity:0.6,fontSize:16,cursor:'pointer',padding:'2px 6px',borderRadius:4,transition:'color 0.15s'}}
-            onMouseEnter={e=>e.currentTarget.style.color='var(--text-pri)'} onMouseLeave={e=>e.currentTarget.style.color='var(--text-sec)'}>‹</button>
-          <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:17,color:'var(--text-pri)',letterSpacing:0.5,minWidth:160,textAlign:'center'}}>{navLabel}</span>
-          <button onClick={()=>setOffset(o=>o+1)} style={{background:'none',border:'none',color:'var(--text-sec)',opacity:0.6,fontSize:16,cursor:'pointer',padding:'2px 6px',borderRadius:4,transition:'color 0.15s'}}
-            onMouseEnter={e=>e.currentTarget.style.color='var(--text-pri)'} onMouseLeave={e=>e.currentTarget.style.color='var(--text-sec)'}>›</button>
-        </div>
-        <div style={{display:'flex',gap:10}}>
-          <div style={{display:'flex',alignItems:'center',gap:4,fontSize:10,color:'var(--text-sec)',opacity:0.6,fontWeight:600}}>
-            <span style={{width:6,height:6,borderRadius:'50%',background:G,display:'inline-block'}}/>BJJ
+          <div style={{display:'flex',alignItems:'center',gap:10}}>
+            <button onClick={()=>setOffset(o=>o-1)} style={{background:'none',border:'none',color:'var(--text-sec)',opacity:0.6,fontSize:16,cursor:'pointer',padding:'2px 6px',borderRadius:4,transition:'color 0.15s'}}
+              onMouseEnter={e=>e.currentTarget.style.color='var(--text-pri)'} onMouseLeave={e=>e.currentTarget.style.color='var(--text-sec)'}>‹</button>
+            <span style={{fontFamily:"'Barlow Condensed',sans-serif",fontWeight:800,fontSize:17,color:'var(--text-pri)',letterSpacing:0.5,minWidth:120,textAlign:'center'}}>{navLabel}</span>
+            <button onClick={()=>setOffset(o=>o+1)} style={{background:'none',border:'none',color:'var(--text-sec)',opacity:0.6,fontSize:16,cursor:'pointer',padding:'2px 6px',borderRadius:4,transition:'color 0.15s'}}
+              onMouseEnter={e=>e.currentTarget.style.color='var(--text-pri)'} onMouseLeave={e=>e.currentTarget.style.color='var(--text-sec)'}>›</button>
           </div>
-          <div style={{display:'flex',alignItems:'center',gap:4,fontSize:10,color:'var(--text-sec)',opacity:0.6,fontWeight:600}}>
-            <span style={{width:6,height:6,borderRadius:'50%',background:AMBER,display:'inline-block'}}/>WKT
-          </div>
-        </div>
-      </div>
-          {/* Legend */}
-          <div style={{display:'flex',gap:10}}>
-            <div style={{display:'flex',alignItems:'center',gap:4,fontSize:10,color:'var(--text-sec)',opacity:0.6,fontWeight:600}}>
-              <span style={{width:6,height:6,borderRadius:'50%',background:G,display:'inline-block'}}/>BJJ
-            </div>
-            <div style={{display:'flex',alignItems:'center',gap:4,fontSize:10,color:'var(--text-sec)',opacity:0.6,fontWeight:600}}>
-              <span style={{width:6,height:6,borderRadius:'50%',background:AMBER,display:'inline-block'}}/>WKT
-            </div>
+          
+          {/* View Toggle */}
+          <div style={{display:'flex', gap: 4, background: 'rgba(0,0,0,0.2)', border: '1px solid var(--border)', borderRadius: 8, padding: 2}}>
+             <button onClick={() => { setView('week'); setOffset(0); }} style={{ fontSize: 10, fontWeight: 700, background: view === 'week' ? 'var(--border)' : 'transparent', color: view === 'week' ? 'var(--text-pri)' : 'var(--text-sec)', border: 'none', borderRadius: 6, padding: '4px 10px', cursor: 'pointer', transition: 'all 0.2s' }}>WEEK</button>
+             <button onClick={() => { setView('month'); setOffset(0); }} style={{ fontSize: 10, fontWeight: 700, background: view === 'month' ? 'var(--border)' : 'transparent', color: view === 'month' ? 'var(--text-pri)' : 'var(--text-sec)', border: 'none', borderRadius: 6, padding: '4px 10px', cursor: 'pointer', transition: 'all 0.2s' }}>MONTH</button>
           </div>
         </div>
 
@@ -78,18 +86,18 @@ export default function Calendar({ selectedDate, onSelectDate }) {
         </div>
       </div>
 
-      {/* Month grid */}
+      {/* Grid */}
       <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)',gap:2,padding:'6px 8px 10px'}}>
-        {Array.from({length: firstDay}).map((_,i)=><div key={`e${i}`}/>)}
+        {getRenderDays().map((dDate, i) => {
+          if (!dDate) return <div key={`empty-${i}`}/>;
 
-        {Array.from({length: daysInMonth}).map((_,i)=>{
-          const dayNum  = i + 1;
-          const dow     = (firstDay + i) % 7;
+          const dayNum  = dDate.getDate();
+          const dow     = dDate.getDay();
           const idx     = dowToIdx(dow);
-          const isToday = today.getDate()===dayNum && today.getMonth()===month && today.getFullYear()===year;
+          const isToday = today.getDate()===dayNum && today.getMonth()===dDate.getMonth() && today.getFullYear()===dDate.getFullYear();
           const bjj     = idxBjj(idx);
           const wkt     = idxWorkout(idx);
-          const sel     = isSelected(dayNum);
+          const sel     = selectedDate && selectedDate.getDate()===dayNum && selectedDate.getMonth()===dDate.getMonth() && selectedDate.getFullYear()===dDate.getFullYear();
 
           let bg = 'transparent';
           let borderColor = 'transparent';
@@ -103,11 +111,8 @@ export default function Calendar({ selectedDate, onSelectDate }) {
 
           return (
             <div
-              key={dayNum}
-              onClick={() => {
-                const clicked = new Date(year, month, dayNum);
-                onSelectDate && onSelectDate(clicked);
-              }}
+              key={`day-${i}`}
+              onClick={() => onSelectDate && onSelectDate(dDate)}
               style={{
                 aspectRatio:'1',
                 display:'flex',flexDirection:'column',

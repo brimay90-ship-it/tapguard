@@ -667,11 +667,8 @@ export default function Dashboard() {
               }}
             >
               <div>
-                <div style={{ fontSize: 10, letterSpacing: 2, textTransform: 'uppercase', color: '#555', fontWeight: 800, marginBottom: 3 }}>
+                <div style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 800, fontSize: 18, color: 'var(--text-pri)', letterSpacing: 1, textTransform: 'uppercase' }}>
                   Start workout
-                </div>
-                <div style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 900, fontSize: 16, color: 'var(--text-pri)', letterSpacing: 0.6 }}>
-                  View full plan
                 </div>
               </div>
               <div style={{ fontSize: 18, color: isWorkoutToday ? '#F0A020' : '#666', fontWeight: 900, paddingLeft: 10 }}>
