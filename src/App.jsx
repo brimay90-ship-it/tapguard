@@ -165,15 +165,25 @@ function MainApp() {
       background: 'var(--bg-page)', maxWidth: 430, margin: '0 auto', overflow: 'hidden',
       position: 'relative'
     }}>
+      {/* Header Background Gradient Layer */}
       <div style={{ 
-        position: 'absolute', top: 0, left: 0, right: 0, 
-        height: 110, zIndex: 110, padding: '48px 20px 0',
-        background: 'var(--header-bg)',
+        position: 'fixed', top: 0, left: 0, right: 0, 
+        height: 80, zIndex: 109,
+        background: 'var(--bg-page)',
         backdropFilter: 'blur(20px) saturate(160%)',
         WebkitBackdropFilter: 'blur(20px) saturate(160%)',
-        pointerEvents: 'none', // Allow scrolling through empty header space
+        WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)',
+        maskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)',
+        pointerEvents: 'none', 
+      }}/>
+
+      {/* Header Content Layer */}
+      <div style={{ 
+        position: 'fixed', top: 0, left: 0, right: 0, 
+        height: 55, zIndex: 110, padding: '0 20px',
+        pointerEvents: 'none', 
       }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pointerEvents: 'auto' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pointerEvents: 'auto', height: '100%', maxWidth: 430, margin: '0 auto' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <img src="/icon (2).svg" alt="GroundWork" style={{ height: 28, width: 'auto' }} />
           </div>
@@ -188,7 +198,7 @@ function MainApp() {
         position: 'relative', 
         overflowY: activeTab === 'matrix' ? 'hidden' : 'auto', 
         WebkitOverflowScrolling: 'touch',
-        padding: activeTab === 'matrix' ? '110px 0 0' : '110px 0 180px', // Clear header always
+        padding: activeTab === 'matrix' ? '55px 0 0' : '55px 0 180px', // Clear header always
       }}>
         {NAV.map(tab => (
           <div key={tab.id} style={{

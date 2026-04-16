@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useApp } from '../../context/AppContext';
 import { weekPlan, bjjDayTips } from '../../data/weekPlan';
 import { RANK_ROSTER, SPECIAL_RANKS } from '../../data/rankRoster';
@@ -142,14 +143,14 @@ function FocusOverlay({ focus, onClose }) {
   const [activeVid, setActiveVid] = useState(0);
   const videos = focus.videos || (focus.youtube ? [{ title: focus.skill, url: focus.youtube }] : []);
 
-  return (
+  return createPortal(
     <div className="overlay-enter" style={{
-      position:'fixed', inset:0, zIndex:50,
-      background:'#080808', overflowY:'auto',
+      position:'fixed', inset:0, zIndex:90,
+      background:'var(--bg-total)', overflowY:'auto',
       padding:'0 0 60px', maxWidth:430, margin:'0 auto',
     }}>
-      <div style={{ padding:'52px 20px 20px', borderBottom:'1px solid #1A1C20', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-        <button onClick={onClose} style={{ background:'none', border:'none', color:'#555', fontSize:13, cursor:'pointer', fontWeight:600, fontFamily:"'Space Grotesk',sans-serif", display:'flex', alignItems:'center', gap:6 }}>← Back</button>
+      <div style={{ padding:'52px 20px 20px', borderBottom:'1px solid var(--border)', display:'flex', alignItems:'center', justifyContent:'space-between', background:'var(--bg-total)', position:'sticky', top:0, zIndex:10 }}>
+        <button onClick={onClose} style={{ background:'none', border:'none', color:'var(--text-sec)', fontSize:13, cursor:'pointer', fontWeight:600, fontFamily:"'Space Grotesk',sans-serif", display:'flex', alignItems:'center', gap:6 }}>← Back</button>
         <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:G, fontWeight:700 }}>This Week's Focus</div>
       </div>
       <div style={{ padding:'24px 20px 0' }}>
@@ -164,17 +165,17 @@ function FocusOverlay({ focus, onClose }) {
                 allowFullScreen style={{display:'block'}}/>
             </div>
             {/* Video title */}
-            <div style={{ fontSize:11, color:G, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', marginTop:10 }}>
+            <div style={{ fontSize:12, color:G, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.05em', marginTop:18, marginBottom:14 }}>
               {videos[activeVid].title}
             </div>
             {/* Selector pills — only show when multiple videos */}
             {videos.length > 1 && (
-              <div style={{ display:'flex', gap:8, marginTop:12, flexWrap:'wrap' }}>
+              <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
                 {videos.map((v, i) => (
                   <button key={i} onClick={() => setActiveVid(i)} style={{
-                    padding:'6px 14px', borderRadius:20,
+                    padding:'8px 16px', borderRadius:20,
                     border:`1px solid ${i === activeVid ? G : 'var(--border)'}`,
-                    background: i === activeVid ? G + '18' : 'transparent',
+                    background: i === activeVid ? 'rgba(var(--accent-rgb), 0.12)' : 'transparent',
                     color: i === activeVid ? G : 'var(--text-sec)',
                     fontSize:11, fontWeight:600, cursor:'pointer',
                     fontFamily:"'DM Sans',sans-serif",
@@ -197,7 +198,8 @@ function FocusOverlay({ focus, onClose }) {
           return <p key={i} style={{fontSize:14,color:'var(--text-sec)',fontWeight:400,lineHeight:1.7,marginBottom:8,opacity:0.8}}>{line}</p>;
         })}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -226,14 +228,14 @@ function RankOverlay({ currentScore, target, onClose }) {
     return () => clearTimeout(timer);
   }, [target, currentScore]);
 
-  return (
+  return createPortal(
     <div ref={containerRef} className="overlay-enter" style={{
-      position:'fixed', inset:0, zIndex:50,
-      background:'#080808', overflowY:'auto',
-      padding:'0 0 60px', maxWidth:430, margin:'0 auto',
+      position:'fixed', inset:0, zIndex:90,
+      background:'var(--bg-total)', overflowY:'auto',
+      padding:'0 0 80px', maxWidth:430, margin:'0 auto',
     }}>
-      <div style={{ padding:'52px 20px 20px', borderBottom:'1px solid #1A1C20', display:'flex', alignItems:'center', justifyContent:'space-between', background:'#080808', position:'sticky', top:0, zIndex:10 }}>
-        <button onClick={onClose} style={{ background:'none', border:'none', color:'#555', fontSize:13, cursor:'pointer', fontWeight:600, fontFamily:"'Space Grotesk',sans-serif", display:'flex', alignItems:'center', gap:6 }}>← Back</button>
+      <div style={{ padding:'52px 20px 20px', borderBottom:'1px solid var(--border)', display:'flex', alignItems:'center', justifyContent:'space-between', background:'var(--bg-total)', position:'sticky', top:0, zIndex:10 }}>
+        <button onClick={onClose} style={{ background:'none', border:'none', color:'var(--text-sec)', fontSize:13, cursor:'pointer', fontWeight:600, fontFamily:"'Space Grotesk',sans-serif", display:'flex', alignItems:'center', gap:6 }}>← Back</button>
         <div style={{ fontSize:10, letterSpacing:3, textTransform:'uppercase', color:G, fontWeight:700 }}>Rank Library</div>
       </div>
 
@@ -247,19 +249,19 @@ function RankOverlay({ currentScore, target, onClose }) {
               const isActive = currentScore >= rank.range[0] && currentScore <= rank.range[1];
               return (
                 <div key={rank.title} ref={el => rankRefs.current[rank.title] = el} className={isActive ? "liquid-glass" : ""} style={{
-                  background: isActive ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.02)',
-                  border: isActive ? `1px solid rgba(11,245,113,0.3)` : '1px solid rgba(255,255,255,0.05)',
+                  background: isActive ? 'var(--glass-bg)' : 'transparent',
+                  border: isActive ? `1px solid rgba(var(--accent-rgb), 0.3)` : '1px solid var(--glass-border)',
                   borderRadius:20, padding:'20px',
                   position:'relative', transition:'all 0.4s ease',
                   opacity: isActive ? 1 : 0.85,
                   backdropFilter:'blur(24px)',
-                  boxShadow: isActive ? '0 8px 32px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.1)' : 'none'
+                  boxShadow: isActive ? '0 8px 32px rgba(0,0,0,0.1), inset 0 1px 1px rgba(255,255,255,0.05)' : 'none'
                 }}>
                   <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:10 }}>
                     <span style={{ fontSize:28, filter: isActive ? 'none' : 'grayscale(100%) brightness(80%)' }}>{rank.icon}</span>
-                    <h2 style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:22, color: isActive ? G : '#fff', letterSpacing:0.5 }}>{rank.title}</h2>
+                    <h2 style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:22, color: isActive ? G : 'var(--text-pri)', letterSpacing:0.5 }}>{rank.title}</h2>
                   </div>
-                  <p style={{ fontSize:14, color: isActive ? '#eee' : '#666', lineHeight:1.5, fontWeight:400, fontStyle:'italic' }}>{rank.subtext}</p>
+                  <p style={{ fontSize:14, color: isActive ? 'var(--text-pri)' : 'var(--text-sec)', lineHeight:1.5, fontWeight:400, fontStyle:'italic' }}>{rank.subtext}</p>
                   {isActive && <div style={{ position:'absolute', top:20, right:20, fontSize:9, color:G, fontWeight:800, letterSpacing:1.5, textTransform:'uppercase' }}>Active</div>}
                 </div>
               );
@@ -294,21 +296,22 @@ function RankOverlay({ currentScore, target, onClose }) {
             const isActive = target === key;
             return (
               <div key={key} ref={el => specRefs.current[key] = el} style={{
-                background: isActive ? 'rgba(11,245,113,0.05)' : '#111', 
-                border: isActive ? `1px solid ${G}` : '1px solid #1f1f1f',
+                background: isActive ? 'rgba(var(--accent-rgb), 0.08)' : 'var(--bg-card)', 
+                border: isActive ? `1px solid ${G}` : '1px solid var(--border)',
                 borderRadius:12, padding:'14px',
                 transition:'all 0.3s ease',
                 transform: isActive ? 'scale(1.02)' : 'scale(1)'
               }}>
                 <div style={{ fontSize:20, marginBottom:8 }}>{rank.icon}</div>
-                <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:15, color: isActive ? G : '#fff', marginBottom:4 }}>{rank.title}</div>
-                <div style={{ fontSize:11, color: isActive ? '#ccc' : '#666', lineHeight:1.4 }}>{rank.subtext}</div>
+                <div style={{ fontFamily:"'Barlow Condensed',sans-serif", fontWeight:800, fontSize:15, color: isActive ? G : 'var(--text-pri)', marginBottom:4 }}>{rank.title}</div>
+                <div style={{ fontSize:11, color: isActive ? 'var(--text-pri)' : 'var(--text-sec)', lineHeight:1.4 }}>{rank.subtext}</div>
               </div>
             );
           })}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -424,7 +427,7 @@ export default function Dashboard() {
           flexDirection:'column',
           justifyContent:'flex-end',
           cursor:'pointer',
-          boxShadow: '0 24px 48px rgba(0,0,0,0.7)',
+          boxShadow: 'var(--card-shadow)',
           animation:'fadeUp 0.4s ease both'
         }}>
           {/* Background Image */}
@@ -568,7 +571,7 @@ export default function Dashboard() {
                 <div style={{fontSize:13,color:'var(--text-sec)',lineHeight:1.6,marginBottom:10,opacity:0.8}}>{bjjClassFocus.tip}</div>
                 <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
                   {todayBjjTips.warmup.slice(0,2).map((w,i) => (
-                    <div key={i} style={{fontSize:10,padding:'4px 8px',borderRadius:6,background:G+'11',border:`1px solid ${G}33`,color:G,fontWeight:600}}>{w}</div>
+                    <div key={i} style={{fontSize:10,padding:'4px 8px',borderRadius:6,background:'rgba(var(--accent-rgb), 0.12)',border:`1px solid rgba(var(--accent-rgb), 0.2)`,color:G,fontWeight:600}}>{w}</div>
                   ))}
                 </div>
               </div>
@@ -620,7 +623,7 @@ export default function Dashboard() {
                   <div style={{fontSize:13,color:'#888',lineHeight:1.55,marginBottom:8}}>{bjjClassFocus.tip}</div>
                   <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
                     {todayBjjTips.warmup.slice(0,2).map((w,i) => (
-                      <div key={i} style={{fontSize:10,padding:'4px 8px',borderRadius:6,background:'rgba(11,245,113,0.08)',border:'1px solid rgba(11,245,113,0.15)',color:G,fontWeight:600}}>{w}</div>
+                      <div key={i} style={{fontSize:10,padding:'4px 8px',borderRadius:6,background:'rgba(var(--accent-rgb), 0.12)',border:'1px solid rgba(var(--accent-rgb), 0.2)',color:G,fontWeight:600}}>{w}</div>
                     ))}
                   </div>
                 </div>

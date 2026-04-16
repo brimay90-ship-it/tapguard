@@ -56,7 +56,7 @@ export default function NoteEditor({ note: existingNote, onClose }) {
   const overlay = (
     <div className="overlay-enter" style={{ 
       position: 'fixed', inset: 0, 
-      background: 'var(--overlay-bg)', 
+      background: 'var(--bg-page)', 
       overflowY: 'auto', padding: '20px 20px 100px', zIndex: 9999,
     }}>
       <button onClick={onClose} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--text-sec)', opacity: 0.6, cursor: 'pointer', background: 'none', border: 'none', marginBottom: 20, fontWeight: 800, transition: 'color 0.18s' }}

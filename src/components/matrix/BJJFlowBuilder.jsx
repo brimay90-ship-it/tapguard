@@ -1,5 +1,6 @@
 import { useState, useMemo, useRef, useEffect, useCallback, createContext, useContext } from "react";
 import { createPortal } from "react-dom";
+import { TRANSITIONS } from '../../data/flowTransitions';
 
 // ─── Color system (Reactive) ──────────────────────────────────────────────────
 const CAT = {
@@ -1326,7 +1327,7 @@ function TooltipHint({ text }) {
 // ─── Path Builder ─────────────────────────────────────────────────────────────
 // Redesigned: shows chain with step numbers, visual progress bar,
 // inline add/remove per node, and a clear "Build your flow" CTA
-function PathBuilder({ path, byId, focusId, onTap, onRemove, onAddFocus, focusInPath }) {
+function PathBuilder({ path, byId, focusId, onTap, onRemove, onAddFocus, focusInPath, onSave }) {
   const scrollRef = useRef();
 
   useEffect(() => {
@@ -1465,6 +1466,23 @@ function PathBuilder({ path, byId, focusId, onTap, onRemove, onAddFocus, focusIn
                     Add here
                   </span>
                 </div>
+              </div>
+            )}
+
+            {/* ADD THE SAVE BUTTON HERE if path is at least 2 long */}
+            {path.length >= 2 && (
+              <div style={{ display: "flex", alignItems: "center", flexShrink: 0, paddingLeft: 12 }}>
+                <button
+                  onClick={onSave}
+                  style={{
+                    minHeight: 36, padding: "0 18px", borderRadius: 20,
+                    border: "1px solid #22c55e", background: "#22c55e14",
+                    color: "#22c55e", cursor: "pointer", fontSize: 13,
+                    fontFamily: "'DM Sans',sans-serif", flexShrink: 0, fontWeight: 700
+                  }}
+                >
+                  Save ↗
+                </button>
               </div>
             )}
           </div>
@@ -1890,7 +1908,133 @@ function Library({ onSelect, onBack }) {
 // ─── Arsenal ──────────────────────────────────────────────────────────────────
 function Arsenal({ byId, onBack, onLoadFlow, onNavigate, embedded = false }) {
   const { store, delFlow } = useA();
+  const [activeFlow, setActiveFlow] = useState(null);
   const [view, setView] = useState("saved");
+  
+  if (activeFlow) {
+    const p = activeFlow.path || [];
+    return (
+      <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", background: 'var(--bg-page)' }}>
+        <div style={{
+          padding: embedded ? "12px 16px 12px" : "24px 16px 12px", background: "#0d0d0d",
+          borderBottom: "1px solid #191919", flexShrink: 0, display: "flex", alignItems: "flex-start", gap: 12
+        }}>
+          <button onClick={() => setActiveFlow(null)} style={{
+            background: "#181818", border: "none", color: "#999",
+            width: 44, height: 44, borderRadius: "50%", cursor: "pointer", fontSize: 20,
+            display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0
+          }}>← </button>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontFamily: "'Barlow Condensed',sans-serif", fontSize: 22, fontWeight: 700, color: 'var(--text-pri)', marginBottom: 2 }}>
+              {activeFlow.name}
+            </div>
+            <div style={{ fontSize: 11, color: 'var(--text-sec)' }}>
+              {p.length} technique{p.length !== 1 ? "s" : ""} · {new Date(activeFlow.createdAt).toLocaleDateString()}
+            </div>
+          </div>
+          <button onClick={() => { delFlow(activeFlow.id); setActiveFlow(null); }} style={{
+            minHeight: 36, padding: "0 12px", borderRadius: 20,
+            border: "1px solid #1e1e1e", background: "transparent",
+            color: 'var(--border)', cursor: "pointer", fontSize: 14, flexShrink: 0
+          }}>✕</button>
+        </div>
+
+        <div style={{ flex: 1, overflowY: "auto", padding: "20px 16px 120px", WebkitOverflowScrolling: "touch" }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-sec)', textTransform: "uppercase", letterSpacing: 1, marginBottom: 16 }}>Flow Sequencer</div>
+          {p.map((id, i) => {
+            const t = byId[id]; if (!t) return null;
+            const tc = catColor(t);
+            const prevT = i > 0 ? byId[p[i - 1]] : null;
+            let tText = prevT ? `Transition to ${t.name}` : "";
+            if (prevT) {
+              const explicitTrans = TRANSITIONS[`${prevT.id}-${t.id}`];
+              if (explicitTrans) {
+                tText = explicitTrans;
+              } else {
+                let match = t.common_setups?.find(s => s.toLowerCase().includes(prevT.name.toLowerCase()));
+                if (!match) match = prevT.common_setups?.find(s => s.toLowerCase().includes(t.name.toLowerCase()));
+                if (match) {
+                  const safeName = prevT.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                  tText = match.replace(new RegExp('^' + safeName + '\\s*(→|->|-|\\u2192)\\s*', 'i'), '').trim();
+                  tText = tText.charAt(0).toUpperCase() + tText.slice(1);
+                } else {
+                if (prevT.category === "Submission" && t.category === "Submission") {
+                  tText = `If opponent defends the ${prevT.name}, adjust your angle and attack the ${t.name}`;
+                } else if (prevT.category === "Position" && t.category === "Submission") {
+                  tText = `From ${prevT.name}, isolate the ${t.body_target?.toLowerCase() || 'target'} and lock in the ${t.name}`;
+                } else if (prevT.category === "Guard System" && t.category === "Submission") {
+                  tText = `Break posture from ${prevT.name}, control the ${t.body_target?.toLowerCase() || 'target'}, and apply the ${t.name}`;
+                } else if (prevT.category === "Guard System" && t.category === "Sweep") {
+                  tText = `Secure grips from ${prevT.name}, off-balance their base, and execute the ${t.name}`;
+                } else if (prevT.category === "Guard Pass" && t.category === "Position") {
+                  tText = `Clear the leg frames via ${prevT.name} and settle heavy into ${t.name}`;
+                } else if (prevT.category === "Position" && t.category === "Position") {
+                  tText = `Advance from ${prevT.name} by killing their frames and moving to ${t.name}`;
+                } else if (prevT.category === "Takedown & Throw" && t.category === "Position") {
+                  tText = `Complete the ${prevT.name} and aggressively establish ${t.name}`;
+                } else if ((prevT.category === "Takedown & Throw" || prevT.category === "Sweep") && t.category === "Submission") {
+                  tText = `Use the momentum of the ${prevT.name} to immediately attack the ${t.name}`;
+                } else if (prevT.category === "Escape & Recovery" && t.category === "Guard System") {
+                  tText = `Create space with the ${prevT.name} and recover to ${t.name}`;
+                } else if (prevT.category === "Leg Entanglement" && t.category === "Submission") {
+                  tText = `Control the entanglement, isolate the ${t.body_target?.toLowerCase() || 'leg'}, and finish with the ${t.name}`;
+                } else if (prevT.category === "Guard System" && t.category === "Guard System") {
+                  tText = `Transition your hooks and grips from ${prevT.name} to establish ${t.name}`;
+                } else {
+                  tText = `Flow transition from ${prevT.name} to ${t.name}`;
+                }
+              }
+             }
+            }
+            return (
+              <div key={`${id}-${i}`} style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
+                {i > 0 && (
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "4px 0", width: "100%" }}>
+                    <div style={{ height: 16, width: 2, background: 'var(--border)' }} />
+                    <div style={{
+                      background: '#121212', color: '#a3a3a3', fontSize: 13,
+                      fontFamily: "'DM Sans',sans-serif", padding: "12px 18px",
+                      borderRadius: 12, maxWidth: "90%", textAlign: "center",
+                      border: "1px dashed #2a2a2a", lineHeight: 1.5, margin: "4px 0"
+                    }}>
+                      {tText}
+                    </div>
+                    <div style={{ height: 16, width: 2, background: 'var(--border)', position: "relative" }}>
+                      <div style={{ position: "absolute", bottom: -2, left: -4, width: 0, height: 0, borderLeft: "5px solid transparent", borderRight: "5px solid transparent", borderTop: `8px solid var(--border)` }} />
+                    </div>
+                  </div>
+                )}
+                <div 
+                  onClick={() => onNavigate(id)}
+                  style={{
+                    width: "100%", background: 'var(--bg-card)', borderRadius: 14, border: "1px solid #191919",
+                    padding: "16px", cursor: "pointer", display: "flex", alignItems: "center", gap: 12
+                  }}
+                >
+                  <div style={{ width: 4, height: 40, borderRadius: 2, background: tc, flexShrink: 0 }} />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 18, fontWeight: 700, color: "#e0e0e0", fontFamily: "'Barlow Condensed',sans-serif", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                       {t.name}
+                    </div>
+                    <div style={{ fontSize: 11, color: 'var(--text-sec)', marginTop: 2 }}>{t.category}</div>
+                  </div>
+                  <span style={{ fontSize: 14, color: 'var(--border)', flexShrink: 0 }}>›</span>
+                </div>
+              </div>
+            );
+          })}
+          
+          <button onClick={() => { onLoadFlow(activeFlow); setActiveFlow(null); }} style={{
+            width: "100%", marginTop: 32, minHeight: 48, borderRadius: 14, border: "1.5px dashed #333",
+            background: "transparent", color: "#22c55e", cursor: "pointer", fontSize: 14, fontFamily: "'DM Sans',sans-serif", fontWeight: 600, display: "flex", alignItems: "center", justifyContent: "center", gap: 8
+          }}>
+            ＋ Add Link Techniques
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   const saved = Object.entries(store.techs || {}).filter(([, v]) => v.proficiency > 0);
   const byCat = {};
   saved.forEach(([id, info]) => {
@@ -1938,8 +2082,8 @@ function Arsenal({ byId, onBack, onLoadFlow, onNavigate, embedded = false }) {
           (store.flows || []).map(f => {
             const p = f.path || [];
             return (
-              <div key={f.id} style={{
-                background: 'var(--bg-card)', borderRadius: 14,
+              <div key={f.id} onClick={() => setActiveFlow(f)} style={{
+                background: 'var(--bg-card)', borderRadius: 14, cursor: "pointer",
                 padding: "14px", marginBottom: 10, border: "1px solid #191919"
               }}>
                 <div style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 10 }}>
@@ -1952,13 +2096,7 @@ function Arsenal({ byId, onBack, onLoadFlow, onNavigate, embedded = false }) {
                       {p.length} technique{p.length !== 1 ? "s" : ""} · {new Date(f.createdAt).toLocaleDateString()}
                     </div>
                   </div>
-                  <button onClick={() => onLoadFlow(f)} style={{
-                    minHeight: 36, padding: "0 14px", borderRadius: 20,
-                    border: "1px solid #22c55e", background: "#22c55e14",
-                    color: "#22c55e", cursor: "pointer", fontSize: 12,
-                    fontFamily: "'DM Sans',sans-serif", flexShrink: 0, fontWeight: 600
-                  }}>Load ↗</button>
-                  <button onClick={() => delFlow(f.id)} style={{
+                  <button onClick={e => { e.stopPropagation(); delFlow(f.id); }} style={{
                     minHeight: 36, padding: "0 12px", borderRadius: 20,
                     border: "1px solid #1e1e1e", background: "transparent",
                     color: 'var(--border)', cursor: "pointer", fontSize: 14, flexShrink: 0
@@ -2279,7 +2417,6 @@ function App() {
   }
 
   const focusInPath = focusId && path.includes(focusId);
-  const canSave = path.length >= 2;
 
   return (
     <div style={{
@@ -2307,72 +2444,6 @@ function App() {
         />
       )}
 
-      {/* Top bar */}
-      <div style={{
-        display: "flex", alignItems: "center", padding: "11px 14px",
-        background: "var(--bg-card)", borderBottom: "1px solid var(--border)",
-        flexShrink: 0, gap: 8, zIndex: 10,
-      }}>
-        <div style={{
-          width: 30, height: 30, borderRadius: 7, flexShrink: 0,
-          background: "linear-gradient(135deg,#22c55e,#16a34a)",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          fontSize: 14, fontWeight: 900, color: '#fff', fontFamily: "'Barlow Condensed',sans-serif",
-        }}>T</div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{
-            fontSize: 12, fontWeight: 700, color: "var(--text-pri)",
-            fontFamily: "'Barlow Condensed',sans-serif", letterSpacing: "0.05em",
-            lineHeight: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"
-          }}>
-            {flowTitle}
-          </div>
-          <div style={{ fontSize: 8, color: 'var(--text-sec)', letterSpacing: "0.12em", lineHeight: 1.4 }}>
-            {focusId ? `THE PLAYBOOK · ${path.length} MOVE${path.length !== 1 ? "S" : ""}` : "THE PLAYBOOK"}
-          </div>
-        </div>
-        {/* Action buttons — only show on techniques tab */}
-        {matrixTab === "techniques" && (
-          <div style={{ display: "flex", gap: 6, alignItems: "center", flexShrink: 0 }}>
-            <button onClick={() => setScreen("library")} style={{
-              minHeight: 34, padding: "0 12px", borderRadius: 20, border: "none",
-              background: "#22c55e", color: "#fff", fontWeight: 700, fontSize: 11,
-              cursor: "pointer", fontFamily: "'Barlow Condensed',sans-serif",
-              letterSpacing: "0.04em", boxShadow: "0 2px 10px #22c55e44", whiteSpace: "nowrap",
-            }}>＋ Technique</button>
-
-            {focusId && (
-              <button onClick={() => focusInPath ? removeFromPath(focusId) : addToPath(focusId)} style={{
-                minHeight: 34, padding: "0 11px", borderRadius: 20,
-                border: `1.5px solid ${focusInPath ? 'var(--border)' : catColor(byId[focusId]) + "66"}`,
-                background: focusInPath ? "transparent" : `${catColor(byId[focusId])}16`,
-                color: focusInPath ? 'var(--text-sec)' : catColor(byId[focusId]),
-                fontSize: 11, cursor: "pointer", fontFamily: "'DM Sans',sans-serif",
-                fontWeight: 700, whiteSpace: "nowrap", transition: "all 0.18s",
-              }}>
-                {focusInPath ? "✓ In Flow" : "+ Flow"}
-              </button>
-            )}
-
-            {(focusId || path.length > 0) && (
-              <button onClick={clear} style={{
-                minHeight: 34, width: 34, borderRadius: 20, flexShrink: 0,
-                border: `1px solid var(--border)`, background: "transparent",
-                color: 'var(--text-sec)', fontSize: 14, cursor: "pointer", display: "flex",
-                alignItems: "center", justifyContent: "center",
-              }}>✕</button>
-            )}
-
-            {canSave && (
-              <button onClick={() => setShowSave(true)} style={{
-                minHeight: 34, padding: "0 11px", borderRadius: 20,
-                border: "1px solid #22c55e55", background: "#22c55e0f",
-                color: "#22c55e", cursor: "pointer", fontWeight: 700, fontSize: 11, whiteSpace: "nowrap",
-              }}>Save ↗</button>
-            )}
-          </div>
-        )}
-      </div>
 
       {/* Matrix tab bar */}
       <div style={{
@@ -2419,7 +2490,7 @@ function App() {
                   fontSize: 13, color: 'var(--border)', textAlign: "center",
                   fontFamily: "'DM Sans',sans-serif", lineHeight: 1.6
                 }}>
-                  Tap <span style={{ color: 'var(--text-sec)' }}>＋ Technique</span> to pick a move<br />and start exploring connections
+                  Explore the Matrix by tapping any technique node<br />and discover new connections
                 </div>
               </div>
             ) : null}
@@ -2443,6 +2514,7 @@ function App() {
             onRemove={removeFromPath}
             onAddFocus={() => addToPath(focusId)}
             focusInPath={focusInPath}
+            onSave={() => setShowSave(true)}
           />
         </>
       )}

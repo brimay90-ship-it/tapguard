@@ -39,8 +39,18 @@ export default function Notes() {
   return (
     <div style={{ position: 'relative' }}>
       <div style={{ padding: '20px 20px 20px' }}>
-        <div style={{ fontSize: 10, letterSpacing: 3, textTransform: 'uppercase', color: 'var(--text-sec)', opacity: 0.6, marginBottom: 6, fontWeight: 700 }}>Training Journal</div>
-        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 30, color: 'var(--text-pri)', marginBottom: 16, letterSpacing: 1 }}>CLASS NOTES</div>
+        <div style={{ marginBottom: 16 }}>
+          <div style={{ fontSize: 10, letterSpacing: 3, textTransform: 'uppercase', color: 'var(--text-sec)', opacity: 0.6, marginBottom: 6, fontWeight: 700 }}>Training Journal</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 30, color: 'var(--text-pri)', letterSpacing: 1 }}>CLASS NOTES</div>
+            <button 
+              onClick={openNew} 
+              style={{ width:44, height:44, borderRadius:'50%', background:G, border:'none', color:'#000', fontSize:28, fontFamily:'sans-serif', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', boxShadow:`0 4px 12px ${G}44`, transition:'transform 0.2s', paddingBottom: 2, flexShrink: 0 }}
+              onMouseDown={e => e.currentTarget.style.transform='scale(0.95)'}
+              onMouseUp={e => e.currentTarget.style.transform='scale(1)'}
+            >+</button>
+          </div>
+        </div>
 
         {/* Filter tabs */}
         <div style={{ display: 'flex', gap: 6, marginBottom: 16 }}>
@@ -55,18 +65,7 @@ export default function Notes() {
           ))}
         </div>
 
-        {/* Add new note button */}
-        <div onClick={openNew} className="liquid-glass" style={{
-          width: '100%', border: '1px dashed var(--glass-border)',
-          borderRadius: 20, padding: 24, color: 'var(--text-sec)', opacity: 0.6, fontSize: 13,
-          fontWeight: 800, cursor: 'pointer', textAlign: 'center',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-          marginBottom: 20, transition: 'all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28)',
-          letterSpacing: 2
-        }}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = G; e.currentTarget.style.color = 'var(--text-pri)'; e.currentTarget.style.opacity = '1'; }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--glass-border)'; e.currentTarget.style.color = 'var(--text-sec)'; e.currentTarget.style.opacity = '0.6'; }}
-        >⚡ ADD TODAY'S CLASS NOTES</div>
+        {/* Legacy add note button removed, replaced by + button */}
 
         {/* Note cards — each opens in editor for viewing/editing */}
         {filtered.length === 0 && (
