@@ -1523,57 +1523,76 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
       dragControls={controls}
       dragListener={false}
       dragConstraints={{ top: 0 }}
-      dragElastic={0.15}
+      dragElastic={0.08}
       onDragEnd={(e, info) => {
-        if (info.offset.y > 100 || info.velocity.y > 300) {
+        if (info.offset.y > 150 || info.velocity.y > 500) {
           onClose();
         }
       }}
       initial={{ y: "100%" }}
       animate={{ y: 0 }}
       exit={{ y: "100%" }}
-      transition={{ type: "spring", damping: 25, stiffness: 200 }}
+      transition={{ type: "spring", damping: 30, stiffness: 300, mass: 0.8 }}
       style={{
-        position: "absolute", bottom: 0, left: 0, right: 0,
-        borderRadius: "32px 32px 0 0",
+        position: "absolute", top: 1, left: 0, right: 0, bottom: 0,
         background: "var(--bg-card)",
-        border: "1px solid var(--border)",
-        maxHeight: "calc(100% - 24px)",
+        borderTop: "1px solid var(--border)",
+        borderLeft: "1px solid var(--border)",
+        borderRight: "1px solid var(--border)",
+        borderRadius: "16px 16px 0 0",
         display: "flex", flexDirection: "column",
         boxShadow: "0 -16px 64px rgba(0,0,0,0.4)",
         zIndex: 200,
+        height: "calc(100% - 1px)",
+        overflow: "hidden"
       }}
     >
+      {/* Invisible drag overlay for 'almost anywhere' feel */}
+      <div 
+        onPointerDown={(e) => controls.start(e)}
+        style={{ 
+          position: "absolute", inset: 0, zIndex: 0, pointerEvents: "auto",
+          touchAction: "none"
+        }} 
+      />
+
       {/* Handle — swipe to close */}
       <div 
         onPointerDown={(e) => controls.start(e)}
         style={{ 
-          padding: "12px 0 16px", display: "flex", justifyContent: "center", cursor: "grab",
-          touchAction: "none" // Essential for drag handle to work on mobile
+          padding: "20px 0 16px", display: "flex", justifyContent: "center", cursor: "grab",
+          touchAction: "none", position: "relative", zIndex: 1
         }}
       >
         <div style={{ width: 44, height: 5, borderRadius: 2.5, background: "var(--border)", opacity: 0.6 }} />
       </div>
 
       {/* Header */}
-      <div style={{ padding: "8px 18px 12px", borderBottom: "1px solid #191919" }}>
+      <div 
+        onPointerDown={(e) => {
+          // Only start drag if not clicking a button
+          if (e.target.tagName !== "BUTTON") controls.start(e);
+        }}
+        style={{ padding: "8px 18px 16px", borderBottom: "1px solid #191919", position: "relative", zIndex: 1 }}>
         <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{
               fontSize: 10, color: col, fontWeight: 700, textTransform: "uppercase",
-              letterSpacing: "0.09em", marginBottom: 3
+              letterSpacing: "0.09em", marginBottom: 4
             }}>{tech.category}</div>
             <div style={{
               fontFamily: "'Barlow Condensed',sans-serif",
-              fontSize: 22, fontWeight: 700, color: 'var(--text-pri)', lineHeight: 1.1
+              fontSize: 26, fontWeight: 700, color: 'var(--text-pri)', lineHeight: 1.1
             }}>{tech.name}</div>
             {tech.aka?.length > 0 && (
-              <div style={{ fontSize: 11, color: "#777", marginTop: 3 }}>aka {tech.aka.slice(0, 2).join(", ")}</div>
+              <div style={{ fontSize: 11, color: "#777", marginTop: 4 }}>aka {tech.aka.slice(0, 2).join(", ")}</div>
             )}
           </div>
           {/* Actions: Add/remove from path and Close */}
           <div style={{ display: "flex", gap: 8, alignItems: "flex-start", flexShrink: 0 }}>
-            <button onClick={() => { inPath ? onRemoveFromPath(tech.id) : onAddToPath(tech.id); haptic(8); }} style={{
+            <button 
+              onPointerDown={e => e.stopPropagation()}
+              onClick={() => { inPath ? onRemoveFromPath(tech.id) : onAddToPath(tech.id); haptic(8); }} style={{
               minHeight: 40, padding: "0 16px", borderRadius: 20,
               border: `1.5px solid ${inPath ? 'var(--border)' : col}`,
               background: inPath ? 'var(--bg-card)' : `${col}18`,
@@ -1581,7 +1600,9 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
               cursor: "pointer", fontWeight: 700, fontSize: 12,
               fontFamily: "'DM Sans',sans-serif", flexShrink: 0, whiteSpace: "nowrap",
             }}>{inPath ? "✓ In Flow" : "+ Add to Flow"}</button>
-            <button onClick={onClose} style={{
+            <button 
+              onPointerDown={e => e.stopPropagation()}
+              onClick={onClose} style={{
               width: 40, height: 40, borderRadius: 20,
               background: "transparent", border: "1px solid #262626", color: "#777",
               display: "flex", alignItems: "center", justifyContent: "center",
@@ -1592,12 +1613,19 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
       </div>
 
       {/* Tabs */}
-      <div style={{ display: "flex", flexShrink: 0, borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+      <div 
+        onPointerDown={(e) => {
+          if (e.target.tagName !== "BUTTON") controls.start(e);
+        }}
+        style={{ display: "flex", flexShrink: 0, borderBottom: "1px solid rgba(255,255,255,0.08)", position: "relative", zIndex: 1 }}>
         {[["info", "Details"], ["train", "Training"], ["links", "Connections"], ["video", "Videos"]].map(([t, l]) => {
           const hasVideo = t === "video" && (TECH_VIDEOS[tech?.id] || []).length > 0;
           return (
-            <button key={t} onClick={() => setTab(t)} style={{
-              flex: 1, minHeight: 44, fontSize: 11, border: "none", background: "transparent",
+            <button 
+              key={t} 
+              onPointerDown={e => e.stopPropagation()}
+              onClick={() => setTab(t)} style={{
+              flex: 1, minHeight: 48, fontSize: 11, border: "none", background: "transparent",
               cursor: "pointer", fontFamily: "'DM Sans',sans-serif",
               color: tab === t ? 'var(--text-pri)' : 'var(--text-sec)',
               borderBottom: tab === t ? `2px solid ${col}` : "2px solid transparent",
@@ -1617,8 +1645,14 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
         })}
       </div>
 
-      <div style={{ flex: 1, overflowY: "auto", padding: "14px 18px 20px", WebkitOverflowScrolling: "touch" }}>
-        {tab === "info" && (
+      <div 
+        style={{ 
+          flex: 1, overflowY: "auto", padding: "14px 18px 20px", 
+          WebkitOverflowScrolling: "touch", position: "relative", zIndex: 1,
+          background: "transparent" // Ensure it doesn't block the background drag overlay completely if empty
+        }}>
+        <div style={{ minHeight: "100%" }}> {/* Ensure consistent height content container */}
+          {tab === "info" && (
           <div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 14 }}>
               {[
@@ -1845,6 +1879,7 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
             )}
           </div>
         )}
+        </div>
       </div>
       <style>{`@keyframes sheetUp{from{transform:translateY(60%);opacity:0.5}to{transform:translateY(0);opacity:1}}`}</style>
     </motion.div>
@@ -1943,7 +1978,8 @@ function Arsenal({ byId, adj, path, onBack, onLoadFlow, onNavigate, onAddToPath,
       <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", background: 'var(--bg-page)' }}>
         <div style={{
           padding: embedded ? "12px 16px 12px" : "24px 16px 12px", background: "#0d0d0d",
-          borderBottom: "1px solid #191919", flexShrink: 0, display: "flex", alignItems: "flex-start", gap: 12
+          borderBottom: "1px solid #191919", flexShrink: 0, display: "flex", alignItems: "flex-start", gap: 12,
+          position: "relative", zIndex: 10
         }}>
           <button onClick={() => setActiveFlow(null)} style={{
             background: "#181818", border: "none", color: "#999",
@@ -2087,7 +2123,8 @@ function Arsenal({ byId, adj, path, onBack, onLoadFlow, onNavigate, onAddToPath,
     <div style={{ ...(embedded ? { flex: 1, overflow: "hidden" } : { position: "absolute", inset: 0, zIndex: 400 }), background: 'var(--bg-page)', display: "flex", flexDirection: "column" }}>
       <div style={{
         padding: embedded ? "12px 16px 12px" : "24px 16px 12px", background: "#0d0d0d",
-        borderBottom: "1px solid #191919", flexShrink: 0
+        borderBottom: "1px solid #191919", flexShrink: 0,
+        position: "relative", zIndex: 10
       }}>
         {!embedded && (
           <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
@@ -2488,6 +2525,7 @@ function App() {
         display: "flex", flexShrink: 0,
         background: "var(--bg-card)", borderBottom: "1px solid var(--border)",
         padding: "0 14px",
+        position: "relative", zIndex: 300 // Stay above everything in the content area
       }}>
         {[["techniques", "Techniques"], ["arsenal", "Arsenal"]].map(([tab, label]) => (
           <button key={tab} onClick={() => setMatrixTab(tab)} style={{
