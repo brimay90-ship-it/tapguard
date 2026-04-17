@@ -1,5 +1,6 @@
 import { useState, useMemo, useRef, useEffect, useCallback, createContext, useContext } from "react";
 import { createPortal } from "react-dom";
+import { motion, AnimatePresence, useDragControls } from "framer-motion";
 import { TRANSITIONS } from '../../data/flowTransitions';
 
 // ─── Color system (Reactive) ──────────────────────────────────────────────────
@@ -1494,6 +1495,7 @@ function PathBuilder({ path, byId, focusId, onTap, onRemove, onAddFocus, focusIn
 
 // ─── Detail Sheet ─────────────────────────────────────────────────────────────
 function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFromPath, onNavigate }) {
+  const controls = useDragControls();
   const { store, rate } = useA();
   const saved = store.techs?.[tech?.id];
   const [prof, setProf] = useState(saved?.proficiency || 0);
@@ -1516,20 +1518,41 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
   const allNbrs = (adj[tech.id] || []).map(id => byId[id]).filter(Boolean);
 
   return (
-    <div style={{
-      position: "absolute", bottom: 0, left: 0, right: 0,
-      borderRadius: "32px 32px 0 0",
-      background: "var(--bg-card)",
-      border: "1px solid var(--border)",
-      maxHeight: "calc(100% - 24px)",
-      display: "flex", flexDirection: "column",
-      boxShadow: "0 -16px 64px rgba(0,0,0,0.4)",
-      zIndex: 200,
-      animation: "sheetUp 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28) both",
-    }}>
-      {/* Handle — tap to close */}
-      <div onClick={onClose} style={{ padding: "12px 0 0", display: "flex", justifyContent: "center", cursor: "pointer" }}>
-        <div style={{ width: 40, height: 4, borderRadius: 2, background: "var(--border)" }} />
+    <motion.div 
+      drag="y"
+      dragControls={controls}
+      dragListener={false}
+      dragConstraints={{ top: 0 }}
+      dragElastic={0.15}
+      onDragEnd={(e, info) => {
+        if (info.offset.y > 100 || info.velocity.y > 300) {
+          onClose();
+        }
+      }}
+      initial={{ y: "100%" }}
+      animate={{ y: 0 }}
+      exit={{ y: "100%" }}
+      transition={{ type: "spring", damping: 25, stiffness: 200 }}
+      style={{
+        position: "absolute", bottom: 0, left: 0, right: 0,
+        borderRadius: "32px 32px 0 0",
+        background: "var(--bg-card)",
+        border: "1px solid var(--border)",
+        maxHeight: "calc(100% - 24px)",
+        display: "flex", flexDirection: "column",
+        boxShadow: "0 -16px 64px rgba(0,0,0,0.4)",
+        zIndex: 200,
+      }}
+    >
+      {/* Handle — swipe to close */}
+      <div 
+        onPointerDown={(e) => controls.start(e)}
+        style={{ 
+          padding: "12px 0 16px", display: "flex", justifyContent: "center", cursor: "grab",
+          touchAction: "none" // Essential for drag handle to work on mobile
+        }}
+      >
+        <div style={{ width: 44, height: 5, borderRadius: 2.5, background: "var(--border)", opacity: 0.6 }} />
       </div>
 
       {/* Header */}
@@ -1824,7 +1847,7 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
         )}
       </div>
       <style>{`@keyframes sheetUp{from{transform:translateY(60%);opacity:0.5}to{transform:translateY(0);opacity:1}}`}</style>
-    </div>
+    </motion.div>
   );
 }
 
@@ -1905,12 +1928,15 @@ function Library({ onSelect, onBack }) {
   );
 }
 
-// ─── Arsenal ──────────────────────────────────────────────────────────────────
-function Arsenal({ byId, onBack, onLoadFlow, onNavigate, embedded = false }) {
+function Arsenal({ byId, adj, path, onBack, onLoadFlow, onNavigate, onAddToPath, onRemoveFromPath, embedded = false }) {
   const { store, delFlow } = useA();
   const [activeFlow, setActiveFlow] = useState(null);
+  const [detailId, setDetailId] = useState(null);
   const [view, setView] = useState("saved");
   
+  const detailTech = byId[detailId];
+  const techPath = activeFlow ? (activeFlow.path || []) : path;
+
   if (activeFlow) {
     const p = activeFlow.path || [];
     return (
@@ -2005,7 +2031,7 @@ function Arsenal({ byId, onBack, onLoadFlow, onNavigate, embedded = false }) {
                   </div>
                 )}
                 <div 
-                  onClick={() => onNavigate(id)}
+                  onClick={() => setDetailId(id)}
                   style={{
                     width: "100%", background: 'var(--bg-card)', borderRadius: 14, border: "1px solid #191919",
                     padding: "16px", cursor: "pointer", display: "flex", alignItems: "center", gap: 12
@@ -2031,6 +2057,18 @@ function Arsenal({ byId, onBack, onLoadFlow, onNavigate, embedded = false }) {
             ＋ Add Link Techniques
           </button>
         </div>
+
+        <AnimatePresence>
+          {detailTech && (
+            <DetailSheet
+              tech={detailTech} path={techPath} adj={adj} byId={byId}
+              onClose={() => setDetailId(null)}
+              onAddToPath={onAddToPath}
+              onRemoveFromPath={onRemoveFromPath}
+              onNavigate={(id) => setDetailId(id)}
+            />
+          )}
+        </AnimatePresence>
       </div>
     );
   }
@@ -2496,15 +2534,17 @@ function App() {
             ) : null}
 
             {/* Detail sheet */}
-            {detailTech && (
-              <DetailSheet
-                tech={detailTech} path={path} adj={adj} byId={byId}
-                onClose={() => setDetailId(null)}
-                onAddToPath={addToPath}
-                onRemoveFromPath={removeFromPath}
-                onNavigate={navigateTo}
-              />
-            )}
+            <AnimatePresence>
+              {detailTech && (
+                <DetailSheet
+                  tech={detailTech} path={path} adj={adj} byId={byId}
+                  onClose={() => setDetailId(null)}
+                  onAddToPath={addToPath}
+                  onRemoveFromPath={removeFromPath}
+                  onNavigate={navigateTo}
+                />
+              )}
+            </AnimatePresence>
           </div>
 
           {/* Path builder */}
@@ -2524,9 +2564,13 @@ function App() {
         <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
           <Arsenal
             byId={byId}
+            adj={adj}
+            path={path}
             onBack={() => setMatrixTab("techniques")}
             onLoadFlow={f => { loadFlow(f); setMatrixTab("techniques"); }}
             onNavigate={id => { navigateTo(id); setMatrixTab("techniques"); }}
+            onAddToPath={addToPath}
+            onRemoveFromPath={removeFromPath}
             embedded
           />
         </div>
