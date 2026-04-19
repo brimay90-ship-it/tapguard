@@ -2736,26 +2736,28 @@ function App() {
                   onTogglePath={id => path.includes(id) ? removeFromPath(id) : addToPath(id)}
                 />
                 
-                {/* Search Icon - Top Right */}
-                <button 
-                  onClick={() => { haptic(10); setScreen("library"); }}
-                  style={{
-                    position: "absolute", top: 18, right: 18, zIndex: 350,
-                    width: 44, height: 44, borderRadius: "14px",
-                    background: 'var(--bg-card)', border: `1px solid var(--border)`,
-                    boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    cursor: "pointer", transition: "transform 0.2s, background 0.2s",
-                    backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)",
-                  }}
-                  onMouseEnter={e => e.currentTarget.style.transform = "scale(1.05)"}
-                  onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke='var(--text-pri)' strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                  </svg>
-                </button>
+                {/* Search Icon - Top Right (Only show if detail sheet is closed) */}
+                {!detailId && (
+                  <button 
+                    onClick={() => { haptic(10); setScreen("library"); }}
+                    style={{
+                      position: "absolute", top: 18, right: 18, zIndex: 350,
+                      width: 44, height: 44, borderRadius: "14px",
+                      background: 'var(--bg-card)', border: `1px solid var(--border)`,
+                      boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      cursor: "pointer", transition: "transform 0.2s, background 0.2s",
+                      backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)",
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.transform = "scale(1.05)"}
+                    onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke='var(--text-pri)' strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                  </button>
+                )}
               </>
             ) : started ? (
               <div style={{
