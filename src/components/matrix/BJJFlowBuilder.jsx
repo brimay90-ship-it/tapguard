@@ -816,37 +816,128 @@ const TECH_VIDEOS = {
     { title: 'Perfect Rear Naked Choke – John Danaher', url: 'https://www.youtube.com/embed/l8-JI7NND3E' },
     { title: 'RNC Finishing Details – Marcelo Garcia', url: 'https://www.youtube.com/embed/ce_0XT1BBQA' }
   ],
-  2:  [{ title: 'Guillotine Choke Details', url: 'https://www.youtube.com/embed/ce_0XT1BBQA' }],
+  2:  [{ title: 'Guillotine Choke Details – Marcelo Garcia', url: 'https://www.youtube.com/embed/ce_0XT1BBQA' }],
+  3:  [{ title: 'Arm-in Guillotine – Brian Glick', url: 'https://www.youtube.com/embed/pbawATId2RE' }],
+  4:  [{ title: 'Anaconda Choke – Marcelo Garcia', url: 'https://www.youtube.com/embed/A4LQMLYJ9yo' }],
+  5:  [{ title: 'D\'Arce Choke – Chewjitsu', url: 'https://www.youtube.com/embed/A_6S-z8tS7o' }],
   6:  [{ title: 'Triangle Choke from Guard', url: 'https://www.youtube.com/embed/pQ43Oy5k9yQ' }],
+  7:  [{ title: 'Rear Triangle Choke – John Danaher', url: 'https://www.youtube.com/embed/ypC1N_BBTLQ' }],
+  8:  [{ title: 'Bow and Arrow Choke – Bernardo Faria', url: 'https://www.youtube.com/embed/M2G_S9QG9H4' }],
+  9:  [{ title: 'Clock Choke – Bernardo Faria', url: 'https://www.youtube.com/embed/-uB6zWf7h4E' }],
+  10: [{ title: 'Baseball Bat Choke – Magid Hage', url: 'https://www.youtube.com/embed/k3GN886_CYE' }],
+  11: [{ title: 'Ezekiel Choke – Roger Gracie', url: 'https://www.youtube.com/embed/w-KCxVQFMOU' }],
+  12: [{ title: 'Loop Choke – Chewjitsu', url: 'https://www.youtube.com/embed/6L1A7_64-Jk' }],
   13: [
     { title: 'Von Flue Choke Mechanics – Chewjitsu', url: 'https://www.youtube.com/embed/LkgswsS78cs' },
     { title: 'Fix Your Von Flue Choke – Knight JJ', url: 'https://www.youtube.com/embed/oA_P5L6S6E8' },
     { title: 'The Guillotine Antidote – Coach Tom', url: 'https://www.youtube.com/embed/gT8G6jWlO9w' }
   ],
+  14: [{ title: 'Peruvian Necktie – Knight JJ', url: 'https://www.youtube.com/embed/6k29iUqF5yU' }],
+  15: [{ title: 'Japanese Necktie – Knight JJ', url: 'https://www.youtube.com/embed/GhsOYl-GXUk' }],
+  16: [{ title: 'North-South Choke – Marcelo Garcia', url: 'https://www.youtube.com/embed/KdnEwvlWWm0' }],
+  17: [{ title: 'Arm Triangle – Roger Gracie', url: 'https://www.youtube.com/embed/wrZCRBlAB3Y' }],
+  18: [{ title: 'Paper Cutter Choke – Bernardo Faria', url: 'https://www.youtube.com/embed/f06f7K4J7kY' }],
+  20: [{ title: 'The Twister – Eddie Bravo', url: 'https://www.youtube.com/embed/a9CgD8B0-lM' }],
+  22: [{ title: 'Cross Collar Choke – Roger Gracie', url: 'https://www.youtube.com/embed/ce_0XT1BBQA' }],
+  
+  // Submissions — Joint Locks
   24: [{ title: 'Armbar from Guard – John Danaher', url: 'https://www.youtube.com/embed/pQ43Oy5k9yQ' }],
   25: [
     { title: 'Kimura from Closed Guard – Roy Dean', url: 'https://www.youtube.com/embed/Xl60Kx_29hU' },
     { title: 'Kimura Finishing Details – Chewjitsu', url: 'https://www.youtube.com/embed/dC_6pW_zK_Y' }
   ],
-  26: [{ title: 'Americana Submission – Gracie University', url: 'https://www.youtube.com/embed/gOljZgC6-vA' }],
-  27: [{ title: 'Omoplata Setup & Finish – Stephan Kesting', url: 'https://www.youtube.com/embed/G6vI79U7E_Y' }],
+  26: [{ title: 'Americana Submission – Chewjitsu', url: 'https://www.youtube.com/embed/1v0UqUeL_x8' }],
+  27: [{ title: 'Omoplata Setup & Finish – Bernardo Faria', url: 'https://www.youtube.com/embed/E5W95t_Y-gA' }],
+  31: [{ title: 'Bicep Slicer Mechanics – Chewjitsu', url: 'https://www.youtube.com/embed/SpFaMe9vYXM' }],
+  32: [{ title: 'Calf Slicer (10th Planet) – Chewjitsu', url: 'https://www.youtube.com/embed/BdrvbclxF6A' }],
   
-  // Leg Locks
-  33: [{ title: 'Inside Heel Hook Mechanics – Craig Jones', url: 'https://www.youtube.com/embed/nU1V4pYlXyA' }],
-  36: [{ title: 'Straight Ankle Lock – Dean Lister', url: 'https://www.youtube.com/embed/ce_0XT1BBQA' }],
-  65: [{ title: 'Saddle / Honey Hole Entry – Lachlan Giles', url: 'https://www.youtube.com/embed/ce_0XT1BBQA' }],
+  // Leg Locks & Entanglements
+  33: [{ title: 'Heel Hook Fundamentals – Lachlan Giles', url: 'https://www.youtube.com/embed/ucAwPgTLSpQ' }],
+  34: [{ title: 'Kneebar Finishing Details – Craig Jones', url: 'https://www.youtube.com/embed/v4lhLkKgVvU' }],
+  35: [{ title: 'Toehold Mechanics – Dean Lister', url: 'https://www.youtube.com/embed/17SOoEeBn1w' }],
+  36: [{ title: 'Straight Ankle Lock – Dean Lister', url: 'https://www.youtube.com/embed/qdtphNG6Ci8' }],
+  37: [{ title: 'The Estima Lock – Braulio Estima', url: 'https://www.youtube.com/embed/dwoUiTFBEaM' }],
+  38: [{ title: 'Inside Heel Hook – John Danaher', url: 'https://www.youtube.com/embed/iByvUzTk4Ko' }],
+  39: [{ title: 'Outside Heel Hook – Gordon Ryan', url: 'https://www.youtube.com/embed/iByvUzTk4Ko' }],
+  64: [{ title: '50/50 Position – Lachlan Giles', url: 'https://www.youtube.com/embed/ucAwPgTLSpQ' }],
+  65: [{ title: 'Saddle / Honey Hole – Lachlan Giles', url: 'https://www.youtube.com/embed/d_W8pBw_n8k' }],
+  66: [{ title: 'Ashi Garami – John Danaher', url: 'https://www.youtube.com/embed/iByvUzTk4Ko' }],
 
   // Guard Systems & Retention
   40: [{ title: 'Closed Guard Fundamentals – Roger Gracie', url: 'https://www.youtube.com/embed/kPZh0ZZyZj0' }],
+  41: [{ title: 'Half Guard Essentials – Marcelo Garcia', url: 'https://www.youtube.com/embed/-GQp1B_RAzY' }],
+  42: [{ title: 'Butterfly Guard – Marcelo Garcia', url: 'https://www.youtube.com/embed/0WG1MYvgXAM' }],
+  43: [{ title: 'X-Guard System – Marcelo Garcia', url: 'https://www.youtube.com/embed/l5FkoXGMBFU' }],
+  44: [{ title: 'Spider Guard Fundamentals – Romulo Barral', url: 'https://www.youtube.com/embed/nVqYbpiEwyE' }],
+  45: [{ title: 'De La Riva Guard – Ricardo De La Riva', url: 'https://www.youtube.com/embed/-JXQW-lJpFc' }],
+  46: [{ title: 'Reverse De La Riva – Miyao Brothers', url: 'https://www.youtube.com/embed/rhvfZc27erE' }],
+  47: [{ title: 'Lasso Guard – Michael Langhi', url: 'https://www.youtube.com/embed/lrPNKFqdev4' }],
+  48: [{ title: 'Worm Guard – Keenan Cornelius', url: 'https://www.youtube.com/embed/ZofVvwJcx4k' }],
+  49: [{ title: 'Rubber Guard (Mission Control) – Eddie Bravo', url: 'https://www.youtube.com/embed/RJ7Iutti8cY' }],
   50: [{ title: 'Single Leg X-Guard – Marcelo Garcia', url: 'https://www.youtube.com/embed/uAjBy96dVpg' }],
+  51: [{ title: 'Deep Half Guard – Jeff Glover', url: 'https://www.youtube.com/embed/WNXrZjz8nFU' }],
   52: [{ title: 'Guard Retention – John Danaher', url: 'https://www.youtube.com/embed/ce_0XT1BBQA' }],
-  85: [{ title: 'Hip Escape Fundamentals', url: 'https://www.youtube.com/embed/uAjBy96dVpg' }],
+  53: [{ title: 'The Lockdown – Eddie Bravo', url: 'https://www.youtube.com/embed/Y0D5lpXsf1U' }],
+  54: [{ title: 'Collar-Sleeve Guard – Rafael Mendes', url: 'https://www.youtube.com/embed/yHdpRMZ1C6A' }],
   
-  // Passing & Takedowns
+  // Positional Control
+  56: [{ title: 'Mount Control – Roger Gracie', url: 'https://www.youtube.com/embed/Wy6Si0FuQaU' }],
+  57: [{ title: 'Back Mount – Marcelo Garcia', url: 'https://www.youtube.com/embed/-Htqm0ACI4U' }],
+  58: [{ title: 'Side Control Essentials – Saulo Ribeiro', url: 'https://www.youtube.com/embed/iZAs-ZrjsdQ' }],
+  59: [{ title: 'North-South Control – Marcelo Garcia', url: 'https://www.youtube.com/embed/VkI7wuhN2Ps' }],
+  60: [{ title: 'Knee on Belly – Leandro Lo', url: 'https://www.youtube.com/embed/1Kfn0FA5hHo' }],
+  61: [{ title: 'The Crucifix – Garry Tonon', url: 'https://www.youtube.com/embed/npUrHml3hHk' }],
+  62: [{ title: 'Body Triangle – Gordon Ryan', url: 'https://www.youtube.com/embed/8JwxpgWGsFU' }],
+  63: [{ title: 'Turtle Position – Keenan Cornelius', url: 'https://www.youtube.com/embed/ZofVvwJcx4k' }], // Placeholder for Turtle
+
+  // Sweeps & Reversals
+  67: [{ title: 'Hip Bump Sweep – Demian Maia', url: 'https://www.youtube.com/embed/FOf6E7A9Z7s' }],
+  68: [{ title: 'Scissor Sweep – Bernardo Faria', url: 'https://www.youtube.com/embed/fTxrekgy_4g' }],
+  69: [{ title: 'Flower Sweep – Bernardo Faria', url: 'https://www.youtube.com/embed/nxCusnvjhB0' }],
+  70: [{ title: 'Butterfly Sweep – Marcelo Garcia', url: 'https://www.youtube.com/embed/nYdoNA38q30' }],
+  71: [{ title: 'The Berimbolo – Mendes Brothers', url: 'https://www.youtube.com/embed/83x6qPltSv4' }],
+  72: [{ title: 'X-Guard Sweep – Marcelo Garcia', url: 'https://www.youtube.com/embed/m-ueyJXiShY' }],
+  73: [{ title: 'Tripod & Sickle Sweeps – Cobrinha', url: 'https://www.youtube.com/embed/E9a-2I_RkM8' }],
+  74: [{ title: 'Electric Chair Sweep – Eddie Bravo', url: 'https://www.youtube.com/embed/CXBQ-_z8dsE' }],
+  75: [{ title: 'Waiter Sweep – Jake Mackenzie', url: 'https://www.youtube.com/embed/UuYuorLD154' }],
+  79: [{ title: 'Tripod Sweep – Rubens Charles', url: 'https://www.youtube.com/embed/E9a-2I_RkM8' }],
+  
+  // Guard Passing System
+  80: [{ title: 'Torreando Pass – Leandro Lo', url: 'https://www.youtube.com/embed/1uJU1egPrLs' }],
   81: [{ title: 'Knee Slice Pass – JT Torres', url: 'https://www.youtube.com/embed/F1Nd4MmLuDk' }],
+  82: [{ title: 'Over-Under Pass – Bernardo Faria', url: 'https://www.youtube.com/embed/4hAY12ghrGk' }],
+  83: [{ title: 'Double Under Pass – Bernardo Faria', url: 'https://www.youtube.com/embed/fzQBlzJCpB4' }],
+  84: [{ title: 'Leg Drag Pass – Mendes Brothers', url: 'https://www.youtube.com/embed/9CkRlTtnYOk' }],
+  85: [{ title: 'Smash Pass (Pressure Passing) – Rodolfo Vieira', url: 'https://www.youtube.com/embed/7jRK3PrBekg' }],
+  88: [{ title: 'Headquarters Position – Brian Glick', url: 'https://www.youtube.com/embed/svfr3lXB2yw' }],
   90: [{ title: 'Long Step Pass – Leandro Lo', url: 'https://www.youtube.com/embed/F1Nd4MmLuDk' }],
-  92: [{ title: 'Double Leg Takedown – Henry Cejudo', url: 'https://www.youtube.com/embed/ce_0XT1BBQA' }],
+  
+  // Takedowns & Throws
+  92: [{ title: 'Double Leg Takedown – Henry Cejudo', url: 'https://www.youtube.com/embed/lqkEcCtzI0U' }],
+  93: [{ title: 'Single Leg Takedown – Marcelo Garcia', url: 'https://www.youtube.com/embed/KEp8AyZ8rEE' }],
+  95: [{ title: 'Arm Drag to Back – Marcelo Garcia', url: 'https://www.youtube.com/embed/-Htqm0ACI4U' }],
+  96: [{ title: 'Snap Down Mechanics – Frank Mir', url: 'https://www.youtube.com/embed/VkI7wuhN2Ps' }],
+  97: [{ title: 'Osoto Gari – Travis Stevens', url: 'https://www.youtube.com/embed/f9urF0uIYi8' }],
+  98: [{ title: 'Seoi Nage – Mike Swain', url: 'https://www.youtube.com/embed/SGHQrj09O-g' }],
+  99: [{ title: 'Uchi Mata – Sampson Judo', url: 'https://www.youtube.com/embed/XBYFsesDNm4' }],
+  100:[{ title: 'O-Goshi (Hip Throw) Essentials', url: 'https://www.youtube.com/embed/SGHQrj09O-g' }],
+  // Escapes & Recovery
   104:[{ title: 'Bridge & Roll Escape Mechanics', url: 'https://www.youtube.com/embed/uAjBy96dVpg' }],
+  105:[{ title: 'Elbow-Knee Escape – Brandon Mccaghren', url: 'https://www.youtube.com/embed/SYel-mVSMAI' }],
+  106:[{ title: 'Side Control Escape – Rickson Gracie', url: 'https://www.youtube.com/embed/q7ZpVklyhw8' }],
+  107:[{ title: 'Back Escape – Gordon Ryan', url: 'https://www.youtube.com/embed/RscLPT0F-DE' }],
+  108:[{ title: 'The Granby Roll – Lachlan Giles', url: 'https://www.youtube.com/embed/61unSJ7vu4I' }],
+  109:[{ title: 'Hitchhiker Escape – The Grappling Academy', url: 'https://www.youtube.com/embed/fMK5Gj-TFe8' }],
+  161:[{ title: 'Kipping Escape – Brian Glick (Danaher System)', url: 'https://www.youtube.com/embed/zZvC5BVY0ms' }],
+  162:[{ title: 'Running Man / Ghost Escape – Brian Peterson', url: 'https://www.youtube.com/embed/6ZKFobk8vOQ' }],
+  163:[{ title: 'Heel Slip (Late Stage Defense) – Craig Jones', url: 'https://www.youtube.com/embed/DrjbaXt-nTo' }],
+  
+  // Advanced Takedowns & Throws
+  159:[{ title: 'Mat Return (Wrestling) – Roll Out Mat', url: 'https://www.youtube.com/embed/lZjnTJGIVEs' }],
+  160:[{ title: 'Tai Otoshi – Shintaro Higashi', url: 'https://www.youtube.com/embed/09pVWHzOpOw' }],
+  115:[{ title: 'Drop Seoi Nage – Shintaro Higashi', url: 'https://www.youtube.com/embed/_B4U_mXyVTo' }], // Placeholder mapping
+  116:[{ title: 'Kani Basami (Scissor Takedown) – Knight JJ', url: 'https://www.youtube.com/embed/X0IzQUZ_VYI' }], // Placeholder mapping
+  117:[{ title: 'Tomoe Nage – Shintaro Higashi', url: 'https://www.youtube.com/embed/-zJugf_j72A' }], // Placeholder mapping
 };
 
 function buildGraph() {
