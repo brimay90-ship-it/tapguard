@@ -812,15 +812,40 @@ const DATA = [{ "id": 1, "name": "Rear naked choke", "aka": ["RNC", "mata le\u00
 
 const TECH_VIDEOS = {
   // Submissions — Chokes
-  1:  [{ title: 'Perfect Rear Naked Choke – John Danaher', url: 'https://www.youtube.com/embed/l8-JI7NND3E' }],
+  1:  [
+    { title: 'Perfect Rear Naked Choke – John Danaher', url: 'https://www.youtube.com/embed/l8-JI7NND3E' },
+    { title: 'RNC Finishing Details – Marcelo Garcia', url: 'https://www.youtube.com/embed/ce_0XT1BBQA' }
+  ],
   2:  [{ title: 'Guillotine Choke Details', url: 'https://www.youtube.com/embed/ce_0XT1BBQA' }],
   6:  [{ title: 'Triangle Choke from Guard', url: 'https://www.youtube.com/embed/pQ43Oy5k9yQ' }],
+  13: [
+    { title: 'Von Flue Choke Mechanics – Chewjitsu', url: 'https://www.youtube.com/embed/LkgswsS78cs' },
+    { title: 'Fix Your Von Flue Choke – Knight JJ', url: 'https://www.youtube.com/embed/oA_P5L6S6E8' },
+    { title: 'The Guillotine Antidote – Coach Tom', url: 'https://www.youtube.com/embed/gT8G6jWlO9w' }
+  ],
   24: [{ title: 'Armbar from Guard – John Danaher', url: 'https://www.youtube.com/embed/pQ43Oy5k9yQ' }],
+  25: [
+    { title: 'Kimura from Closed Guard – Roy Dean', url: 'https://www.youtube.com/embed/Xl60Kx_29hU' },
+    { title: 'Kimura Finishing Details – Chewjitsu', url: 'https://www.youtube.com/embed/dC_6pW_zK_Y' }
+  ],
+  26: [{ title: 'Americana Submission – Gracie University', url: 'https://www.youtube.com/embed/gOljZgC6-vA' }],
+  27: [{ title: 'Omoplata Setup & Finish – Stephan Kesting', url: 'https://www.youtube.com/embed/G6vI79U7E_Y' }],
+  
+  // Leg Locks
+  33: [{ title: 'Inside Heel Hook Mechanics – Craig Jones', url: 'https://www.youtube.com/embed/nU1V4pYlXyA' }],
+  36: [{ title: 'Straight Ankle Lock – Dean Lister', url: 'https://www.youtube.com/embed/ce_0XT1BBQA' }],
+  65: [{ title: 'Saddle / Honey Hole Entry – Lachlan Giles', url: 'https://www.youtube.com/embed/ce_0XT1BBQA' }],
+
   // Guard Systems & Retention
   40: [{ title: 'Closed Guard Fundamentals – Roger Gracie', url: 'https://www.youtube.com/embed/kPZh0ZZyZj0' }],
+  50: [{ title: 'Single Leg X-Guard – Marcelo Garcia', url: 'https://www.youtube.com/embed/uAjBy96dVpg' }],
   52: [{ title: 'Guard Retention – John Danaher', url: 'https://www.youtube.com/embed/ce_0XT1BBQA' }],
   85: [{ title: 'Hip Escape Fundamentals', url: 'https://www.youtube.com/embed/uAjBy96dVpg' }],
-  90: [{ title: 'Knee Slice Pass – JT Torres', url: 'https://www.youtube.com/embed/F1Nd4MmLuDk' }],
+  
+  // Passing & Takedowns
+  81: [{ title: 'Knee Slice Pass – JT Torres', url: 'https://www.youtube.com/embed/F1Nd4MmLuDk' }],
+  90: [{ title: 'Long Step Pass – Leandro Lo', url: 'https://www.youtube.com/embed/F1Nd4MmLuDk' }],
+  92: [{ title: 'Double Leg Takedown – Henry Cejudo', url: 'https://www.youtube.com/embed/ce_0XT1BBQA' }],
   104:[{ title: 'Bridge & Roll Escape Mechanics', url: 'https://www.youtube.com/embed/uAjBy96dVpg' }],
 };
 
@@ -1502,6 +1527,7 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
   const [status, setStatus] = useState(saved?.status || "Not started");
   const [notes, setNotes] = useState(saved?.notes || "");
   const [tab, setTab] = useState("info");
+  const [activeVid, setActiveVid] = useState(0);
   const col = catColor(tech);
   const inPath = path.includes(tech?.id);
 
@@ -1511,6 +1537,7 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
     setStatus(s?.status || "Not started");
     setNotes(s?.notes || "");
     setTab("info");
+    setActiveVid(0);
   }, [tech?.id]);
 
   if (!tech) return null;
@@ -1815,38 +1842,38 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
 
         {tab === "video" && (
           <div>
-            {(TECH_VIDEOS[tech?.id] || []).length === 0 ? (
-              <div style={{
-                display: "flex", flexDirection: "column", alignItems: "center",
-                gap: 12, padding: "40px 20px", textAlign: "center",
-              }}>
-                <div style={{ fontSize: 32, opacity: 0.2 }}>ðŸŽ¬</div>
-                <div style={{ fontSize: 13, color: 'var(--border)', fontFamily: "'DM Sans',sans-serif", lineHeight: 1.6 }}>
-                  No videos indexed yet for this technique.
-                </div>
-                <a
-                  href={`https://www.youtube.com/results?search_query=${encodeURIComponent(tech.name + ' BJJ tutorial')}`}
-                  target="_blank" rel="noopener noreferrer"
-                  style={{
-                    fontSize: 12, color: col, padding: "8px 16px",
-                    border: `1px solid ${col}44`, borderRadius: 20,
-                    textDecoration: "none", fontFamily: "'DM Sans',sans-serif",
-                  }}
-                >
-                  Search YouTube →
-                </a>
-              </div>
-            ) : (
-              <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-                {(TECH_VIDEOS[tech.id] || []).map((vid, i) => (
-                  <div key={i}>
-                    <div style={{
-                      fontSize: 11, color: col, fontWeight: 700,
-                      textTransform: "uppercase", letterSpacing: "0.08em",
-                      marginBottom: 8, fontFamily: "'DM Sans',sans-serif",
-                    }}>
-                      {vid.title}
+            {(() => {
+              const videos = TECH_VIDEOS[tech?.id] || [];
+              if (videos.length === 0) {
+                return (
+                  <div style={{
+                    display: "flex", flexDirection: "column", alignItems: "center",
+                    gap: 12, padding: "40px 20px", textAlign: "center",
+                  }}>
+                    <div style={{ fontSize: 32, opacity: 0.2 }}>🎬</div>
+                    <div style={{ fontSize: 13, color: 'var(--border)', fontFamily: "'DM Sans',sans-serif", lineHeight: 1.6 }}>
+                      No videos indexed yet for this technique.
                     </div>
+                    <a
+                      href={`https://www.youtube.com/results?search_query=${encodeURIComponent(tech.name + ' BJJ tutorial')}`}
+                      target="_blank" rel="noopener noreferrer"
+                      style={{
+                        fontSize: 12, color: col, padding: "8px 16px",
+                        border: `1px solid ${col}44`, borderRadius: 20,
+                        textDecoration: "none", fontFamily: "'DM Sans',sans-serif",
+                      }}
+                    >
+                      Search YouTube →
+                    </a>
+                  </div>
+                );
+              }
+              
+              const currentVid = videos[activeVid] || videos[0];
+              
+              return (
+                <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+                  <div>
                     <div style={{
                       width: "100%", aspectRatio: "16/9",
                       borderRadius: 12, overflow: "hidden",
@@ -1854,29 +1881,61 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
                     }}>
                       <iframe
                         width="100%" height="100%"
-                        src={vid.url}
-                        title={vid.title}
+                        src={currentVid.url}
+                        title={currentVid.title}
                         frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
                         style={{ display: "block" }}
                       />
                     </div>
+                    
+                    {/* Video title styled like Dashboard */}
+                    <div style={{ 
+                      fontSize: 11, color: col, fontWeight: 800, 
+                      textTransform: "uppercase", letterSpacing: "0.08em", 
+                      marginTop: 18, marginBottom: 14, fontFamily: "'DM Sans',sans-serif" 
+                    }}>
+                      {currentVid.title}
+                    </div>
+
+                    {/* Selector pills — only show when multiple videos */}
+                    {videos.length > 1 && (
+                      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 10 }}>
+                        {videos.map((v, i) => (
+                          <button key={i} 
+                            onClick={(e) => { e.stopPropagation(); setActiveVid(i); haptic(6); }} 
+                            style={{
+                              padding: '8px 16px', borderRadius: 20,
+                              border: `1px solid ${i === activeVid ? col : 'var(--border)'}`,
+                              background: i === activeVid ? `${col}1a` : 'transparent',
+                              color: i === activeVid ? col : 'var(--text-sec)',
+                              fontSize: 11, fontWeight: 600, cursor: 'pointer',
+                              fontFamily: "'DM Sans',sans-serif",
+                              transition: 'all 0.15s',
+                            }}>
+                            {i === activeVid ? '▶ ' : ''}{i + 1}. {v.title.split('–')[0].split('(')[0].trim()}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                ))}
-                <a
-                  href={`https://www.youtube.com/results?search_query=${encodeURIComponent(tech.name + ' BJJ tutorial')}`}
-                  target="_blank" rel="noopener noreferrer"
-                  style={{
-                    display: "block", textAlign: "center",
-                    fontSize: 12, color: 'var(--text-sec)', padding: "10px",
-                    textDecoration: "none", fontFamily: "'DM Sans',sans-serif",
-                  }}
-                >
-                  Search more on YouTube →
-                </a>
-              </div>
-            )}
+                  
+                  <a
+                    href={`https://www.youtube.com/results?search_query=${encodeURIComponent(tech.name + ' BJJ tutorial')}`}
+                    target="_blank" rel="noopener noreferrer"
+                    style={{
+                      display: "block", textAlign: "center",
+                      fontSize: 12, color: 'var(--text-sec)', padding: "10px",
+                      textDecoration: "none", fontFamily: "'DM Sans',sans-serif",
+                      opacity: 0.6
+                    }}
+                  >
+                    Search more on YouTube →
+                  </a>
+                </div>
+              );
+            })()}
           </div>
         )}
         </div>
