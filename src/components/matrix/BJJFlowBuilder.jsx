@@ -1,5 +1,6 @@
 import { useState, useMemo, useRef, useEffect, useCallback, createContext, useContext } from "react";
 import { createPortal } from "react-dom";
+import { useApp } from "../../context/AppContext";
 import { motion, AnimatePresence, useDragControls } from "framer-motion";
 import { TRANSITIONS } from '../../data/flowTransitions';
 
@@ -1646,6 +1647,7 @@ function PathBuilder({ path, byId, focusId, onTap, onRemove, onAddFocus, focusIn
 function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFromPath, onNavigate }) {
   const controls = useDragControls();
   const { store, rate } = useA();
+  const { addNote, updateNote, notes } = useApp();
   const saved = store.techs?.[tech?.id];
   const [prof, setProf] = useState(saved?.proficiency || 0);
   const [status, setStatus] = useState(saved?.status || "Not started");
@@ -1654,8 +1656,6 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
   const [notesCovered, setNotesCovered] = useState(saved?.notesCovered || "");
   const [notesExtra, setNotesExtra] = useState(saved?.notesExtra || saved?.notes || "");
   
-  const [isEditing, setIsEditing] = useState(false);
-  const [isRecording, setIsRecording] = useState(null); // 'covered' | 'extra' | null
   const [tab, setTab] = useState("info");
   const [activeVid, setActiveVid] = useState(0);
   const col = catColor(tech);
@@ -1669,34 +1669,8 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
     setNotesExtra(s?.notesExtra || s?.notes || "");
     setTab("info");
     setActiveVid(0);
-    setIsEditing(false);
   }, [tech?.id]);
 
-  const toggleDictation = (field) => {
-    if (isRecording) return;
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) return;
-    
-    haptic(15);
-    setIsRecording(field);
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'en-US';
-    recognition.interimResults = false;
-    
-    recognition.onresult = (e) => {
-      const text = e.results[0][0].transcript;
-      if (field === 'covered') setNotesCovered(p => p + (p ? " " : "") + text);
-      else setNotesExtra(p => p + (p ? " " : "") + text);
-    };
-    
-    recognition.onend = () => {
-      setIsRecording(null);
-      haptic(10);
-    };
-    
-    recognition.onerror = () => setIsRecording(null);
-    recognition.start();
-  };
 
   if (!tech) return null;
 
@@ -1940,117 +1914,76 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
               ))}
             </div>
             {/* Notes Section Header */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-              <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-sec)', textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                Active Session Notes
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-pri)', fontFamily: "'Barlow Condensed',sans-serif", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: 12 }}>Training Notes</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 16 }}>
+              <div style={{ 
+                padding: "12px 14px", borderRadius: 12, background: "var(--bg-total)", 
+                border: "1px solid var(--border)", minHeight: 44 
+              }}>
+                <div style={{ fontSize: 9, color: "#22c55e", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>What was covered</div>
+                <textarea 
+                  value={notesCovered} 
+                  onChange={e => setNotesCovered(e.target.value)}
+                  placeholder="What was covered today?"
+                  onPointerDown={e => e.stopPropagation()}
+                  style={{
+                    width: "100%", background: "transparent", border: "none",
+                    color: "var(--text-pri)", fontSize: 14, fontFamily: "'DM Sans',sans-serif",
+                    resize: "none", height: 60, lineHeight: 1.5, outline: "none", padding: 0
+                  }}
+                />
               </div>
-              <button 
-                onPointerDown={e => e.stopPropagation()}
-                onClick={() => setIsEditing(!isEditing)}
-                style={{
-                  background: isEditing ? col + "1a" : "transparent",
-                  border: `1px solid ${isEditing ? col : 'var(--border)'}`,
-                  borderRadius: 20, padding: "4px 12px", fontSize: 10, fontWeight: 700,
-                  color: isEditing ? col : 'var(--text-sec)', cursor: "pointer",
-                  fontFamily: "'DM Sans',sans-serif"
-                }}
-              >
-                {isEditing ? "✓ Done" : "✎ Edit"}
-              </button>
+              <div style={{ 
+                padding: "12px 14px", borderRadius: 12, background: "var(--bg-total)", 
+                border: "1px solid var(--border)", minHeight: 44 
+              }}>
+                <div style={{ fontSize: 9, color: "#3b82f6", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>Extra Notes</div>
+                <textarea 
+                  value={notesExtra} 
+                  onChange={e => setNotesExtra(e.target.value)}
+                  placeholder="Extra insights or details..."
+                  onPointerDown={e => e.stopPropagation()}
+                  style={{
+                    width: "100%", background: "transparent", border: "none",
+                    color: "var(--text-sec)", fontSize: 13, fontFamily: "'DM Sans',sans-serif",
+                    resize: "none", height: 60, lineHeight: 1.5, outline: "none", padding: 0
+                  }}
+                />
+              </div>
             </div>
 
-            {isEditing ? (
-              <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 16 }}>
-                {/* What was covered */}
-                <div style={{ position: "relative" }}>
-                  <textarea 
-                    value={notesCovered} 
-                    onChange={e => setNotesCovered(e.target.value)}
-                    placeholder="What was covered today?"
-                    style={{
-                      width: "100%", boxSizing: "border-box", background: "var(--bg-total)",
-                      border: "1px solid var(--border)", borderRadius: 12, padding: "12px 40px 12px 12px",
-                      color: "var(--text-pri)", fontSize: 14, fontFamily: "'DM Sans',sans-serif",
-                      resize: "none", height: 74, lineHeight: 1.5
-                    }}
-                  />
-                  <button 
-                    onPointerDown={e => { e.stopPropagation(); toggleDictation('covered'); }}
-                    style={{
-                      position: "absolute", bottom: 8, right: 8,
-                      width: 32, height: 32, borderRadius: "50%",
-                      background: isRecording === 'covered' ? "#ef4444" : 'var(--bg-card)',
-                      border: "none", display: "flex", alignItems: "center", justifyContent: "center",
-                      cursor: "pointer", boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
-                      animation: isRecording === 'covered' ? "pulse 1.5s infinite" : "none"
-                    }}
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={isRecording === 'covered' ? "#fff" : 'var(--text-sec)'} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
-                      <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                      <line x1="12" y1="19" x2="12" y2="23"></line>
-                      <line x1="8" y1="23" x2="16" y2="23"></line>
-                    </svg>
-                  </button>
-                </div>
-
-                {/* Extra Notes */}
-                <div style={{ position: "relative" }}>
-                  <textarea 
-                    value={notesExtra} 
-                    onChange={e => setNotesExtra(e.target.value)}
-                    placeholder="Extra insights or details..."
-                    style={{
-                      width: "100%", boxSizing: "border-box", background: "var(--bg-total)",
-                      border: "1px solid var(--border)", borderRadius: 12, padding: "12px 40px 12px 12px",
-                      color: "var(--text-sec)", fontSize: 13, fontFamily: "'DM Sans',sans-serif",
-                      resize: "none", height: 74, lineHeight: 1.5
-                    }}
-                  />
-                  <button 
-                    onPointerDown={e => { e.stopPropagation(); toggleDictation('extra'); }}
-                    style={{
-                      position: "absolute", bottom: 8, right: 8,
-                      width: 32, height: 32, borderRadius: "50%",
-                      background: isRecording === 'extra' ? "#ef4444" : 'var(--bg-card)',
-                      border: "none", display: "flex", alignItems: "center", justifyContent: "center",
-                      cursor: "pointer", boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
-                      animation: isRecording === 'extra' ? "pulse 1.5s infinite" : "none"
-                    }}
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={isRecording === 'extra' ? "#fff" : 'var(--text-sec)'} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
-                      <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                      <line x1="12" y1="19" x2="12" y2="23"></line>
-                      <line x1="8" y1="23" x2="16" y2="23"></line>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 16 }}>
-                <div style={{ 
-                  padding: "12px 14px", borderRadius: 12, background: "var(--bg-total)", 
-                  border: "1px solid var(--border)", minHeight: 44 
-                }}>
-                  <div style={{ fontSize: 9, color: "#22c55e", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>What was covered</div>
-                  <div style={{ fontSize: 13, color: "var(--text-pri)", lineHeight: 1.5 }}>
-                    {notesCovered || <span style={{ opacity: 0.3, fontStyle: "italic" }}>No curriculum notes...</span>}
-                  </div>
-                </div>
-                <div style={{ 
-                  padding: "12px 14px", borderRadius: 12, background: "var(--bg-total)", 
-                  border: "1px solid var(--border)", minHeight: 44 
-                }}>
-                  <div style={{ fontSize: 9, color: "#3b82f6", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>Extra Notes</div>
-                  <div style={{ fontSize: 13, color: "var(--text-sec)", lineHeight: 1.5 }}>
-                    {notesExtra || <span style={{ opacity: 0.3, fontStyle: "italic" }}>No extra insights...</span>}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <button onClick={() => { rate(tech.id, prof, status, notesCovered, notesExtra); haptic(12); onClose(); }} style={{
+            <button onClick={() => { 
+              // 1. Matrix local save
+              rate(tech.id, prof, status, notesCovered, notesExtra); 
+              
+              // 2. Sync to Main Journal
+              const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+              const days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+              const now    = new Date();
+              const dateStr = `${months[now.getMonth()]} ${now.getDate()} · ${days[now.getDay()]}`;
+              
+              const existingMatch = notes.find(n => n.date === dateStr && (n.title.toLowerCase().includes(tech.name.toLowerCase()) || n.moves.includes(tech.name)));
+              
+              if (existingMatch) {
+                updateNote(existingMatch.id, {
+                  notesCovered,
+                  notesExtra,
+                  moves: Array.from(new Set([...existingMatch.moves, tech.name]))
+                });
+              } else {
+                addNote({
+                  title: `Technique: ${tech.name}`,
+                  date: dateStr,
+                  moves: [tech.name],
+                  feel: prof >= 8 ? 'locked' : prof >= 5 ? 'good' : prof >= 3 ? 'okay' : 'lost',
+                  notesCovered,
+                  notesExtra,
+                  category: 'Techniques'
+                });
+              }
+              
+              haptic(12); onClose(); 
+            }} style={{
               width: "100%", minHeight: 46, borderRadius: 12, border: "none",
               background: `linear-gradient(135deg,${col},${col}bb)`,
               color: 'var(--text-pri)', fontWeight: 700, fontSize: 15, cursor: "pointer",
@@ -2203,7 +2136,6 @@ function DetailSheet({ tech, path, adj, byId, onClose, onAddToPath, onRemoveFrom
       </div>
       <style>{`
         @keyframes sheetUp{from{transform:translateY(60%);opacity:0.5}to{transform:translateY(0);opacity:1}}
-        @keyframes pulse{0%{opacity:1;transform:scale(1)}50%{opacity:0.7;transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}
       `}</style>
     </motion.div>
   );

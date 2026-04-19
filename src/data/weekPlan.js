@@ -168,7 +168,8 @@ export const notesSample = [
     moves: ['DLR Hook', 'Berimbolo', 'X-Guard Entry'],
     feel: 'okay',
     feelEmoji: '😐',
-    note: 'DLR hook needs more reps. Berimbolo timing is off — need to commit earlier.',
+    notesCovered: 'DLR hook needs more reps. Berimbolo timing is off — need to commit earlier.',
+    notesExtra: 'Focus on keeping the far leg hook tighter next time.'
   },
   {
     id: 1,
@@ -177,7 +178,8 @@ export const notesSample = [
     moves: ['Knee Slice', 'Leg Weave', 'Torreando'],
     feel: 'good',
     feelEmoji: '💪',
-    note: 'Clicking now — hitting knee slice in sparring. Leg weave needs work.',
+    notesCovered: 'Clicking now — hitting knee slice in sparring.',
+    notesExtra: 'Leg weave needs work when opponent has a strong far-side collar grip.'
   },
   {
     id: 2,
@@ -186,6 +188,7 @@ export const notesSample = [
     moves: ['Seatbelt', 'Hook Insertion', 'RNC'],
     feel: 'lost',
     feelEmoji: '😵',
-    note: 'Struggling with seatbelt control. Keep losing position when they chin-tuck.',
+    notesCovered: 'Struggling with seatbelt control.',
+    notesExtra: 'Keep losing position when they chin-tuck. Need to drill my hand fighting more.'
   },
 ];

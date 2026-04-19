@@ -51,7 +51,7 @@ const NAV = [
     ),
   },
   {
-    id: 'notes', label: 'NOTES',
+    id: 'notes', label: 'JOURNAL',
     icon: (active) => (
       <svg width="18" height="18" viewBox="0 0 20 20" fill={active ? 'var(--accent)' : 'var(--text-sec)'}>
         <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
