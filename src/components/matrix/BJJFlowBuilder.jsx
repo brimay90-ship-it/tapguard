@@ -850,6 +850,15 @@ const TECH_VIDEOS = {
   27: [{ title: 'Omoplata Setup & Finish – Bernardo Faria', url: 'https://www.youtube.com/embed/E5W95t_Y-gA' }],
   31: [{ title: 'Bicep Slicer Mechanics – Chewjitsu', url: 'https://www.youtube.com/embed/SpFaMe9vYXM' }],
   32: [{ title: 'Calf Slicer (10th Planet) – Chewjitsu', url: 'https://www.youtube.com/embed/BdrvbclxF6A' }],
+  136:[{ title: 'The Buggy Choke – Ruotolo Brothers', url: 'https://www.youtube.com/embed/0_3YYrWEGoU' }],
+  137:[{ title: 'The Aoki Lock – Brian Glick', url: 'https://www.youtube.com/embed/e77qj87R0P0' }],
+  138:[{ title: 'Barataplata – Rafael Barata Freitas', url: 'https://www.youtube.com/embed/kYI9F2XG66w' }],
+  139:[{ title: 'The Monoplata – Chewjitsu', url: 'https://www.youtube.com/embed/zfYaDZI0Vh0' }],
+  140:[{ title: 'Banana Split – Brandon Mccaghren', url: 'https://www.youtube.com/embed/olGpwduTKxY' }],
+  141:[{ title: 'Crotch Ripper – Brandon Mccaghren', url: 'https://www.youtube.com/embed/olGpwduTKxY' }],
+  142:[{ title: 'Dead Orchard – Nathan Orchard', url: 'https://www.youtube.com/embed/pf9er1ivzX8' }],
+  143:[{ title: 'Texas Cloverleaf – Dean Lister', url: 'https://www.youtube.com/embed/0-Z9L1J0W1E' }],
+  144:[{ title: 'Crucifix Short Choke – Marcelo Garcia', url: 'https://www.youtube.com/embed/JPTc1fYiNh4' }],
   
   // Leg Locks & Entanglements
   33: [{ title: 'Heel Hook Fundamentals – Lachlan Giles', url: 'https://www.youtube.com/embed/ucAwPgTLSpQ' }],
@@ -862,6 +871,7 @@ const TECH_VIDEOS = {
   64: [{ title: '50/50 Position – Lachlan Giles', url: 'https://www.youtube.com/embed/ucAwPgTLSpQ' }],
   65: [{ title: 'Saddle / Honey Hole – Lachlan Giles', url: 'https://www.youtube.com/embed/d_W8pBw_n8k' }],
   66: [{ title: 'Ashi Garami – John Danaher', url: 'https://www.youtube.com/embed/iByvUzTk4Ko' }],
+  131:[{ title: 'The Truck – Brandon Mccaghren', url: 'https://www.youtube.com/embed/olGpwduTKxY' }],
 
   // Guard Systems & Retention
   40: [{ title: 'Closed Guard Fundamentals – Roger Gracie', url: 'https://www.youtube.com/embed/kPZh0ZZyZj0' }],
@@ -879,6 +889,8 @@ const TECH_VIDEOS = {
   52: [{ title: 'Guard Retention – John Danaher', url: 'https://www.youtube.com/embed/ce_0XT1BBQA' }],
   53: [{ title: 'The Lockdown – Eddie Bravo', url: 'https://www.youtube.com/embed/Y0D5lpXsf1U' }],
   54: [{ title: 'Collar-Sleeve Guard – Rafael Mendes', url: 'https://www.youtube.com/embed/yHdpRMZ1C6A' }],
+  129:[{ title: 'Shin-to-Shin Guard – Michelle Nicolini', url: 'https://www.youtube.com/embed/LQDBm3nDwfc' }],
+  130:[{ title: 'Quarter Guard (Ankle Trap) – Jeff Glover', url: 'https://www.youtube.com/embed/PhVY8wm6Af8' }],
   
   // Positional Control
   56: [{ title: 'Mount Control – Roger Gracie', url: 'https://www.youtube.com/embed/Wy6Si0FuQaU' }],
@@ -888,7 +900,11 @@ const TECH_VIDEOS = {
   60: [{ title: 'Knee on Belly – Leandro Lo', url: 'https://www.youtube.com/embed/1Kfn0FA5hHo' }],
   61: [{ title: 'The Crucifix – Garry Tonon', url: 'https://www.youtube.com/embed/npUrHml3hHk' }],
   62: [{ title: 'Body Triangle – Gordon Ryan', url: 'https://www.youtube.com/embed/8JwxpgWGsFU' }],
-  63: [{ title: 'Turtle Position – Keenan Cornelius', url: 'https://www.youtube.com/embed/ZofVvwJcx4k' }], // Placeholder for Turtle
+  63: [{ title: 'Turtle Position – Keenan Cornelius', url: 'https://www.youtube.com/embed/ZofVvwJcx4k' }],
+  132:[{ title: 'The Crab Ride – Mikey Musumeci', url: 'https://www.youtube.com/embed/EWZ7DW7ZM7I' }],
+  133:[{ title: 'S-Mount Position – Roger Gracie', url: 'https://www.youtube.com/embed/b_1U3br_mOM' }],
+  134:[{ title: 'Kesa-Gatame (Scarf Hold) – Ronda Rousey', url: 'https://www.youtube.com/embed/G6DqE_0A5uQ' }],
+  135:[{ title: 'Reverse Kesa-Gatame – Saulo Ribeiro', url: 'https://www.youtube.com/embed/murmN5spY4s' }],
 
   // Sweeps & Reversals
   67: [{ title: 'Hip Bump Sweep – Demian Maia', url: 'https://www.youtube.com/embed/FOf6E7A9Z7s' }],
@@ -901,6 +917,9 @@ const TECH_VIDEOS = {
   74: [{ title: 'Electric Chair Sweep – Eddie Bravo', url: 'https://www.youtube.com/embed/CXBQ-_z8dsE' }],
   75: [{ title: 'Waiter Sweep – Jake Mackenzie', url: 'https://www.youtube.com/embed/UuYuorLD154' }],
   79: [{ title: 'Tripod Sweep – Rubens Charles', url: 'https://www.youtube.com/embed/E9a-2I_RkM8' }],
+  145:[{ title: 'Balloon Sweep (Overhead) – Bernardo Faria', url: 'https://www.youtube.com/embed/Psqf50I9Xf0' }],
+  146:[{ title: 'Kiss of the Dragon (Reverse DLR) – Mikey Musumeci', url: 'https://www.youtube.com/embed/JgzY8OA9LmE' }],
+  147:[{ title: 'Helicopter Sweep – Royler Gracie', url: 'https://www.youtube.com/embed/V12Yy6J7C3A' }],
   
   // Guard Passing System
   80: [{ title: 'Torreando Pass – Leandro Lo', url: 'https://www.youtube.com/embed/1uJU1egPrLs' }],
@@ -911,6 +930,11 @@ const TECH_VIDEOS = {
   85: [{ title: 'Smash Pass (Pressure Passing) – Rodolfo Vieira', url: 'https://www.youtube.com/embed/7jRK3PrBekg' }],
   88: [{ title: 'Headquarters Position – Brian Glick', url: 'https://www.youtube.com/embed/svfr3lXB2yw' }],
   90: [{ title: 'Long Step Pass – Leandro Lo', url: 'https://www.youtube.com/embed/F1Nd4MmLuDk' }],
+  150:[{ title: 'Body Lock Pass – Lachlan Giles', url: 'https://www.youtube.com/embed/oF0nU7X-2-s' }],
+  151:[{ title: 'Float Pass – Gordon Ryan Study', url: 'https://www.youtube.com/embed/KQY6n4zE8ys' }],
+  152:[{ title: 'Folding Pass – Bernardo Faria', url: 'https://www.youtube.com/embed/O-L2N17L9K8' }],
+  153:[{ title: 'Backstep Pass – Marcelo Garcia', url: 'https://www.youtube.com/embed/j-h5D9m5e_o' }],
+  154:[{ title: 'Leg Pin (Staple) Pass – Ruotolo Brothers', url: 'https://www.youtube.com/embed/hXpD-C9fXG4' }],
   
   // Takedowns & Throws
   92: [{ title: 'Double Leg Takedown – Henry Cejudo', url: 'https://www.youtube.com/embed/lqkEcCtzI0U' }],
@@ -921,6 +945,15 @@ const TECH_VIDEOS = {
   98: [{ title: 'Seoi Nage – Mike Swain', url: 'https://www.youtube.com/embed/SGHQrj09O-g' }],
   99: [{ title: 'Uchi Mata – Sampson Judo', url: 'https://www.youtube.com/embed/XBYFsesDNm4' }],
   100:[{ title: 'O-Goshi (Hip Throw) Essentials', url: 'https://www.youtube.com/embed/SGHQrj09O-g' }],
+  148:[{ title: 'Sumi Gaeshi – Travis Stevens', url: 'https://www.youtube.com/embed/jPQHKQkEVFQ' }],
+  149:[{ title: 'Tomoe Nage – Shintaro Higashi', url: 'https://www.youtube.com/embed/-zJugf_j72A' }],
+  155:[{ title: 'Russian Tie (2-on-1) – Cary Kolat', url: 'https://www.youtube.com/embed/V2wE_6tP0Q' }],
+  156:[{ title: 'Fireman\'s Carry – Cary Kolat', url: 'https://www.youtube.com/embed/Kth0Uqo5ygY' }],
+  157:[{ title: 'Ankle Pick – Cary Kolat', url: 'https://www.youtube.com/embed/P5p4x4y7W74' }],
+  158:[{ title: 'Lateral Drop – Cary Kolat', url: 'https://www.youtube.com/embed/oU11b-zY6pQ' }],
+  159:[{ title: 'Mat Return (Wrestling) – Roll Out Mat', url: 'https://www.youtube.com/embed/lZjnTJGIVEs' }],
+  160:[{ title: 'Tai Otoshi – Shintaro Higashi', url: 'https://www.youtube.com/embed/09pVWHzOpOw' }],
+  
   // Escapes & Recovery
   104:[{ title: 'Bridge & Roll Escape Mechanics', url: 'https://www.youtube.com/embed/uAjBy96dVpg' }],
   105:[{ title: 'Elbow-Knee Escape – Brandon Mccaghren', url: 'https://www.youtube.com/embed/SYel-mVSMAI' }],
@@ -931,13 +964,7 @@ const TECH_VIDEOS = {
   161:[{ title: 'Kipping Escape – Brian Glick (Danaher System)', url: 'https://www.youtube.com/embed/zZvC5BVY0ms' }],
   162:[{ title: 'Running Man / Ghost Escape – Brian Peterson', url: 'https://www.youtube.com/embed/6ZKFobk8vOQ' }],
   163:[{ title: 'Heel Slip (Late Stage Defense) – Craig Jones', url: 'https://www.youtube.com/embed/DrjbaXt-nTo' }],
-  
-  // Advanced Takedowns & Throws
-  159:[{ title: 'Mat Return (Wrestling) – Roll Out Mat', url: 'https://www.youtube.com/embed/lZjnTJGIVEs' }],
-  160:[{ title: 'Tai Otoshi – Shintaro Higashi', url: 'https://www.youtube.com/embed/09pVWHzOpOw' }],
-  115:[{ title: 'Drop Seoi Nage – Shintaro Higashi', url: 'https://www.youtube.com/embed/_B4U_mXyVTo' }], // Placeholder mapping
-  116:[{ title: 'Kani Basami (Scissor Takedown) – Knight JJ', url: 'https://www.youtube.com/embed/X0IzQUZ_VYI' }], // Placeholder mapping
-  117:[{ title: 'Tomoe Nage – Shintaro Higashi', url: 'https://www.youtube.com/embed/-zJugf_j72A' }], // Placeholder mapping
+  164:[{ title: 'Takedown Defense (Sprawl) – Chael Sonnen', url: 'https://www.youtube.com/embed/yvP578t3uRE' }],
 };
 
 function buildGraph() {
